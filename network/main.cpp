@@ -11,21 +11,23 @@
 
 #include "network.h"
 #include "matrix_solution.h"
-#include "chip_data.h"
-
 using namespace std;
 
 int main(const int argc, const char **argv){
-    vector <int> network_col(101,0);//
-    vector < vector <int> > network(101,network_col);//
+    vector <int> network_col(11,0);//
+    vector <double> flowrate_col(11,0);
+    vector < vector <int> > network(11,network_col);//
+    vector < vector <int> > direction(11,network_col);
+    vector < vector <double> > flow_rate(11,flowrate_col);
+    
     vector <node> tempnode(0);
     vector <edge_info> edges(0);
     vector < int > equal_eq(0);
     double wc = 100,hc = 400,coolant_flow_rate = 42,unit_pressure_drop = 100;
     matrix matrix_a;
-    
-    //0:1:flow 2:inlet 3:outlet
-  /*  network[0][3] = 3;
+    //cout << network.size() << " " << network[0].size() << 123123 << endl;
+    //0: 1:flow 2:inlet 3:outlet
+    network[0][3] = 3;
     network[1][10] = 3;
     network[10][9] = 3;
     network[10][1] = 2;
@@ -61,8 +63,8 @@ int main(const int argc, const char **argv){
     }
     for (int j = 7; j <= 9; j++) {
         network[9][j] = 1;
-    }*/
-     for (int j = 1; j < 101; j+=2) {
+    }
+    /* for (int j = 1; j < 101; j+=2) {
      network[0][j] = 3;
      }
      for (int i = 1; i < 75; i++) {
@@ -76,9 +78,28 @@ int main(const int argc, const char **argv){
      for (int i = 76; i < 101; i++) {
      network[i][51] = 1;
      }
-     network[100][51] = 2;
+     network[100][51] = 2;*/
+    /*for (int i = 1 ; i < network.size(); i+=2) {
+        for (int j = 0; j < network[i].size(); j++) {
+            network[i][j] = 1;
+        }
+    }
+    for (int j = 1 ; j < network[0].size(); j+=2) {
+        for (int i = 0; i < network.size(); i++) {
+            network[i][j] = 1;
+        }
+    }
+    for (int j = 1; j < network[0].size(); j+=2) {
+        network[0][j] = 2;
+        network[network.size()-1][j] = 2;
+    }
+    for (int i = 1; i < network[0].size(); i+=2) {
+        network[i][0] = 3;
+        network[i][network.size()-1] = 3;
+    }*/
     /////////////////////
-    
+    network_reverse(&network);
+    cout << network.size() << " " << network[0].size() << endl;
     network_graph( &network, &tempnode, &edges);
     cout << "network_graph done!" << endl;
     //getchar();
@@ -90,7 +111,7 @@ int main(const int argc, const char **argv){
         cout << endl;
     }
     for (int i = 0; i < edges.size(); i++) {
-        cout << "edge: " << i << " nodes: " << edges[i].nodes.first << " " << edges[i].nodes.second << "  " << edges[i].HV << "  length: " << edges[i].length << endl;
+        cout << "edge: " << i << " nodes: " << edges[i].nodes.first << " " << edges[i].nodes.second << "  " << edges[i].HV << "  length: " << edges[i].length <<endl;
         //cout << "flow_rate: " << edges[i].flow_rate << endl;
     }
     matrix_a.get_num_channel(&tempnode, &edges);
@@ -114,6 +135,9 @@ int main(const int argc, const char **argv){
     }
     
     matrix_a.get_pressure_drop(wc, hc, coolant_flow_rate, unit_pressure_drop, &edges);
+    matrix_a.fill_flow_rate(&tempnode ,&edges,&flow_rate);
+    matrix_a.fill_direction(&tempnode ,&edges,&direction);
+    matrix_a.write_output(argv[1],argv[2],&flow_rate,&direction);
     return 0;
 }
 
