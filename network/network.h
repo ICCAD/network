@@ -8,6 +8,7 @@
 
 #ifndef network_network_h
 #define network_network_h
+
 #include <iostream>
 #include <stdio.h>
 #include <vector>
@@ -17,7 +18,6 @@ using namespace std;
 struct edge_info{
 	double length;
 	pair < int , int > nodes;
-    //vector < pair < int , int > > cells;
 	int channel;
     //char direction;
 	char HV; //H V N
@@ -38,5 +38,4 @@ struct node{
 
 void network_graph( vector < vector <int> > *, vector <node> * , vector <edge_info> *);
 
-void network_reverse (vector < vector <int> > *);
 #endif
