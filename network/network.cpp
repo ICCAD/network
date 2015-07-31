@@ -4,16 +4,30 @@
 //
 //  Created by 張志銘 on 2015/7/18.
 //  Copyright (c) 2015年 cmchang. All rights reserved.
-//
+// 
 
 #include "network.h"
+
+void network_reverse (vector < vector <int> > *network){
+    vector < vector <int> > copy_network;
+    copy_network = (*network);
+    for (int i = 0; i < (*network).size(); i++) {
+        (*network)[i] = copy_network[(*network).size()-1-i];
+    }
+    for (int i = 0; i < (*network).size(); i++) {
+        for (int j = 0; j < (*network)[i].size(); j++) {
+            cout << (*network)[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
 
 void network_graph( vector < vector <int> > *network, vector <node> *tempnode, vector <edge_info> *edges){
     node temp;
     edge_info temp_edge;
     vector <int> network_col((*network)[0].size(),-2);//
     vector < vector <int> > network_state((*network).size(),network_col);//
-	
+    cout << (*network)[0].size() << " " << (*network).size() << endl;
     for ( int i = 0; i < (*network).size() ; i++) {
         for ( int j = 0; j < (*network)[i].size(); j++) {
             if ((*network)[i][j] == 1 || (*network)[i][j] == 2  || (*network)[i][j] == 3) {
@@ -23,7 +37,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 			if ((*network)[i][j] == 2 || (*network)[i][j] == 3 ) {
 				temp.num = (*tempnode).size();
 				temp.coordinate.first = j;
-				temp.coordinate.second = (*network).size()-1-i;
+				temp.coordinate.second = i;
 				if ((*network)[i][j] == 2){
 					temp.type = 'i';
 				}
@@ -39,7 +53,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i+1][j] != -1 && (*network)[i+1][j] != 0) && ((*network)[i][j+1] != -1 && (*network)[i][j+1] != 0) ){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'c';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -49,7 +63,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i+1][j] != -1 && (*network)[i+1][j] != 0) && ((*network)[i][j-1] != -1 && (*network)[i][j-1] != 0) ){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'c';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -59,7 +73,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i+1][j] != -1 && (*network)[i+1][j] != 0) && (((*network)[i][j-1] != -1 && (*network)[i][j-1] != 0) || ((*network)[i][j+1] != -1 && (*network)[i][j+1] != 0))){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'N';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -71,7 +85,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i-1][j] != -1 && (*network)[i-1][j] != 0) &&  ((*network)[i][j+1] != -1 && (*network)[i][j+1] != 0) ){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'c';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -81,7 +95,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i-1][j] != -1 && (*network)[i-1][j] != 0) &&  ((*network)[i][j-1] != -1 && (*network)[i][j-1] != 0) ){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'c';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -91,7 +105,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 						if ( ((*network)[i-1][j] != -1 && (*network)[i-1][j] != 0) && (((*network)[i][j-1] != -1 && (*network)[i][j-1] != 0) || ((*network)[i][j+1] != -1 && (*network)[i][j+1] != 0))){
 							temp.num = (*tempnode).size();
 							temp.coordinate.first = j;
-							temp.coordinate.second = (*network).size()-1-i;
+							temp.coordinate.second = i;
 							temp.type = 'N';
 							(*tempnode).push_back(temp);
 							network_state[i][j] = temp.num;
@@ -102,7 +116,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 					if ( (((*network)[i-1][j] != -1 && (*network)[i-1][j] != 0) || ((*network)[i+1][j] != -1 && (*network)[i+1][j] != 0)) && (((*network)[i][j-1] != -1 && (*network)[i][j-1] != 0) || ((*network)[i][j+1] != -1 && (*network)[i][j+1] != 0))){
 						temp.num = (*tempnode).size();
 						temp.coordinate.first = j;
-						temp.coordinate.second = (*network).size()-1-i;
+						temp.coordinate.second = i;
 						temp.type = 'N';
 						(*tempnode).push_back(temp);
 						network_state[i][j] = temp.num;
@@ -154,6 +168,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 	 }
 	//////////////
     int current_node = -1;
+    pair < int , int > cells_location;//x y
     for (int j = 0; j < network_col.size() ; j++) {
         for (int i = network_state.size()-1; i >= 0 ; i--) {
             if ( network_state[i][j] >= 0 ) {
@@ -167,6 +182,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 					(*edges).push_back(temp_edge);
                     (*tempnode)[current_node].edges.push_back((*edges).size()-1);
 					(*tempnode)[network_state[i][j]].edges.push_back((*edges).size()-1);
+                    
 					current_node = network_state[i][j];
                 }
             }
@@ -189,6 +205,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 					(*edges).push_back(temp_edge);
                     (*tempnode)[current_node].edges.push_back((*edges).size()-1);
 					(*tempnode)[network_state[i][j]].edges.push_back((*edges).size()-1);
+                    
 					current_node = network_state[i][j];
                 }
             }
@@ -212,7 +229,7 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 	for (int i = 0; i < (*edges).size(); i++){
 		if ( (*edges)[i].HV != 'N'){
 			if ( (*edges)[i].HV == 'V'){
-				(*edges)[i].length =  (*tempnode)[(*edges)[i].nodes.first].coordinate.second -  (*tempnode)[(*edges)[i].nodes.second].coordinate.second;
+				(*edges)[i].length =  (*tempnode)[(*edges)[i].nodes.second].coordinate.second -  (*tempnode)[(*edges)[i].nodes.first].coordinate.second;
 			}
 			else if ( (*edges)[i].HV == 'H'){
 				(*edges)[i].length =  (*tempnode)[(*edges)[i].nodes.second].coordinate.first -  (*tempnode)[(*edges)[i].nodes.first].coordinate.first;

@@ -165,11 +165,11 @@ void matrix::initial_direction(vector <node> *temp_node , vector <edge_info> *te
     }
 }
 
-void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edge, long double unit_pressure_drop){
+void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edge, long double unit_pressure_drop ){
     vector <long double> temp_row(num_channel+1,0);
     vector <int> path_channel(num_channel,0);
     long double temp_length = 0;
-    vector <int> channels(0);
+    vector <int> channels;
     
     for (int i = 0; i < (*temp_node).size(); i++) { //node
         if ((*temp_node)[i].type == 'b'){
@@ -187,6 +187,7 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
             temp_row.resize(num_channel+1);
         }
     }
+    
     cout << "\nbranch: " << endl;
     node_func_num = all_function.size();
     cout << "node_function num " << node_func_num << endl;
@@ -434,7 +435,6 @@ void matrix::get_pressure_drop(double wc, double hc, double coolant_flow_rate, d
     dh = (2 * wc * hc) / (wc + hc);
     Ac = wc * hc;
     k = 0.02848 / (dh * dh * Ac);
-    vector <double> sol_Q;
     vector <int> inlet_channel;
     for (int i = 0; i < member_path.size(); i++) {
         if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
@@ -456,9 +456,263 @@ void matrix::get_pressure_drop(double wc, double hc, double coolant_flow_rate, d
     cout << "\nQ: " << Q << endl;
     cout << "coolant_flow_rate: " << coolant_flow_rate << endl;
     n = coolant_flow_rate / Q;
+    cout << "sol_Q: ";
     for (int i = 0; i < matrix_Q.size(); i++) {
         sol_Q.push_back( n * matrix_Q[i][matrix_Q[0].size()-1] );
+        cout << sol_Q[sol_Q.size()-1] << " ";
     }
     pressure_drop = k * unit_pressure_drop * n;
-    cout << "pressure_drop: " << pressure_drop << endl;
+    cout << "\npressure_drop: " << pressure_drop << endl;
 }
+
+void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <double> > *flow_rate){ //
+    //int current_edge;
+    //int current_node;
+    for (int i = 0; i < num_channel; i++) {
+       // current_edge = -1;
+        for (int j = 0; j < member_channel[i].size(); j++) {
+            if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
+                for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first; k++) {
+                    if (sol_Q[i]>=0) {
+                        (*flow_rate)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = sol_Q[i];
+                    }
+                    else{
+                        (*flow_rate)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = (-1)*sol_Q[i];
+                    }
+                }
+            }
+            else {
+                for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second; k++) {
+                    if (sol_Q[i]>=0) {
+                        (*flow_rate)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = sol_Q[i];
+                    }
+                    else{
+                        (*flow_rate)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = (-1)*sol_Q[i];
+                    }
+                }
+            }
+        }
+    }
+    
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if ((*temp_node)[i].type == 'b') {
+            (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 0;
+            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                if ( channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first == (*temp_node)[i].num) {
+                    if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] < 0) {
+                        (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] -= sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
+                    }
+                }
+                else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                    if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] >= 0) {
+                        (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "flow_rate:" << endl;
+    for (int i = 0; i < (*flow_rate).size(); i++) {
+        for (int j = 0; j < (*flow_rate)[i].size(); j++) {
+            cout << (*flow_rate)[i][j] << "\t";
+        }
+        cout << endl;
+    }
+    
+    
+}
+
+void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <int> > *direction){
+    int current_edge;
+    int current_node;
+    for (int i = 0; i < num_channel; i++) {
+        if (sol_Q[i] >= 0) {
+            current_node = channel_dir[i].first;
+        }
+        else{
+            current_node = channel_dir[i].second;
+        }
+        
+        cout << "current_node " << current_node << " ";
+       
+        current_edge = -1;
+        if ( (*temp_edge)[member_channel[i][0]].nodes.first == current_node || (*temp_edge)[member_channel[i][0]].nodes.second == current_node){
+            current_edge = 0;
+        }
+        else if ((*temp_edge)[member_channel[i][member_channel[i].size()-1]].nodes.first == current_node || (*temp_edge)[member_channel[i][member_channel[i].size()-1]].nodes.second == current_node){
+            current_edge = member_channel[i].size()-1;
+        }
+        
+        cout << "current_edge " << current_edge << endl;
+        // 1234: EWSN  1248:ESWN
+        if (current_edge == 0) {
+            for (int j = 0; j < member_channel[i].size(); j++) {
+                if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
+                    if (current_node == (*temp_edge)[member_channel[i][j]].nodes.first) {
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first+1; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first; k++) {
+                            
+                            (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = 1;
+                            
+                            if (j == 0){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 1;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.second;
+                    }
+                    else if (current_node == (*temp_edge)[member_channel[i][j]].nodes.second){
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first-1; k++) {
+                           
+                            (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = 4;//2;
+                            if (j == 0){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first] = 4;//2;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.first;
+                    }
+                }
+                else { //V
+                    if (current_node == (*temp_edge)[member_channel[i][j]].nodes.first) {
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second+1; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second; k++) {
+                           
+                            (*direction)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 8;//4;
+                            if (j == 0){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 8;//4;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.second;
+                    }
+                    else if (current_node == (*temp_edge)[member_channel[i][j]].nodes.second){
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second-1; k++) {
+                           
+                            (*direction)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 2;//3;
+                            if (j == 0){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 2;//3;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.first;
+                    }
+                }
+            }
+        }
+        else {
+            for (int j = member_channel[i].size()-1 ; j >= 0; j--) {
+                if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
+                    if (current_node == (*temp_edge)[member_channel[i][j]].nodes.first) {
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first+1; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first; k++) {
+                          
+                            (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = 1;
+                            
+                            if (j == member_channel[i].size()-1){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 1;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.second;
+                    }
+                    else if (current_node == (*temp_edge)[member_channel[i][j]].nodes.second){
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first-1; k++) {
+                           
+                            (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = 4;//2;
+                            if (j == member_channel[i].size()-1){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first] = 4;//2;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.first;
+                    }
+                }
+                else { //V
+                    if (current_node == (*temp_edge)[member_channel[i][j]].nodes.first) {
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second+1; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second; k++) {
+                           
+                            (*direction)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 8;//4;
+                            if (j == member_channel[i].size()-1){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 8;//4;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.second;
+                    }
+                    else if (current_node == (*temp_edge)[member_channel[i][j]].nodes.second){
+                        for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second-1; k++) {
+                           
+                            (*direction)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 2;//3;
+                            if (j == member_channel[i].size()-1){
+                                (*direction)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.second][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = 2;//3;
+                            }
+                        }
+                        current_node = (*temp_edge)[member_channel[i][j]].nodes.first;
+                    }
+                }
+            }
+        }
+    }
+  ////// 1248:ESWN
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if ((*temp_node)[i].type == 'b') {
+            (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 0;
+            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                if ( channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first == (*temp_node)[i].num) {
+                    if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] < 0) {
+                        if ((*temp_edge)[(*temp_node)[i].edges[j]].HV == 'H') {
+                            if ((*temp_edge)[(*temp_node)[i].edges[j]].nodes.first == (*temp_node)[i].num ) {
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 4;
+                            }
+                            else{
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 1;
+                            }
+                        }
+                        else{ //V
+                            if ((*temp_edge)[(*temp_node)[i].edges[j]].nodes.first == (*temp_node)[i].num ) {
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 2;
+                            }
+                            else{
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 8;
+                            }
+                        }
+                    }
+                }
+                else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                    if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] >= 0) {
+                        if ((*temp_edge)[(*temp_node)[i].edges[j]].HV == 'H') {
+                            if ((*temp_edge)[(*temp_node)[i].edges[j]].nodes.first == (*temp_node)[i].num ) {
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 4;
+                            }
+                            else{
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 1;
+                            }
+                        }
+                        else{ //V
+                            if ((*temp_edge)[(*temp_node)[i].edges[j]].nodes.first == (*temp_node)[i].num ) {
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 2;
+                            }
+                            else{
+                                (*direction)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += 8;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ////
+    cout << "\ndirection:" << endl;
+    for (int i = 0; i < (*direction).size(); i++) {
+        for (int j = 0; j < (*direction)[i].size(); j++) {
+            cout << (*direction)[i][j] << "\t";
+        }
+        cout << endl; 
+    }
+}
+
+void matrix::write_output(const char *output_flow, const char *output_direction, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){
+    ofstream flowrate_out(output_flow);
+    ofstream direction_out(output_direction);
+    for (int i = (*flow_rate).size()-1; i >= 0; i--) {
+        for (int j = 0; j < (*flow_rate)[i].size(); j++) {
+            flowrate_out << (*flow_rate)[i][j] << "\t";
+            direction_out << (*direction)[i][j] << "\t";
+        }
+        flowrate_out << endl;
+        direction_out << endl;
+    }
+}
+
