@@ -456,25 +456,7 @@ void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_fl
     dh = (2 * wc * hc) / (wc + hc);
     Ac = wc * hc;
     k = 0.02848 / (dh * dh * Ac);
-    /*vector <int> inlet_channel;
-    for (int i = 0; i < member_path.size(); i++) {
-        if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
-            inlet_channel.push_back((*temp_edge)[member_path[i][0]].channel);
-        }
-    }
-    Q = 0;
-    cout << "inlet_channel: ";
-    for (int i = 0; i < inlet_channel.size(); i++) {
-        cout << inlet_channel[i] << " ";
-        if (matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1] < 0) {
-            Q -= matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1];
-
-        }
-        else {
-            Q += matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1];
-        }
-    }
-    cout << "\nQ: " << Q << endl;*/
+    
     cout << "coolant_flow_rate: " << coolant_flow_rate << endl; //pow (7.0, 3.0)
     n = (coolant_flow_rate * pow (10.0, 12.0) / 60) / total_Q;
     cout << "sol_Q: ";
