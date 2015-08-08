@@ -14,27 +14,25 @@ void matrix::get_num_channel(vector <node> *temp_node, vector <edge_info> *temp_
     vector <int> temp_edge_member;
     for (int i = 0; i < (*temp_node).size(); i++) {
         if((*temp_node)[i].type != 'c' && (*temp_node)[i].type != 'I' && (*temp_node)[i].type != 'O'){
-            cout << (*temp_node)[i].num << endl;
             DFS_edge(i, temp_node, temp_edge, &temp_edge_member, &record_edge);
-            // cout << "edge done" << endl;
         }
-        break;
+        
     }
     for (int i = 0; i < (*temp_edge).size() ; i++){
         (*temp_edge)[i].channel = -1;
     }
     for( int i = 0; i < member_channel.size(); i++){
-        cout << "channel_" << i << ": " ;
+        //cout << "channel_" << i << ": " ;
         for (int j = 0; j < member_channel[i].size(); j++) {
             (*temp_edge)[member_channel[i][j]].channel = i;
-            cout << member_channel[i][j] << " ";
+           // cout << member_channel[i][j] << " ";
         }
-        cout << endl;
+        //cout << endl;
     }
     cout << "num_channel: " << num_channel << endl;
-    for (int i = 0; i < (*temp_edge).size(); i++){
+  /*  for (int i = 0; i < (*temp_edge).size(); i++){
         cout << "edge_" << i << ": channel_" << (*temp_edge)[i].channel << endl;
-    }
+    }*/
 }
 
 void matrix::DFS_edge(int nodex, vector <node> *temp_node, vector <edge_info> *temp_edge, vector <int> *temp_edge_member, vector <int> *record_edge){
@@ -87,13 +85,13 @@ void matrix::get_path(vector <node> *temp_node, vector <edge_info> *temp_edge){
             // cout << "path done" << endl;
         }
     }
-    for( int i = 0; i < member_path.size(); i++){
+ /*   for( int i = 0; i < member_path.size(); i++){
         cout << "path_" << i << ": " ;
         for (int j = 0; j < member_path[i].size(); j++) {
             cout << member_path[i][j] << " ";
         }
         cout << endl;
-    }
+    }*/
     cout << "num_path: " << num_path << endl;
 }
 
@@ -159,10 +157,10 @@ void matrix::initial_direction(vector <node> *temp_node , vector <edge_info> *te
         }
         channel_dir.push_back(dir);
     }
-    cout << "\nflow_direction"<< endl;
+   /* cout << "\nflow_direction"<< endl;
     for (int i = 0; i < channel_dir.size(); i++) {
         cout << "channel_" << i << " in: " <<channel_dir[i].first << " out: " << channel_dir[i].second << endl;
-    }
+    }*/
 }
 
 void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edge, long double unit_pressure_drop ){
@@ -244,11 +242,11 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
             }
         }
         //////
-        cout << "path_" << i << " channel: ";
+       /* cout << "path_" << i << " channel: ";
         for (int j = 0; j < path_channel.size(); j++){
             cout << path_channel[j] << " ";
         }
-        cout << endl;
+        cout << endl;*/
         //getchar();
         
         for (int j = 0; j < path_channel.size(); j++) {
@@ -272,14 +270,14 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
         temp_row.clear();
         temp_row.resize(num_channel+1);
     }
-    cout << "\nall_function" << endl;
+   /* cout << "\nall_function" << endl;
     for (int i = 0; i < all_function.size(); i++) {
         for (int j = 0 ; j < all_function[i].size() ; j++) {
             cout << all_function[i][j] << "\t" ;
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 }
 
 
@@ -317,7 +315,7 @@ void matrix::initial_matrix(vector < int > *equal_eq){
             }
         }
     }
-    cout << "store_func: ";
+  /*  cout << "store_func: ";
     for ( int i = 0; i < store_func.size(); i++){
         cout << store_func[i] << " ";
     }
@@ -329,7 +327,7 @@ void matrix::initial_matrix(vector < int > *equal_eq){
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 }
 
 void matrix::check_matrix_Q(){
@@ -367,14 +365,14 @@ void matrix::check_matrix_Q(){
         }
         record.erase(record.begin());
     }
-    cout << "after check" << endl;
+  /*  cout << "after check" << endl;
     for (int i = 0; i < matrix_Q.size(); i++){
         for (int j = 0; j < matrix_Q[i].size(); j++){
             cout << matrix_Q[i][j] << "\t";
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 }
 
 int  matrix::Gaussian_Elimination(vector < int > *equal_eq){
@@ -419,23 +417,46 @@ int  matrix::Gaussian_Elimination(vector < int > *equal_eq){
             }
         }
     }
-    cout << "sol: " << num_channel << endl;
+  /*  cout << "sol: " << num_channel << endl;
     for (int i = 0; i < matrix_Q.size(); i++){
         for (int j = 0; j < matrix_Q[i].size(); j++){
             cout << matrix_Q[i][j] << "\t";
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
     return -1;
 }
 
-void matrix::get_pressure_drop(double wc, double hc, double coolant_flow_rate, double unit_pressure_drop, vector <edge_info> *temp_edge){
-    double k,dh,Ac,Q,n;
+void matrix::get_inlet_Q(vector <edge_info> *temp_edge){
+    inlet_Q = 0;
+    vector <int> inlet_channel;
+    for (int i = 0; i < member_path.size(); i++) {
+        if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
+            inlet_channel.push_back((*temp_edge)[member_path[i][0]].channel);
+        }
+    }
+    cout << "inlet_channel: ";
+    for (int i = 0; i < inlet_channel.size(); i++) {
+        cout << inlet_channel[i] << " ";
+        if (matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1] < 0) {
+            inlet_Q -= matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1];
+            
+        }
+        else {
+            inlet_Q += matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1];
+        }
+    }
+    cout << "\ninlet_Q: " << inlet_Q << endl;
+}
+
+
+void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_flow_rate, double unit_pressure_drop ,double total_Q){
+    double k,dh,Ac,n;//Q
     dh = (2 * wc * hc) / (wc + hc);
     Ac = wc * hc;
     k = 0.02848 / (dh * dh * Ac);
-    vector <int> inlet_channel;
+    /*vector <int> inlet_channel;
     for (int i = 0; i < member_path.size(); i++) {
         if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
             inlet_channel.push_back((*temp_edge)[member_path[i][0]].channel);
@@ -453,16 +474,16 @@ void matrix::get_pressure_drop(double wc, double hc, double coolant_flow_rate, d
             Q += matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1];
         }
     }
-    cout << "\nQ: " << Q << endl;
-    cout << "coolant_flow_rate: " << coolant_flow_rate << endl;
-    n = coolant_flow_rate / Q;
+    cout << "\nQ: " << Q << endl;*/
+    cout << "coolant_flow_rate: " << coolant_flow_rate << endl; //pow (7.0, 3.0)
+    n = (coolant_flow_rate * pow (10.0, 12.0) / 60) / total_Q;
     cout << "sol_Q: ";
     for (int i = 0; i < matrix_Q.size(); i++) {
         sol_Q.push_back( n * matrix_Q[i][matrix_Q[0].size()-1] );
-        cout << sol_Q[sol_Q.size()-1] << " ";
+       // cout << sol_Q[sol_Q.size()-1] << " ";
     }
-    pressure_drop = k * unit_pressure_drop * n;
-    cout << "\npressure_drop: " << pressure_drop << endl;
+    pressure_drop = k * l * unit_pressure_drop * n;
+    cout << "\npressure_drop: " << pressure_drop  << " (pa)" << endl;
 }
 
 void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <double> > *flow_rate){ //
@@ -512,14 +533,14 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
         }
     }
     
-    cout << "flow_rate:" << endl;
+   /* cout << "flow_rate:" << endl;
     for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             cout << (*flow_rate)[i][j] << "\t";
         }
         cout << endl;
     }
-    
+    */
     
 }
 
@@ -534,7 +555,7 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
             current_node = channel_dir[i].second;
         }
         
-        cout << "current_node " << current_node << " ";
+       // cout << "current_node " << current_node << " ";
        
         current_edge = -1;
         if ( (*temp_edge)[member_channel[i][0]].nodes.first == current_node || (*temp_edge)[member_channel[i][0]].nodes.second == current_node){
@@ -544,7 +565,7 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
             current_edge = member_channel[i].size()-1;
         }
         
-        cout << "current_edge " << current_edge << endl;
+       // cout << "current_edge " << current_edge << endl;
         // 1234: EWSN  1248:ESWN
         if (current_edge == 0) {
             for (int j = 0; j < member_channel[i].size(); j++) {
@@ -694,13 +715,13 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
         }
     }
     ////
-    cout << "\ndirection:" << endl;
+    /*cout << "\ndirection:" << endl;
     for (int i = 0; i < (*direction).size(); i++) {
         for (int j = 0; j < (*direction)[i].size(); j++) {
             cout << (*direction)[i][j] << "\t";
         }
         cout << endl; 
-    }
+    }*/
 }
 
 void matrix::write_output(const char *output_flow, const char *output_direction, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){
@@ -709,7 +730,7 @@ void matrix::write_output(const char *output_flow, const char *output_direction,
     for (int i = (*flow_rate).size()-1; i >= 0; i--) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << (*flow_rate)[i][j] << "\t";
-            direction_out << (*direction)[i][j] << "\t";
+            direction_out << (*direction)[i][j] << " ";
         }
         flowrate_out << endl;
         direction_out << endl;

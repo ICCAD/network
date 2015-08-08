@@ -14,12 +14,12 @@ void network_reverse (vector < vector <int> > *network){
     for (int i = 0; i < (*network).size(); i++) {
         (*network)[i] = copy_network[(*network).size()-1-i];
     }
-    for (int i = 0; i < (*network).size(); i++) {
+    /*for (int i = 0; i < (*network).size(); i++) {
         for (int j = 0; j < (*network)[i].size(); j++) {
             cout << (*network)[i][j] << " ";
         }
         cout << endl;
-    }
+    }*/
 }
 
 void network_graph( vector < vector <int> > *network, vector <node> *tempnode, vector <edge_info> *edges){
@@ -126,12 +126,12 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
         }
     }
 	///////////////
-    for (int i = 0; i < network_state.size(); i++) {
+  /*  for (int i = 0; i < network_state.size(); i++) {
         for (int j = 0; j < network_state[i].size(); j++) {
             cout << network_state[i][j] << "\t";
         }
         cout << endl;
-    }
+    }*/
 	//////////////
 	temp.num = (*tempnode).size(); // inlet size-2
 	temp.type = 'I';
@@ -235,9 +235,13 @@ void network_graph( vector < vector <int> > *network, vector <node> *tempnode, v
 				(*edges)[i].length =  (*tempnode)[(*edges)[i].nodes.second].coordinate.first -  (*tempnode)[(*edges)[i].nodes.first].coordinate.first;
 			}
 			
-			if ( (*tempnode)[(*edges)[i].nodes.second].type == 'i' || (*tempnode)[(*edges)[i].nodes.second].type == 'o' || (*tempnode)[(*edges)[i].nodes.first].type == 'i' || (*tempnode)[(*edges)[i].nodes.first].type == 'o'){
+			if ( (*tempnode)[(*edges)[i].nodes.second].type == 'i' || (*tempnode)[(*edges)[i].nodes.second].type == 'o' ){
 				(*edges)[i].length += 0.5;		
 			}
+            
+            if ((*tempnode)[(*edges)[i].nodes.first].type == 'i' || (*tempnode)[(*edges)[i].nodes.first].type == 'o') {
+                (*edges)[i].length += 0.5;
+            }
 		}
 	}
 }
