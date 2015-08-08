@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>4C4BAA70-4A3E-4449-8055-ED141429B2B0</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>ICCAD_A</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>E4F4006A6DFDC63DAAAA24FE35D8BC30CA9C78F8</key>
 		<string>github.com:ICCAD/network.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>network/ICCAD_A/ICCAD_A.xcodeproj/project.xcworkspace</string>
+	<string>network/ICCAD_A/ICCAD_A.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>E4F4006A6DFDC63DAAAA24FE35D8BC30CA9C78F8</key>
