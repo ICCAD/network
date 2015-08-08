@@ -17,15 +17,8 @@ using namespace std;
 struct edge_info{
 	double length;
 	pair < int , int > nodes;
-    //vector < pair < int , int > > cells;
-	int channel;
-    //char direction;
+    int channel;
 	char HV; //H V N
-	double flow_rate;
-	edge_info(){
-       // direction = 'X';
-		flow_rate = 0;
-	}
 };
 
 struct node{
