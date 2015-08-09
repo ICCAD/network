@@ -3,7 +3,7 @@
 //  network
 //
 //  Created by 張志銘 on 2015/7/19.
-//  Copyright (c) 2015年 cmchang. All rights reserved.
+//  Copyright (c) 2015年 cmchang. All rights reserved. 
 // 
 
 #ifndef __network__matrix_solution__

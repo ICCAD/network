@@ -4,7 +4,7 @@
 //
 //  Created by 張志銘 on 2015/8/7.
 //  Copyright (c) 2015年 cmchang. All rights reserved.
-//
+// 
 
 #include "chip_info.h"
 #include "matrix_solution.h"
@@ -17,8 +17,8 @@ using namespace std;
 
 
 int main(const int argc, const char **argv){
-
-    chip_data chip;
+    
+  /*  chip_data chip;
     if(chip.read(argv[1])){
         cout << "read file done" << endl;
     }
@@ -26,7 +26,7 @@ int main(const int argc, const char **argv){
     network_generator network_a;
     network_a.ambient_init(chip);
     
-    getchar();
+    getchar();*/
     
     
     int network_num = 2;

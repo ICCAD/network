@@ -18,7 +18,7 @@ void network_reverse (vector < vector <int> > *network){
         for (int j = 0; j < (*network)[i].size(); j++) {
             cout << (*network)[i][j] << " ";
         }
-        cout << endl;
+        cout << endl; 
     }*/
 }
 

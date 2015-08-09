@@ -23,7 +23,7 @@ struct edge_info{
 
 struct node{
     int num;
-	//type: c:corner b:branch i:inlet o:outlet I:coolant inlet O:coolant outlet
+	//type: c:corner b:branch i:inlet o:outlet I:coolant inlet O:coolant outlet 
 	char type;
     pair < int ,int > coordinate; // (x,y)
 	vector <int> edges;
