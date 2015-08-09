@@ -4,7 +4,7 @@
 //
 //  Created by 張志銘 on 2015/8/7.
 //  Copyright (c) 2015年 cmchang. All rights reserved.
-// 
+//
 
 #include "chip_info.h"
 #include "matrix_solution.h"
