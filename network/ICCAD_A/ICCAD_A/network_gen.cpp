@@ -3,23 +3,31 @@
 
 void network_generator::ambient_init(chip_data &chip){
 	channel_layer = chip.layer_num - 1;
-	network.resize(channel_layer);
-    vector < vector <double> > temp(101,vector <double> (101));
-    for (int i=0; i<network.size(); i++) {
-        network.push_back(temp);
+    vector < vector <double> > temp(101,vector <double> (101,channel_layer*10000));
+    vector < vector <int> > temp_liquid(101,vector <int> (101));
+    heat_network = temp;
+    for (int i=0; i<101; i+=2) {
+        for (int j=0; j<101; j+=2) {
+            temp_liquid[i][j] = -1;
+        }
     }
-	cout << network.size();
-	
+    for (int i=0; i<channel_layer; i++) {
+        liquid_network.push_back(temp_liquid);
+    }
 	
 	
 }
 
-void network_generator::heat_diffusion(block a, int network_layer){
-    double mid_x = (a.lx + a.width) / 2;
-    double mid_y = (a.ly + a.length) / 2;
-    double power = a.power;
-    for (int i=0; i<network[network_layer].size(); i++) {
-        ;
+void network_generator::print_network(const char *output_file){
+    ofstream fout(output_file);
+    for (int l=0; l<channel_layer; l++) {
+        for (int i=0; i<101; i++) {
+            for (int j=0; j<101; j++) {
+                fout << liquid_network[l][i][j] << " ";
+            }
+            fout << endl;
+        }
+        fout << endl;
     }
     
     

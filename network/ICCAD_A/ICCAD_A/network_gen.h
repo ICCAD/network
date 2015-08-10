@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 #include "chip_info.h"
 
@@ -13,10 +14,11 @@ using namespace std;
 class network_generator{
 public:
 	void ambient_init(chip_data &);
-    void heat_diffusion(block,int);
+    void print_network(const char *);
 private:
 	int channel_layer;
-	vector < vector < vector <double> > > network;
+    vector < vector <double> > heat_network;
+	vector < vector < vector <int> > > liquid_network;
 	
 	
 };
