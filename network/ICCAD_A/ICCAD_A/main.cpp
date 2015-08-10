@@ -17,15 +17,17 @@ using namespace std;
 
 
 int main(const int argc, const char **argv){
-    
+	
+    srand (time(NULL));
     chip_data chip;
     if(chip.read(argv[1])){
         cout << "read file done" << endl;
     }
     
     network_generator network_a;
-    network_a.ambient_init(chip);
-    network_a.print_network(argv[2]);
+    network_a.data_init(chip);
+	network_a.find_network_sol();
+    //network_a.print_liquid_network(argv[2]);
     
     getchar();
     
