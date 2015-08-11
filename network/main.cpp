@@ -16,15 +16,18 @@
 using namespace std;
 
 
-int main(const int argc, const char **argv){
-    
-  /*  chip_data chip;
+int main(const int argc, const char **argv){ //
+	
+   /* srand (time(NULL));
+    chip_data chip;
     if(chip.read(argv[1])){
         cout << "read file done" << endl;
     }
     
     network_generator network_a;
-    network_a.ambient_init(chip);
+    network_a.data_init(chip);
+	network_a.find_network_sol();
+    //network_a.print_liquid_network(argv[2]);
     
     getchar();*/
     
@@ -126,7 +129,7 @@ int main(const int argc, const char **argv){
         matrix_a[i].get_pressure_drop(wc, hc, l, coolant_flow_rate, unit_pressure_drop, total_Q);
         matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i]);
         matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
-        matrix_a[i].write_output(argv[i*2+1],argv[i*2+2],&flow_rate[i],&direction[i]);
+        matrix_a[i].write_output(&i,&flow_rate[i],&direction[i]);
     }
     
     return 0;

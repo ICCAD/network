@@ -706,9 +706,18 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
     }*/
 }
 
-void matrix::write_output(const char *output_flow, const char *output_direction, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){
-    ofstream flowrate_out(output_flow);
-    ofstream direction_out(output_direction);
+void matrix::write_output(int *i, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
+    ostringstream oss;
+    string output_flow,output_direction,num;
+    oss.str("");
+    oss <<  "flow_" << *i;
+    output_flow = oss.str();
+    oss.str("");
+    oss <<  "direction_" << *i;
+    output_direction = oss.str();
+    cout << output_flow << " " << output_direction << endl;
+    ofstream flowrate_out(output_flow.c_str());
+    ofstream direction_out(output_direction.c_str());
     for (int i = (*flow_rate).size()-1; i >= 0; i--) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << (*flow_rate)[i][j] << "\t";
@@ -718,4 +727,3 @@ void matrix::write_output(const char *output_flow, const char *output_direction,
         direction_out << endl;
     }
 }
-
