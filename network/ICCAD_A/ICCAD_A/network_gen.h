@@ -22,7 +22,8 @@ public:
 	bool network_gen(int);
 	void cool_down(pair<int, int>, double);
 	bool check_line(pair<int, int>, int, int);
-	void choose_next_inlet(pair<int, int> &, vector <int> &, vector < pair <int, int> > &, int);
+	void choose_layer_inlet(pair<int, int> &, vector <int> &, vector < pair <int, int> > &, int);
+	void choose_next_layer_inlet(pair<int, int> &, vector <int> &, vector < pair <int, int> > &, int);
 	int choose_dir(pair<int, int>, int, int);
 	void print_heat_network();
     void print_liquid_network();
@@ -35,7 +36,7 @@ private:
 	vector < vector < vector <int> > > init_liquid_network;
 	chip_data chip;
 	double alpha;    /////weight of distance
-	
+	double beta;
 };
 
 

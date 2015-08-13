@@ -5,6 +5,7 @@ void network_generator::data_init(chip_data &chip){
 	this->chip = chip;
 	channel_layer = chip.layer_num - 1;
 	alpha = 0.3;
+	beta = 0.2;
 	vector < vector <double> > temp(101,vector <double> (101,channel_layer*1000));
 	vector < vector <int> > temp_liquid(101,vector <int> (101));
 	for( int i=0;i<this->chip.dies.size();i++ ){
@@ -203,7 +204,12 @@ bool network_generator::network_gen(int seed){
 		getchar();
 		
 		if(line_num < channel_layer*4-1){       //-------------------------change inlet
-			choose_next_inlet(path_head, inlet_lock, inlet, line_layer);
+			if(line_num%4 == 0){
+				choose_next_layer_inlet(path_head, inlet_lock, inlet, line_layer);
+			}
+			else{
+				choose_layer_inlet();
+			}
 			liquid_network[line_layer][path_head.second][path_head.first] = 4;
 			path_length = 0;
 			efficiency = 1 * (pow(half_efficiency_length, 5)/(pow(path_length, 5) + pow(half_efficiency_length, 5)));
@@ -222,7 +228,15 @@ bool network_generator::network_gen(int seed){
 	return true;
 }
 
-void network_generator::choose_next_inlet(pair<int, int> &path_head, vector <int> &inlet_lock, vector < pair <int, int> > &inlet, int layer){
+void choose_layer_inlet(pair<int, int> &path_head, vector <int> &inlet_lock, vector < pair <int, int> > &inlet, int layer){
+	
+	if(inlet_lock[channel_layer*layer+0] != 1){
+		
+	}
+	
+}
+
+void network_generator::choose_next_layer_inlet(pair<int, int> &path_head, vector <int> &inlet_lock, vector < pair <int, int> > &inlet, int layer){
 	
 	double max_heat = 0.0;
 	int next_inlet_dir = 0;
@@ -276,7 +290,7 @@ void network_generator::choose_next_inlet(pair<int, int> &path_head, vector <int
 	inlet_lock[channel_layer*layer+next_inlet_dir] = 1;
 }
 
-int network_generator::choose_dir(pair <int, int> path_head, int path_length, int layer){
+int network_generator::choose_dir(pair <int, int> path_head, int path_length, int layer, vector <int> outlet_lock){
 	
 	int reverse_length = 40;
 	double score[4] = {0};
@@ -292,6 +306,9 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		score[0] += max_heat;
 		if(path_length > reverse_length){
 			score[0] += alpha * (pow((path_head.first+2)-50, 2) + pow(path_head.second-50, 2));
+			if(outlet_lock[layer*4+0] == 1){
+				score[0] -= beta * (pow(100-abs((path_head.first+2)-100), 2);
+			}
 		}
 	}
 	if(path_head.first-1 >= 0 && liquid_network[layer][path_head.second][path_head.first-1] == 0 && !check_line(path_head, 2, layer)){  //left : 2
@@ -306,6 +323,9 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		score[2] += max_heat;
 		if(path_length > reverse_length){
 			score[2] += alpha * (pow((path_head.first-2)-50, 2) + pow(path_head.second-50, 2));
+			if(outlet_lock[layer*4+2] == 1){
+				score[2] -= beta * (pow(100-abs((path_head.first-2)-0), 2);
+			}
 		}
 	}
 	if(path_head.second+1 <= 100 && liquid_network[layer][path_head.second+1][path_head.first] == 0 && !check_line(path_head, 3, layer)){  //top : 3
@@ -320,6 +340,9 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		score[3] += max_heat;
 		if(path_length > reverse_length){
 			score[3] += alpha * (pow(path_head.first-50, 2) + pow((path_head.second+2)-50, 2));
+			if(outlet_lock[layer*4+3] == 1){
+				score[3] -= beta * (pow(100-abs((path_head.second+2)-100), 2);
+			}
 		}
 	}
 	if(path_head.second-1 >= 0 && liquid_network[layer][path_head.second-1][path_head.first] == 0 && !check_line(path_head, 1, layer)){  //bot : 1
@@ -334,6 +357,9 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		score[1] += max_heat;
 		if(path_length > reverse_length){
 			score[1] += alpha * (pow(path_head.first-50, 2) + pow((path_head.second-2)-50, 2));
+			if(outlet_lock[layer*4+1] == 1){
+				score[1] -= beta * (pow(100-abs((path_head.second-2)-0), 2);
+			}
 		}
 	}
 	double max_score = - (1<<30);
