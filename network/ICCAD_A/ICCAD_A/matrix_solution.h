@@ -41,7 +41,7 @@ public:
     void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <double> > *);
     void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
     //void write_output(const char *, const char *, vector < vector <double> > *, vector < vector <int> >*);
-    void write_output(int *, vector < vector <double> > *, vector < vector <int> >*);
+    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <double> > *, vector < vector <int> >*);
     double inlet_Q;
 private:
     vector < vector <long double> > all_function;

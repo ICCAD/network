@@ -706,16 +706,22 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
     }*/
 }
 
-void matrix::write_output(int *i, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
+void matrix::write_output(int *i, vector < vector <int> > *network, vector <node> *temp_node, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
+    vector <int> network_col(101,0);
+    vector < vector <int> > single_network(101,network_col);
     ostringstream oss;
-    string output_flow,output_direction,num;
+    string output_network,output_flow,output_direction,num;
     oss.str("");
-    oss <<  "flow_" << *i;
+    oss <<  "flowrate_" << *i;
     output_flow = oss.str();
     oss.str("");
     oss <<  "direction_" << *i;
     output_direction = oss.str();
-    cout << output_flow << " " << output_direction << endl;
+    oss.str("");
+    oss <<  "network_" << *i;
+    output_network = oss.str();
+    cout << output_network << " " << output_flow << " " << output_direction << endl;
+    ofstream network_out(output_network.c_str());
     ofstream flowrate_out(output_flow.c_str());
     ofstream direction_out(output_direction.c_str());
     for (int i = (*flow_rate).size()-1; i >= 0; i--) {
@@ -725,5 +731,17 @@ void matrix::write_output(int *i, vector < vector <double> > *flow_rate, vector 
         }
         flowrate_out << endl;
         direction_out << endl;
+    }
+    single_network = (*network);
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if ((*temp_node)[i].type == 'b') {
+            single_network[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 4;
+        }
+    }
+    for (int i = single_network.size()-1; i >= 0; i--) {
+        for (int j = 0; j < single_network[i].size(); j++) {
+            network_out << single_network[i][j] << " ";
+        }
+        network_out << endl;
     }
 }

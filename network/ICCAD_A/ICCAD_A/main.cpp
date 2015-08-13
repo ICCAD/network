@@ -18,7 +18,7 @@ using namespace std;
 
 int main(const int argc, const char **argv){ //
 	
-    srand (time(NULL));
+   /* srand (time(NULL));
     chip_data chip;
     if(chip.read(argv[1])){
         cout << "read file done" << endl;
@@ -30,7 +30,7 @@ int main(const int argc, const char **argv){ //
     //network_a.print_liquid_network(argv[2]);
     
     getchar();
-    
+    */
     
     int network_num = 2;
     double total_Q = 0;
@@ -48,7 +48,7 @@ int main(const int argc, const char **argv){ //
     vector < vector < int > > equal_eq(network_num);
     double wc = 100,hc = 400,l = 100,coolant_flow_rate = 42,unit_pressure_drop = 100;
     
-    //0:1:flow 2:inlet 3:outlet
+    //0:no_flow 1:flow 2:inlet 3:outlet
     for (int j = 1; j < 101; j+=2) {
         network[1][0][j] = 3;
     }
@@ -129,7 +129,7 @@ int main(const int argc, const char **argv){ //
         matrix_a[i].get_pressure_drop(wc, hc, l, coolant_flow_rate, unit_pressure_drop, total_Q);
         matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i]);
         matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
-        matrix_a[i].write_output(&i,&flow_rate[i],&direction[i]);
+        matrix_a[i].write_output(&i,&network[i], &tempnode[i],&flow_rate[i],&direction[i]);
     }
     
     return 0;
