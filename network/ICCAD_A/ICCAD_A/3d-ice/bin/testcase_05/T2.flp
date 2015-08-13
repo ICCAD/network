@@ -1,0 +1,183 @@
+Mod0 :
+
+  position       0,    0 ;
+  dimension   2000, 2000 ;
+
+  power values 3.8460;    
+
+Mod1 :
+
+  position    2000,    0 ;
+  dimension   2000, 2000 ;
+
+  power values 3.1004;    
+
+Mod2 :
+
+  position    4000,    0 ;
+  dimension   2000, 2000 ;
+
+  power values 1.0010;    
+
+Mod3 :
+
+  position    6000,    0 ;
+  dimension   2000, 2000 ;
+
+  power values 6.3825;    
+
+Mod4 :
+
+  position    8000,    0 ;
+  dimension   2000, 2000 ;
+
+  power values 4.0505;
+    	
+
+Mod5 :
+
+  position       0, 2000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.1028;    
+
+Mod6 :
+
+  position    2000, 2000 ;
+  dimension   2000, 2000 ;
+
+  power values 3.0687;    
+
+Mod7 :
+
+  position    4000, 2000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.2140;    
+
+Mod8 :
+
+  position    6000, 2000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.2506;    
+
+Mod9 :
+
+  position    8000, 2000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.1430;
+    
+    
+
+Mod10 :
+
+  position       0, 4000 ;
+  dimension   2000, 2000 ;
+
+  power values 0.5059;    
+
+Mod11 :
+
+  position    2000, 4000 ;
+  dimension   2000, 2000 ;
+
+  power values 0.0624;    
+
+Mod12 :
+
+  position    4000, 4000 ;
+  dimension   2000, 2000 ;
+
+  power values 0.4692;    
+
+Mod13 :
+
+  position    6000, 4000 ;
+  dimension   2000, 2000 ;
+
+  power values 1.3993;    
+
+Mod14 :
+
+  position    8000, 4000 ;
+  dimension   2000, 2000 ;
+
+  power values 3.0079;
+    
+
+    
+
+Mod15 :
+
+  position       0, 6000 ;
+  dimension   2000, 2000 ;
+
+  power values 5.8927;   
+
+Mod16 :
+
+  position    2000, 6000 ;
+  dimension   2000, 2000 ;
+
+  power values  4.5602;    
+Mod17 :
+
+  position    4000, 6000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.9399;    
+
+Mod18 :
+
+  position    6000, 6000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.8957;    
+
+
+Mod19 :
+
+  position    8000, 6000 ;
+  dimension   2000, 2000 ;
+
+  power values 0.6055;
+    
+    
+
+Mod20 :
+
+  position       0, 8000 ;
+  dimension   2000, 2000 ;
+
+  power values 6.0561;    
+
+Mod21 :
+
+  position    2000, 8000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.6003;    
+
+Mod22 :
+
+  position    4000, 8000 ;
+  dimension   2000, 2000 ;
+
+  power values 0.8564;    
+
+Mod23 :
+
+  position    6000, 8000 ;
+  dimension   2000, 2000 ;
+
+  power values 7.0542;    	
+
+Mod24 :
+
+  position    8000, 8000 ;
+  dimension   2000, 2000 ;
+
+  power values 2.3257;
+

@@ -1,0 +1,71 @@
+L2_0 :
+
+  position       0,    0 ;
+  dimension   3500, 5000 ;
+
+  power values 1.9;
+
+L2_1 :
+
+  position    6600,    0 ;
+  dimension   3500, 5000 ;
+
+  power values 1.9;
+
+L2_2 :
+
+  position       0, 5100 ;
+  dimension   3500, 5000 ;
+
+  power values 1.9;
+
+L2_3 :
+
+  position    6600, 5100 ;
+  dimension   3500, 5000 ;
+
+  power values 1.9;
+
+Buf0 :
+
+  position    3500,5100;
+  dimension   3100,2000;
+
+  power values 1;
+
+Buf1 :
+
+  position    3500,3000 ;
+  dimension   3100,2000;
+
+  power values 1;
+
+
+Tag01 :
+
+  position    3500,    0 ;
+  dimension   3100, 1500 ;
+
+  power values 0.7;
+
+Tag11 :
+
+  position    3500, 1500 ;
+  dimension   3100, 1500 ;
+
+  power values 0.7;
+
+Tag21 :
+
+  position    3500, 7100;
+  dimension   3100, 1500 ;
+
+  power values 0.7;
+
+Tag31 :
+
+  position    3500, 8600 ;
+  dimension   3100, 1500 ;
+
+  power values 0.7;
+

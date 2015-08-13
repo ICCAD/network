@@ -228,7 +228,7 @@ bool network_generator::network_gen(int seed){
 	return true;
 }
 
-void choose_layer_inlet(pair<int, int> &path_head, vector <int> &inlet_lock, vector < pair <int, int> > &inlet, int layer){
+void network_generator::choose_layer_inlet(pair<int, int> &path_head, vector <int> &inlet_lock, vector < pair <int, int> > &inlet, int layer){
 	
 	if(inlet_lock[channel_layer*layer+0] != 1){
 		
