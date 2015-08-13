@@ -1,0 +1,13 @@
+set terminal png transparent nocrop enhanced size 1000,1000 font "arial,8" 
+set output 'network_0'
+set title "liquid_network" 
+unset key
+set tic scale 0
+set palette rgbformula -23,-28,-3
+set cbrange [0:5]
+set cblabel "liquid" 
+unset cbtics
+set xrange [-0.5:100.5]
+set yrange [-0.5:100.5]
+set view map
+splot 'map.txt' matrix with image
