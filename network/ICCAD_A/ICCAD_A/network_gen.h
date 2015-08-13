@@ -24,7 +24,7 @@ public:
 	bool check_line(pair<int, int>, int, int);
 	void choose_layer_inlet(pair<int, int> &, vector <int> &, vector < pair <int, int> > &, int);
 	void choose_next_layer_inlet(pair<int, int> &, vector <int> &, vector < pair <int, int> > &, int);
-	int choose_dir(pair<int, int>, int, int);
+	int choose_dir(pair<int, int>, int, int, vector <int>);
 	void print_heat_network();
     void print_liquid_network();
 	void print_network();

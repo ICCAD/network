@@ -5,7 +5,7 @@ void network_generator::data_init(chip_data &chip){
 	this->chip = chip;
 	channel_layer = chip.layer_num - 1;
 	alpha = 0.3;
-	beta = 0.2;
+	beta = 0.6;
 	vector < vector <double> > temp(101,vector <double> (101,channel_layer*1000));
 	vector < vector <int> > temp_liquid(101,vector <int> (101));
 	for( int i=0;i<this->chip.dies.size();i++ ){
@@ -154,7 +154,7 @@ bool network_generator::network_gen(int seed){
 				//cout << "0 0 done" << endl;
 			}
 			else{
-				int next_dir = choose_dir(path_head, path_length, line_layer);
+				int next_dir = choose_dir(path_head, path_length, line_layer, outlet_lock);
 				if(next_dir == 0){
 					path_head.first += 1;
 				}
@@ -198,18 +198,19 @@ bool network_generator::network_gen(int seed){
 		}
 		outlet[outlet_dir+line_layer*4] = path_head;
 		outlet_lock[outlet_dir+line_layer*4] = 1;
+		cout << outlet_dir << " " << outlet_lock[outlet_dir+line_layer*4] << endl;
 		print_heat_network();
 		print_liquid_network();
 		cout << line_num << " line done !" << endl;
 		getchar();
 		
 		if(line_num < channel_layer*4-1){       //-------------------------change inlet
-			if(line_num%4 == 0){
+			//if(line_num%4 == 0){
 				choose_next_layer_inlet(path_head, inlet_lock, inlet, line_layer);
-			}
-			else{
-				choose_layer_inlet();
-			}
+			//}
+			//else{
+			//	choose_layer_inlet();
+			//}
 			liquid_network[line_layer][path_head.second][path_head.first] = 4;
 			path_length = 0;
 			efficiency = 1 * (pow(half_efficiency_length, 5)/(pow(path_length, 5) + pow(half_efficiency_length, 5)));
@@ -306,9 +307,10 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		score[0] += max_heat;
 		if(path_length > reverse_length){
 			score[0] += alpha * (pow((path_head.first+2)-50, 2) + pow(path_head.second-50, 2));
-			if(outlet_lock[layer*4+0] == 1){
-				score[0] -= beta * (pow(100-abs((path_head.first+2)-100), 2);
-			}
+			
+		}
+		if(outlet_lock[layer*4+0] == 1){
+			score[0] -= beta * (pow(100-abs((path_head.first+2)-100), 2.2));
 		}
 	}
 	if(path_head.first-1 >= 0 && liquid_network[layer][path_head.second][path_head.first-1] == 0 && !check_line(path_head, 2, layer)){  //left : 2
@@ -324,7 +326,7 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		if(path_length > reverse_length){
 			score[2] += alpha * (pow((path_head.first-2)-50, 2) + pow(path_head.second-50, 2));
 			if(outlet_lock[layer*4+2] == 1){
-				score[2] -= beta * (pow(100-abs((path_head.first-2)-0), 2);
+				score[2] -= beta * (pow(100-abs((path_head.first-2)-0), 2.2));
 			}
 		}
 	}
@@ -341,7 +343,7 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		if(path_length > reverse_length){
 			score[3] += alpha * (pow(path_head.first-50, 2) + pow((path_head.second+2)-50, 2));
 			if(outlet_lock[layer*4+3] == 1){
-				score[3] -= beta * (pow(100-abs((path_head.second+2)-100), 2);
+				score[3] -= beta * (pow(100-abs((path_head.second+2)-100), 2.2));
 			}
 		}
 	}
@@ -358,14 +360,14 @@ int network_generator::choose_dir(pair <int, int> path_head, int path_length, in
 		if(path_length > reverse_length){
 			score[1] += alpha * (pow(path_head.first-50, 2) + pow((path_head.second-2)-50, 2));
 			if(outlet_lock[layer*4+1] == 1){
-				score[1] -= beta * (pow(100-abs((path_head.second-2)-0), 2);
+				score[1] -= beta * (pow(100-abs((path_head.second-2)-0), 2.2));
 			}
 		}
 	}
 	double max_score = - (1<<30);
 	int next_dir = 0;
 	for( int i=0;i<4;i++ ){
-		//cout << "score " << i << " " << score[i] << endl;
+		cout << "score " << i << " " << score[i] << endl;
 		if(max_score < score[i]){
 			max_score = score[i];
 			next_dir = i;
