@@ -193,6 +193,22 @@ bool chip_data::read(const char *input){//*pointer
 				current_data = "";
 				fin >> T_max >>T_gredient;
 			}
+			else if(current_data == "W"){
+				current_data = "";
+				fin >> width;
+			}
+			else if(current_data == "H"){
+				current_data = "";
+				fin >> height;
+			}
+			else if(current_data == "L"){
+				current_data = "";
+				fin >> length;
+			}
+			else if(current_data == "C"){
+				current_data = "";
+				fin >> case_num;
+			}
 			else{
 				cout << "unknown flag" << endl;
 				return false;

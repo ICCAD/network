@@ -61,8 +61,10 @@ class chip_data{
 	private:
 		vector < vector < vector <int> > > channel;
 		vector <die> dies;
+		int case_num;
 		int layer_num;
 		vector <block> constraint;
+		double length, width, height;
 		double T_max;
 		double T_gredient;
 };

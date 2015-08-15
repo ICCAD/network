@@ -38,9 +38,5 @@ solver:
    initial temperature 300.0 ;
 
 output:
-   //T        (  TOP_DIE, 5000, 3000, "output11.txt",             final ) ;
-   Tmap     (    TOP_DIE,             "./testcase_01/output_Top.txt",             final ) ;
-   Tmap     (    BOTTOM_DIE,             "./testcase_01/output_Bottom.txt",             final ) ;
-   //Tflp     (  TOP_DIE,             "output13.txt", minimum,    final ) ;
-   //Tflpel   (   BOTTOM_DIE.Core1,        "output14.txt", average,    final ) ;
-   //Tcoolant ( CHANNEL_LAYER,             "output15.txt", maximum,    final ) ;
+   Tmap     (    TOP_DIE,             "./testcase_01/output_1.txt",             final ) ;
+   Tmap     (    BOTTOM_DIE,             "./testcase_01/output_0.txt",             final ) ;

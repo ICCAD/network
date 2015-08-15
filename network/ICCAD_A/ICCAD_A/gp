@@ -1,5 +1,5 @@
 set terminal png transparent nocrop enhanced size 1000,1000 font "arial,8" 
-set output 'network_0'
+set output 'liquid_network_0'
 set title "liquid_network" 
 unset key
 set tic scale 0

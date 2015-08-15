@@ -1,5 +1,5 @@
 %% Test_Case_03
-
+C= 3
 N=2
 F={Bottom, Top}
 Bottom=
@@ -41,3 +41,6 @@ Fil={CB_boundary}
 CB_boundary={[(2800,4500), (4400,2000)]}
 
 T= 85 15
+W= 100
+H= 400
+L= 100

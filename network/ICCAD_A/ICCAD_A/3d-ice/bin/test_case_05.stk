@@ -1,0 +1,48 @@
+material SILICON :
+   thermal conductivity     1.30e-4 ;
+   volumetric heat capacity 1.628e-12 ;
+
+
+microchannel 4rm :
+   height 400 ;
+   channel    length 100 ;
+   wall       length 100 ;
+   first wall length  100 ;
+   last wall  length  100 ;
+   wall material SILICON ;
+   coolant flow rate 42 ;
+   coolant heat transfer coefficient side 2.7132e-8 ,
+                                      top 5.7132e-8 ,
+                                   bottom 4.7132e-8 ;
+   coolant volumetric heat capacity 4.176e-12 ;
+   coolant incoming temperature 300.0 ;
+
+
+die TOP_IC :
+   source  2 SILICON ;
+   layer  50 SILICON ;
+
+die MIDDLE_IC :
+   source  2 SILICON ;
+   layer  50 SILICON ;
+
+die BOTTOM_IC :
+   source  2 SILICON ;
+   layer  50 SILICON ;
+
+dimensions :
+   chip length 10100, width 10100 ;
+   cell length   100, width   100 ;
+
+stack:
+   die     TOP_DIE     TOP_IC    floorplan "./testcase_05/T2.flp" ;
+   channel CHANNEL_LAYER    ;
+   die     BOTTOM_DIE       BOTTOM_IC  floorplan "./testcase_05/T1.flp" ;
+
+solver:
+   steady ;
+   initial temperature 300.0 ;
+
+output:
+   Tmap     (    TOP_DIE,             "./testcase_04/output_1.txt",             final ) ;
+   Tmap     (    BOTTOM_DIE,             "./testcase_04/output_0.txt",             final ) ;
