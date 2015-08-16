@@ -6,14 +6,32 @@ void network_generator::data_init(chip_data &chip){
 	channel_layer = chip.layer_num - 1;
 	alpha = 0.3;
 	beta = 0.6;
-	vector < vector <double> > temp(101,vector <double> (101,channel_layer*1000));
+	
 	vector < vector <int> > temp_liquid(101,vector <int> (101));
 	
-	
+	vector < vector < vector <double> > > temp(4, vector < vector <double> >(101,vector <double> (101,channel_layer*1000)));
 	for( int x=0;x<101;x++ ){
 		for( int y=0;y<101;y++ ){
-			double distance_square = pow(50-x, 2) + pow(50-y, 2);
-			temp[y][x] += 50 * 10 * (pow(30, 2) / (pow(30, 2) + distance_square));
+			double distance_square = pow(55-x, 2) + pow(50-y, 2);
+			temp[0][y][x] += 50 * 10 * (pow(30, 2) / (pow(30, 2) + distance_square));
+		}
+	}
+	for( int x=0;x<101;x++ ){
+		for( int y=0;y<101;y++ ){
+			double distance_square = pow(50-x, 2) + pow(45-y, 2);
+			temp[1][y][x] += 50 * 10 * (pow(30, 2) / (pow(30, 2) + distance_square));
+		}
+	}
+	for( int x=0;x<101;x++ ){
+		for( int y=0;y<101;y++ ){
+			double distance_square = pow(45-x, 2) + pow(50-y, 2);
+			temp[2][y][x] += 50 * 10 * (pow(30, 2) / (pow(30, 2) + distance_square));
+		}
+	}
+	for( int x=0;x<101;x++ ){
+		for( int y=0;y<101;y++ ){
+			double distance_square = pow(50-x, 2) + pow(55-y, 2);
+			temp[3][y][x] += 50 * 10 * (pow(30, 2) / (pow(30, 2) + distance_square));
 		}
 	}
 	
@@ -58,25 +76,34 @@ bool network_generator::network_gen(){
 	pair <int, int> path_head;
 	vector < pair <int, int> > inlet(channel_layer*4), outlet(channel_layer*4);
 	vector <int> inlet_lock(channel_layer*4), outlet_lock(channel_layer*4);
+	vector < pair <int, int> > centers(4);
 	
-	random_in_out_let(inlet, outlet);
+	centers[0].first = 55;
+	centers[0].second = 50;
+	centers[1].first = 50;
+	centers[1].second = 45;
+	centers[2].first = 45;
+	centers[2].second = 50;
+	centers[3].first = 50;
+	centers[3].second = 55;
+	//random_in_out_let(inlet, outlet);
 	
-	/*inlet[0].first = 89;
-	inlet[0].second = 100;
-	inlet[1].first = 100;
-	inlet[1].second = 21;
-	inlet[2].first = 63;
-	inlet[2].second = 0;
-	inlet[3].first = 0;
-	inlet[3].second = 63;
-	outlet[0].first = 0;
-	outlet[0].second = 37;
-	outlet[1].first = 100;
-	outlet[1].second = 79;
-	outlet[2].first = 25;
-	outlet[2].second = 0;
-	outlet[3].first = 57;
-	outlet[3].second = 100;*/
+	inlet[0].first = 77;
+    inlet[0].second = 100;
+    inlet[1].first = 19;
+    inlet[1].second = 0;
+    inlet[2].first = 100;
+    inlet[2].second = 23;
+    inlet[3].first = 0;
+    inlet[3].second = 27;
+    outlet[0].first = 53;
+    outlet[0].second = 0;
+    outlet[1].first = 100;
+    outlet[1].second = 35;
+    outlet[2].first = 0;
+    outlet[2].second = 65;
+    outlet[3].first = 49;
+    outlet[3].second = 100;
 	
 	for( int i=0;i<inlet.size();i++ ){
 		pout(inlet[i]);
@@ -87,8 +114,7 @@ bool network_generator::network_gen(){
 	getchar();
 	
 	for( int line_num=0;line_num<channel_layer*4;line_num++ ){
-		vector < vector <double> > heat_network = init_heat_network;
-		vector < vector <double> > temp_heat_map = init_heat_network;
+		vector < vector <double> > temp_heat_map(101, vector <double>(101));
 		bool reverse = 0;
 		for( int x=0;x<101;x++ ){
 			for( int y=0;y<101;y++ ){
@@ -102,7 +128,7 @@ bool network_generator::network_gen(){
 			//pout(path_head);
 			//cout <<endl;
 			//getchar();
-			if(Is_close_center(path_head, line_num*4+3) && reverse == 0){
+			if(Is_close_center(path_head, centers[line_num%4]) && reverse == 0){
 				for( int x=0;x<101;x++ ){
 					for( int y=0;y<101;y++ ){
 						if(liquid_network[line_num/4][y][x] == 4){
@@ -117,7 +143,7 @@ bool network_generator::network_gen(){
 				liquid_network[line_num/4][path_head.second][path_head.first] = 4;
 			}
 			else{
-				choose_dir(path_head, line_num/4, &heat_network);
+				choose_dir(path_head, line_num/4, &init_heat_network[line_num%4]);
 				liquid_network[line_num/4][path_head.second][path_head.first] = 4;
 			}
 		}
@@ -134,7 +160,10 @@ bool network_generator::network_gen(){
 		
 		//getchar();
 	}
-	
+	for( int i=0;i<channel_layer*4;i++ ){
+		liquid_network[i/4][inlet[i].second][inlet[i].first] = 2;
+		liquid_network[i/4][outlet[i].second][outlet[i].first] = 3;
+	}
 	
 	//getchar();
 	return true;
@@ -198,9 +227,9 @@ void network_generator::choose_dir(pair <int, int> &path_head, int layer, vector
 	}
 }
 
-bool  network_generator::Is_close_center(pair <int, int> path_head, int alpha){
+bool  network_generator::Is_close_center(pair <int, int> path_head, pair <int, int> center){
 	
-	if(abs(path_head.first-50) + abs(path_head.second-50) <= alpha){
+	if(abs(path_head.first-center.first) + abs(path_head.second-center.second) <= 3){
 		return true;
 	}
 	else{
@@ -349,6 +378,7 @@ void network_generator::network_evolution(){
 	double coolant_flow_rate = 0.0;
 	double unit_pressure_drop = 100.0;
 	while(1){
+		print_network();
 		double total_Q = 0;
 		vector <int> network_col(101,0);
 		vector < vector <int> > single_network(101,network_col);
@@ -362,8 +392,8 @@ void network_generator::network_evolution(){
 		vector < vector <edge_info> > edges(channel_layer);
 		vector < vector < int > > equal_eq(channel_layer);
 		for (int i = 0; i < channel_layer; i++) {
-			network_reverse(&network[i]);
-			network_graph( &network[i], &tempnode[i], &edges[i]);
+			network_reverse(&liquid_network[i]);
+			network_graph( &liquid_network[i], &tempnode[i], &edges[i]);
 			cout << "network_graph done!" << endl;
 			matrix_a[i].get_num_channel(&tempnode[i], &edges[i]);
 			cout << "get_num_channel done!" << endl;
@@ -392,8 +422,11 @@ void network_generator::network_evolution(){
 			matrix_a[i].get_pressure_drop(chip.width, chip.height, chip.length, coolant_flow_rate, unit_pressure_drop, total_Q);
 			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i]);
 			matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
-			matrix_a[i].write_output(&i,&network[i], &tempnode[i],&flow_rate[i],&direction[i]);
+			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i]);
 		}
+		
+		cout << "file done !" << endl;
+		getchar();
 		
 		ifstream *fin = new ifstream[channel_layer+1];
 		vector < vector < vector <double> > > T_map;
@@ -476,7 +509,7 @@ void network_generator::print_network(){
 				if(liquid_network[i][y][x] == 7 || liquid_network[i][y][x] == 0){
 					gnuData_out << 0 << " ";
 				}
-				else if(liquid_network[i][y][x] == 1){
+				else{
 					gnuData_out << 3 << " ";
 				}
 				

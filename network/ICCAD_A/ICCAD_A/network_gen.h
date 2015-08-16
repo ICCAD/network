@@ -24,14 +24,14 @@ public:
 	bool check_line(pair<int, int>, int, int);
 	void choose_dir(pair<int, int> &, int, vector < vector <double> > *);
 	void random_in_out_let(vector < pair <int, int> > &, vector < pair <int, int> > &);
-	bool Is_close_center(pair <int, int>, int);
+	bool Is_close_center(pair <int, int>, pair <int, int>);
 	void network_evolution();
 	void print_heat_network(vector < vector <double> >);
     void print_liquid_network();
 	void print_network();
 private:
 	int channel_layer;
-	vector < vector <double> > init_heat_network;
+	vector < vector < vector <double> > > init_heat_network;
 	vector < vector < vector <int> > > liquid_network;
 	vector < vector < vector <int> > > init_liquid_network;
 	chip_data chip;
