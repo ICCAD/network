@@ -438,18 +438,18 @@ void network_generator::network_evolution(){
 		cout << "file done !" << endl;
 		getchar();
 		
-		string 3D_ICE_sim = "3d-ice/bin/3D-ICE-Emulator test_case_0";
-		3D_ICE_sim += chip.case_num + 48;
+		string simulator = "3d-ice/bin/3D-ICE-Emulator test_case_0";
+		simulator += chip.case_num + 48;
 		for( int i=0;i<channel_layer;i++ ){
-			3D_ICE_sim += " ../../network_"
-			3D_ICE_sim += i+48;
-			3D_ICE_sim += " ../../flowrate_"
-			3D_ICE_sim += i+48;
-			3D_ICE_sim += " ../../direction_"
-			3D_ICE_sim += i+48;
+			simulator += " ../../network_";
+			simulator += i+48;
+			simulator += " ../../flowrate_";
+			simulator += i+48;
+			simulator += " ../../direction_";
+			simulator += i+48;
 		}
-		cout << 3D_ICE_sim << endl;
-		system(3D_ICE_sim.c_str());
+		cout << simulator << endl;
+		system(simulator.c_str());
 		getchar();
 		
 		ifstream *fin = new ifstream[channel_layer+1];
