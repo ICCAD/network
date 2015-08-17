@@ -168,7 +168,7 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
     vector <int> path_channel(num_channel,0);
     long double temp_length = 0;
     vector <int> channels;
-    
+    ofstream fout("all_functions.txt");
     for (int i = 0; i < (*temp_node).size(); i++) { //node
         if ((*temp_node)[i].type == 'b'){
             //  cout << "node_" << i << endl;
@@ -270,22 +270,27 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
         temp_row.clear();
         temp_row.resize(num_channel+1);
     }
-   /* cout << "\nall_function" << endl;
+    cout << "\nall_function" << endl;
     for (int i = 0; i < all_function.size(); i++) {
         for (int j = 0 ; j < all_function[i].size() ; j++) {
-            cout << all_function[i][j] << "\t" ;
+           // cout << all_function[i][j] << "\t" ;
+            fout << all_function[i][j] << "\t" ;
         }
-        cout << endl;
+        //cout << endl;
+        fout << endl;
     }
-    cout << endl;*/
+    cout << endl;
+    
+    for (int i = 0; i < all_function.size(); i++) {
+        functions.push_back(i);
+    }
 }
-
 
 bool compare (record_info a ,record_info b){
     return a.num < b.num;
 }
 
-void matrix::initial_matrix(vector < int > *equal_eq){
+void matrix::initial_matrix(){ //vector < int > *equal_eq
     matrix_Q.clear();
     store_func.clear();
     store_func.resize(0);
@@ -295,40 +300,12 @@ void matrix::initial_matrix(vector < int > *equal_eq){
         store_func.push_back(i);
     }
     
-    if ((*equal_eq).size() == 0){
-        for (int i = node_func_num; i < all_function[0].size()-1; i++){
-            matrix_Q.push_back(all_function[i]);
-            store_func.push_back(i);
-        }
+    for (int i = node_func_num; i < all_function[0].size()-1; i++){
+        matrix_Q.push_back(all_function[functions[i]]);
+        store_func.push_back(functions[i]);
     }
-    else{
-        for (int i = node_func_num,k = node_func_num; i < all_function[0].size()-1 && k < all_function.size(); k++){
-            for (int j = 0; j < (*equal_eq).size(); j++){
-                if (k == (*equal_eq)[j]){
-                    break;
-                }
-                if ( j == (*equal_eq).size()-1){
-                    matrix_Q.push_back(all_function[k]);
-                    store_func.push_back(k);
-                    i++;
-                }
-            }
-        }
-    }
-  /*  cout << "store_func: ";
-    for ( int i = 0; i < store_func.size(); i++){
-        cout << store_func[i] << " ";
-    }
-    cout << endl;
-    cout << "initial" <<endl;
-    for (int i = 0;i < matrix_Q.size();i++){
-        for (int j = 0; j < matrix_Q[i].size(); j++){
-            cout<< matrix_Q[i][j] << "\t";
-        }
-        cout << endl;
-    }
-    cout << endl;*/
 }
+
 
 void matrix::check_matrix_Q(){
     vector < vector <long double> > matrix_copy;
@@ -337,8 +314,13 @@ void matrix::check_matrix_Q(){
     vector <record_info> record;
     vector <int> store_func_copy;
     store_func_copy.clear();
-    //store_func_copy.resize();
     store_func_copy = store_func;
+    /*cout << "store_func_copy"<< endl;
+    for (int i = 0; i < store_func_copy.size(); i++) {
+        cout << store_func_copy[i] << " ";
+    }
+    cout << endl;
+    ofstream fout("after_check.txt");*/
     for (int j = 0; j < matrix_Q[0].size()-1 ; j++){
         temp_record.column = j;
         temp_record.num = 0;
@@ -350,11 +332,13 @@ void matrix::check_matrix_Q(){
             }
         }
     }
-    
+    //cout << 5555555 << " " << matrix_copy[5].size() << endl;
     for (int i = 0; i < matrix_Q[0].size()-1 ; i++){
         sort (record.begin(),record.end(),compare);
-        matrix_Q[record[0].column] = matrix_copy[record[0].row[0]];
+        matrix_Q[record[0].column] = matrix_copy[record[0].row[0]];//
+        //cout << 2 << endl;
         store_func[record[0].column] = store_func_copy[record[0].row[0]];/////
+        //cout << 3 << endl;
         for (int j = 1; j < record.size() ; j++){
             for ( int k = 0 ; k < record[j].row.size(); k++){
                 if (record[j].row[k] == record[0].row[0]){
@@ -363,27 +347,39 @@ void matrix::check_matrix_Q(){
                 }
             }
         }
+        //cout << 4 << endl;
         record.erase(record.begin());
+        //cout << 5 << endl;
     }
-  /*  cout << "after check" << endl;
+    //cout << 6666666 << endl;
+    /*cout << "after check" << endl;
     for (int i = 0; i < matrix_Q.size(); i++){
         for (int j = 0; j < matrix_Q[i].size(); j++){
             cout << matrix_Q[i][j] << "\t";
+            fout << matrix_Q[i][j] << "\t";
         }
         cout << endl;
+        fout << endl;
     }
     cout << endl;*/
 }
 
-int  matrix::Gaussian_Elimination(vector < int > *equal_eq){
+int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
     long double a,b;
     for (int j = 0; j < matrix_Q[0].size()-1; j++ ){
+        //////
         if (matrix_Q[j][j] == 0){
-            (*equal_eq).push_back(store_func[j]);
-            cout << "111 " << store_func[j] << endl;
-            cout << (*equal_eq)[(*equal_eq).size()-1] << endl;
+            //cout << "111 " << store_func[j] << endl;
+            for (int i = 0;  i < functions.size(); i++) {
+                if (functions[i] == store_func[j]) {
+                    functions.erase(functions.begin()+i);
+                    break;
+                }
+            }
+            functions.push_back(store_func[j]);
             return j;
         }
+        ///////
         for (int i = 0; i < matrix_Q.size(); i++){
             if ( j == i ){
                 if ( matrix_Q[i][j] != 1 ){
@@ -409,8 +405,9 @@ int  matrix::Gaussian_Elimination(vector < int > *equal_eq){
                     }
                     
                     if (counter == 0){ //same
-                        (*equal_eq).push_back(store_func[i]);
+                        //(*equal_eq).push_back(store_func[i]);
                         cout << "222 " << store_func[i] << endl;
+                        functions.erase(functions.begin()+i);
                         return i;
                     }
                 }
@@ -469,10 +466,7 @@ void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_fl
 }
 
 void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <double> > *flow_rate){ //
-    //int current_edge;
-    //int current_node;
     for (int i = 0; i < num_channel; i++) {
-       // current_edge = -1;
         for (int j = 0; j < member_channel[i].size(); j++) {
             if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
                 for (int k = (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first; k <= (*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.second].coordinate.first; k++) {
@@ -724,7 +718,8 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     ofstream network_out(output_network.c_str());
     ofstream flowrate_out(output_flow.c_str());
     ofstream direction_out(output_direction.c_str());
-    for (int i = (*flow_rate).size()-1; i >= 0; i--) {
+   
+    for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << (*flow_rate)[i][j] << "\t";
             direction_out << (*direction)[i][j] << " ";
@@ -738,7 +733,8 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
             single_network[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 4;
         }
     }
-    for (int i = single_network.size()-1; i >= 0; i--) {
+   
+    for (int i = 0; i < single_network.size(); i++) {
         for (int j = 0; j < single_network[i].size(); j++) {
             network_out << single_network[i][j] << " ";
         }

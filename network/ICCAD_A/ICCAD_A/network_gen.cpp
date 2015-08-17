@@ -88,16 +88,16 @@ bool network_generator::network_gen(){
 	centers[3].second = 55;
 	//random_in_out_let(inlet, outlet);
 	
-	inlet[0].first = 53;
-    inlet[0].second = 0;
+	inlet[0].first = 77;//53
+    inlet[0].second = 100;//0
     inlet[1].first = 19;
     inlet[1].second = 0;
     inlet[2].first = 100;
     inlet[2].second = 23;
     inlet[3].first = 0;
     inlet[3].second = 27;
-    outlet[0].first = 77;
-    outlet[0].second = 100;
+    outlet[0].first = 53;//77
+    outlet[0].second = 0;//100
     outlet[1].first = 100;
     outlet[1].second = 35;
     outlet[2].first = 0;
@@ -400,9 +400,9 @@ void network_generator::network_evolution(){
 		vector < matrix > matrix_a(channel_layer);
 		vector < vector <node> > tempnode(channel_layer);
 		vector < vector <edge_info> > edges(channel_layer);
-		vector < vector < int > > equal_eq(channel_layer);
+		//vector < vector < int > > equal_eq(channel_layer);
 		for (int i = 0; i < channel_layer; i++) {
-			network_reverse(&liquid_network[i]);
+			//network_reverse(&liquid_network[i]);
 			network_graph( &liquid_network[i], &tempnode[i], &edges[i]);
 			cout << "network_graph done!" << endl;
 			matrix_a[i].get_num_channel(&tempnode[i], &edges[i]);
@@ -416,9 +416,9 @@ void network_generator::network_evolution(){
 			
 			int check = -2;
 			while ( check != -1){
-				matrix_a[i].initial_matrix(&equal_eq[i]);
+				matrix_a[i].initial_matrix();//&equal_eq[i]
 				matrix_a[i].check_matrix_Q();
-				check = matrix_a[i].Gaussian_Elimination(&equal_eq[i]);
+				check = matrix_a[i].Gaussian_Elimination();//&equal_eq[i]
 			}
 			matrix_a[i].get_inlet_Q(&edges[i]);
 			

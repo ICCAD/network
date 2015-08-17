@@ -31,9 +31,9 @@ public:
     void DFS_edge(int, vector <node> *, vector <edge_info> *, vector <int> *, vector <int> *);
     void get_path(vector <node> *, vector <edge_info> * );
     void DFS_path(int, vector <node> *, vector <edge_info> *, vector <int> , vector <int> );
-    int Gaussian_Elimination(vector < int > *);
+    int Gaussian_Elimination();//vector < int > *
     void check_matrix_Q();
-    void initial_matrix(vector < int > *);
+    void initial_matrix();//vector < int > *
     void get_funtion(vector <node> *, vector <edge_info> *, long double);
     void initial_direction(vector <node> *, vector <edge_info> *);
     void get_inlet_Q(vector <edge_info> *);
@@ -51,6 +51,7 @@ private:
     vector < vector <int> > member_path;
     vector <int> store_func;
     vector <double> sol_Q;
+    vector <int> functions;
     int num_channel;
     int num_path;
     long double pressure_drop;

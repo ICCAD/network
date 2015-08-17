@@ -84,7 +84,7 @@ int main(const int argc, const char **argv){ //
     
     for (int i = 0; i < network_num; i++) {
         cout << "network_num " << i << endl;
-        network_reverse(&network[i]);
+        //network_reverse(&network[i]);
         network_graph( &network[i], &tempnode[i], &edges[i]);
         cout << "network_graph done!" << endl;
         //getchar();
@@ -111,9 +111,9 @@ int main(const int argc, const char **argv){ //
         
         int check = -2;
         while ( check != -1){
-            matrix_a[i].initial_matrix(&equal_eq[i]);
+            matrix_a[i].initial_matrix(); //&equal_eq[i]
             matrix_a[i].check_matrix_Q();
-            check = matrix_a[i].Gaussian_Elimination(&equal_eq[i]);
+            check = matrix_a[i].Gaussian_Elimination();//&equal_eq[i]
         }
         
         matrix_a[i].get_inlet_Q(&edges[i]);
