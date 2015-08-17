@@ -51,28 +51,25 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	
-	ofstream fout(argv[2]);
-	
     StackDescription_t stkd ;
     Analysis_t         analysis ;
     Output_t           output ;
     ThermalData_t      tdata ;
-	
 	int **network = new int *[(argc-2)/3];
 	double **flow_rate = new double *[(argc-2)/3];
 	int **direction = new int *[(argc-2)/3];
 	
 	for( int i=0;i<(argc-2)/3;i++ ){
-		ofstream fout_network(argv[2+i*3]);
-		ofstream fout_flow_rate(argv[3+i*3]);
-		ofstream fout_direction(argv[4+i*3]);
+		ifstream fin_network(argv[2+i*3]);
+		ifstream fin_flow_rate(argv[3+i*3]);
+		ifstream fin_direction(argv[4+i*3]);
 		network[i] = new int[101*101];
 		flow_rate[i] = new double[101*101];
 		direction[i] = new int[101*101];
 		for( int j=0;j<101*101;j++ ){
-			fout_network << network[i][j];
-			fout_flow_rate << flow_rate[i][j];
-			fout_direction << direction[i][j];
+			fin_network >> network[i][j];
+			fin_flow_rate >> flow_rate[i][j];
+			fin_direction >> direction[i][j];
 		}
 	}
 	

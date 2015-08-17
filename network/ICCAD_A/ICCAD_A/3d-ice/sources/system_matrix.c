@@ -754,7 +754,7 @@ static SystemMatrix_t add_liquid_column_4rm
 		}
 		//cout << "south " << layer_index << " " << row_index << " " << column_index << " " <<  conductance << endl;
 		//cout << "south " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
-		
+
 		//*sysmatrix.Values++ = conductance;
 		//*sysmatrix.Values++ = conductance_2;
 		
@@ -781,7 +781,7 @@ static SystemMatrix_t add_liquid_column_4rm
             get_conductance_east (thermal_grid, dimensions, layer_index, row_index, column_index - 1)
         ) ;
 		
-		if(network[row_index*101+column_index-1]){
+		if(network[layer_index/3][row_index*101+column_index-1]){
 			
 			if(network[layer_index/3][row_index*101+column_index] == 4){
 				conductance_2 = get_inv(4,direction[layer_index/3][row_index*101+column_index-1])
@@ -928,7 +928,7 @@ static SystemMatrix_t add_liquid_column_4rm
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][(row_index+1)*101+column_index]) ;
 			}
 			else{
-				conductance_2 = get_inv(8,direction[layer_index/3][(row_index+1)*101+column_index])
+				conductance_2 = get_inv(8,direction[layer_index/3][row_index*101+column_index])
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][row_index*101+column_index]) ;
 			}
 			*sysmatrix.Values++ = conductance_2 ;
@@ -1016,7 +1016,7 @@ static SystemMatrix_t add_liquid_column_4rm
 	}
 	//cout << "diagonal " << layer_index << " " << row_index << " " << column_index << " " << *diagonal_pointer << endl << endl;
 	//cout << endl;
-	
+	//getchar();
 		
 #ifdef PRINT_SYSTEM_MATRIX
     fgetpos (stderr, &last_fpos) ;
@@ -1699,8 +1699,6 @@ void fill_system_matrix
 
     CellIndex_t lindex ;
 	
-	cout << "layer size : " << thermal_grid->Size << endl;
-	getchar();
     for (lindex = 0u ; lindex != thermal_grid->Size ; lindex++)
     {
         switch (thermal_grid->LayersProfile [lindex])

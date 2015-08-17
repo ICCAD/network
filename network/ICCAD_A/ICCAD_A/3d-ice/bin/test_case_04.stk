@@ -36,10 +36,10 @@ dimensions :
 
 stack:
    die     TOP_DIE     TOP_IC    floorplan "./testcase_04/top.flp" ;
-   channel CHANNEL_LAYER    ;
+   channel CHANNEL_LAYER_1    ;
    die	MIDDLE_DIE MIDDLE_IC  floorplan "./testcase_04/middle.flp" ;
-   channel	CHANNEL_LAYER	;
-   die     BOTTOM_DIE       floorplan "./testcase_04/bottom.flp" ;
+   channel	CHANNEL_LAYER_0	;
+   die     BOTTOM_DIE BOTTOM_IC      floorplan "./testcase_04/bottom.flp" ;
 
 solver:
    steady ;
@@ -47,5 +47,5 @@ solver:
 
 output:
    Tmap     (    TOP_DIE,             "./testcase_04/output_2.txt",             final ) ;
-   Tmap     (    MIDDLE_IC,             "./testcase_04/output_1.txt",             final ) ;
+   Tmap     (    MIDDLE_DIE,             "./testcase_04/output_1.txt",             final ) ;
    Tmap     (    BOTTOM_DIE,             "./testcase_04/output_0.txt",             final ) ;

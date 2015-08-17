@@ -734,7 +734,7 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     }
     single_network = (*network);
     for (int i = 0; i < (*temp_node).size(); i++) {
-        if ((*temp_node)[i].type == 'b') {
+        if ((*temp_node)[i].type == 'b' || (*temp_node)[i].type == 'c') {
             single_network[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 4;
         }
     }

@@ -88,16 +88,16 @@ bool network_generator::network_gen(){
 	centers[3].second = 55;
 	//random_in_out_let(inlet, outlet);
 	
-	inlet[0].first = 77;
-    inlet[0].second = 100;
+	inlet[0].first = 53;
+    inlet[0].second = 0;
     inlet[1].first = 19;
     inlet[1].second = 0;
     inlet[2].first = 100;
     inlet[2].second = 23;
     inlet[3].first = 0;
     inlet[3].second = 27;
-    outlet[0].first = 53;
-    outlet[0].second = 0;
+    outlet[0].first = 77;
+    outlet[0].second = 100;
     outlet[1].first = 100;
     outlet[1].second = 35;
     outlet[2].first = 0;
@@ -164,7 +164,17 @@ bool network_generator::network_gen(){
 		liquid_network[i/4][inlet[i].second][inlet[i].first] = 2;
 		liquid_network[i/4][outlet[i].second][outlet[i].first] = 3;
 	}
+	for( int l=0;l<channel_layer;l++ ){
+		for( int x=0;x<101;x++ ){
+			for( int y=0;y<101;y++ ){
+				if(liquid_network[l][y][x] == 7){
+					liquid_network[l][y][x] = 0;
+				}
+			}
+		}
+	}
 	
+	print_liquid_network();
 	//getchar();
 	return true;
 }
@@ -375,7 +385,7 @@ void network_generator::random_in_out_let(vector < pair <int, int> > &inlet, vec
 
 void network_generator::network_evolution(){
 	
-	double coolant_flow_rate = 0.0;
+	double coolant_flow_rate = 42.0;
 	double unit_pressure_drop = 100.0;
 	while(1){
 		print_network();
@@ -426,6 +436,20 @@ void network_generator::network_evolution(){
 		}
 		
 		cout << "file done !" << endl;
+		getchar();
+		
+		string 3D_ICE_sim = "3d-ice/bin/3D-ICE-Emulator test_case_0";
+		3D_ICE_sim += chip.case_num + 48;
+		for( int i=0;i<channel_layer;i++ ){
+			3D_ICE_sim += " ../../network_"
+			3D_ICE_sim += i+48;
+			3D_ICE_sim += " ../../flowrate_"
+			3D_ICE_sim += i+48;
+			3D_ICE_sim += " ../../direction_"
+			3D_ICE_sim += i+48;
+		}
+		cout << 3D_ICE_sim << endl;
+		system(3D_ICE_sim.c_str());
 		getchar();
 		
 		ifstream *fin = new ifstream[channel_layer+1];
