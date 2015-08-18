@@ -37,12 +37,12 @@ public:
     void get_funtion(vector <node> *, vector <edge_info> *, long double);
     void initial_direction(vector <node> *, vector <edge_info> *);
     void get_inlet_Q(vector <edge_info> *);
-    void get_pressure_drop(double, double, double, double, double, double);
-    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <double> > *);
+    void get_pressure_drop(double, double, double, double,long double, long double);
+    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *);
     void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
     //void write_output(const char *, const char *, vector < vector <double> > *, vector < vector <int> >*);
-    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <double> > *, vector < vector <int> >*);
-    double inlet_Q;
+    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*);
+    long double inlet_Q;
 private:
     vector < vector <long double> > all_function;
     vector < vector <long double> > matrix_Q;
@@ -50,7 +50,7 @@ private:
     vector < pair < int,int > > channel_dir;
     vector < vector <int> > member_path;
     vector <int> store_func;
-    vector <double> sol_Q;
+    vector <long double> sol_Q;
     vector <int> functions;
     int num_channel;
     int num_path;

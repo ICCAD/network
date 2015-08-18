@@ -32,21 +32,22 @@ int main(const int argc, const char **argv){ //
     
     
     int network_num = 2;
-    double total_Q = 0;
+    long double total_Q = 0;
     vector <int> network_col(101,0);
     vector < vector <int> > single_network(101,network_col);
     vector < vector < vector <int> > > network(network_num,single_network);
-    vector <double> flowrate_col(101,0);
-    vector < vector <double> > single_flow_rate(101,flowrate_col);
-    vector < vector < vector <double> > > flow_rate(network_num,single_flow_rate);
+    vector <long double> flowrate_col(101,0);
+    vector < vector <long double> > single_flow_rate(101,flowrate_col);
+    vector < vector < vector <long double> > > flow_rate(network_num,single_flow_rate);
     vector < vector < vector <int> > > direction(network_num,single_network);
    
     vector < matrix > matrix_a(network_num);
     vector < vector <node> > tempnode(network_num);
     vector < vector <edge_info> > edges(network_num);
     vector < vector < int > > equal_eq(network_num);
-    double wc = 100,hc = 400,l = 100,coolant_flow_rate = 42,unit_pressure_drop = 100;
-    
+    double wc = 100,hc = 400,l = 100,coolant_flow_rate = 42;//,unit_pressure_drop = 100.0 * pow (10.0, 12.0) / 60;
+    long double unit_pressure_drop;
+    unit_pressure_drop = 100.0 * pow (10.0, 12.0) / 60;
     //0:no_flow 1:flow 2:inlet 3:outlet
     for (int j = 1; j < 101; j+=2) {
         network[1][0][j] = 3;

@@ -385,17 +385,17 @@ void network_generator::random_in_out_let(vector < pair <int, int> > &inlet, vec
 
 void network_generator::network_evolution(){
 	
-	double coolant_flow_rate = 84.0;
-	double unit_pressure_drop = 100.0;
+	long double coolant_flow_rate = 84.0;
+	long double unit_pressure_drop = 100.0;// * pow (10.0, 12.0) / 60
 	while(1){
 		print_network();
-		double total_Q = 0;
+		long double total_Q = 0;
 		vector <int> network_col(101,0);
 		vector < vector <int> > single_network(101,network_col);
 		vector < vector < vector <int> > > network(channel_layer,single_network);
-		vector <double> flowrate_col(101,0);
-		vector < vector <double> > single_flow_rate(101,flowrate_col);
-		vector < vector < vector <double> > > flow_rate(channel_layer,single_flow_rate);
+		vector <long double> flowrate_col(101,0);
+		vector < vector <long double> > single_flow_rate(101,flowrate_col);
+		vector < vector < vector <long double> > > flow_rate(channel_layer,single_flow_rate);
 		vector < vector < vector <int> > > direction(channel_layer,single_network);
 		vector < matrix > matrix_a(channel_layer);
 		vector < vector <node> > tempnode(channel_layer);

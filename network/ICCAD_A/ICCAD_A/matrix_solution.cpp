@@ -280,7 +280,7 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
         fout << endl;
     }
     cout << endl;
-    
+    cout << "all function num " << all_function.size() << endl;
     for (int i = 0; i < all_function.size(); i++) {
         functions.push_back(i);
     }
@@ -303,7 +303,19 @@ void matrix::initial_matrix(){ //vector < int > *equal_eq
     for (int i = node_func_num; i < all_function[0].size()-1; i++){
         matrix_Q.push_back(all_function[functions[i]]);
         store_func.push_back(functions[i]);
+        //cout << functions[i] << " ";
     }
+    cout << "functions" <<endl;
+    for (int i = 0; i < functions.size(); i++) {
+        cout <<functions[i] << " ";
+    }
+    cout << endl;
+    cout << "used functions "<< endl;
+    for (int i = 0; i < store_func.size(); i++) {
+        cout << store_func[i] << " ";
+    }
+    cout << endl;
+    cout << endl;
 }
 
 
@@ -369,14 +381,20 @@ int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
     for (int j = 0; j < matrix_Q[0].size()-1; j++ ){
         //////
         if (matrix_Q[j][j] == 0){
-            //cout << "111 " << store_func[j] << endl;
-            for (int i = 0;  i < functions.size(); i++) {
-                if (functions[i] == store_func[j]) {
-                    functions.erase(functions.begin()+i);
-                    break;
-                }
+            cout << "111 " << store_func[j] << endl;
+            if (store_func[j] < node_func_num) {
+                functions.erase(functions.begin()+node_func_num);
+                functions.push_back(store_func[node_func_num]);
             }
-            functions.push_back(store_func[j]);
+            else{
+                for (int i = 0;  i < functions.size(); i++) {
+                    if (functions[i] == store_func[j]) {
+                        functions.erase(functions.begin()+i);
+                        break;
+                    }
+                }
+                functions.push_back(store_func[j]);
+            }
             return j;
         }
         ///////
@@ -405,23 +423,32 @@ int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
                     }
                     
                     if (counter == 0){ //same
-                        //(*equal_eq).push_back(store_func[i]);
-                        //cout << "222 " << store_func[i] << endl;
-                        functions.erase(functions.begin()+i);
+                        cout << "222 " << store_func[i] << endl;
+                        for (int k = 0;  k < functions.size(); k++) {
+                            if (functions[k] == store_func[i]) {
+                                functions.erase(functions.begin()+k);
+                                break;
+                            }
+                        }
                         return i;
                     }
                 }
             }
         }
     }
-  /*  cout << "sol: " << num_channel << endl;
+    cout << "sol: " << num_channel << endl;
     for (int i = 0; i < matrix_Q.size(); i++){
-        for (int j = 0; j < matrix_Q[i].size(); j++){
-            cout << matrix_Q[i][j] << "\t";
-        }
-        cout << endl;
+        //for (int j = 0; j < matrix_Q[i].size(); j++){
+            //cout << matrix_Q[i][j] << "\t";
+        cout << i+1 << " " << matrix_Q[i][matrix_Q[0].size()-1] <<endl;//<< "\t";
+        /*if (matrix_Q[i][matrix_Q[0].size()-1] == 0) {
+            cout << "  000000 " ;
+            getchar();
+        }*/
+        //}
+       // cout << endl;
     }
-    cout << endl;*/
+    cout << endl;
     return -1;
 }
 
@@ -448,7 +475,7 @@ void matrix::get_inlet_Q(vector <edge_info> *temp_edge){
 }
 
 
-void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_flow_rate, double unit_pressure_drop ,double total_Q){
+void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_flow_rate,long double unit_pressure_drop ,long double total_Q){
     double k,dh,Ac,n;//Q
     dh = (2 * wc * hc) / (wc + hc);
     Ac = wc * hc;
@@ -456,16 +483,17 @@ void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_fl
     
     cout << "coolant_flow_rate: " << coolant_flow_rate << endl; //pow (7.0, 3.0)
     n = (coolant_flow_rate * pow (10.0, 12.0) / 60) / total_Q;
+    //n = coolant_flow_rate / total_Q;
     cout << "sol_Q: ";
     for (int i = 0; i < matrix_Q.size(); i++) {
         sol_Q.push_back( n * matrix_Q[i][matrix_Q[0].size()-1] );
-       // cout << sol_Q[sol_Q.size()-1] << " ";
+        cout << sol_Q[sol_Q.size()-1] << " ";
     }
     pressure_drop = k * l * unit_pressure_drop * n;
     cout << "\npressure_drop: " << pressure_drop  << " (pa)" << endl;
 }
 
-void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <double> > *flow_rate){ //
+void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <long double> > *flow_rate){ //
     for (int i = 0; i < num_channel; i++) {
         for (int j = 0; j < member_channel[i].size(); j++) {
             if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
@@ -700,7 +728,7 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
     }*/
 }
 
-void matrix::write_output(int *i, vector < vector <int> > *network, vector <node> *temp_node, vector < vector <double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
+void matrix::write_output(int *i, vector < vector <int> > *network, vector <node> *temp_node, vector < vector <long double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
     vector <int> network_col(101,0);
     vector < vector <int> > single_network(101,network_col);
     ostringstream oss;
