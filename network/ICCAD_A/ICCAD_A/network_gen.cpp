@@ -385,7 +385,7 @@ void network_generator::random_in_out_let(vector < pair <int, int> > &inlet, vec
 
 void network_generator::network_evolution(){
 	
-	double coolant_flow_rate = 42.0;
+	double coolant_flow_rate = 84.0;
 	double unit_pressure_drop = 100.0;
 	while(1){
 		print_network();
@@ -438,8 +438,11 @@ void network_generator::network_evolution(){
 		cout << "file done !" << endl;
 		getchar();
 		
-		string simulator = "3d-ice/bin/3D-ICE-Emulator test_case_0";
+		chdir("3d-ice/bin/");
+		system("ls");
+		string simulator = "./3D-ICE-Emulator test_case_0";
 		simulator += chip.case_num + 48;
+		simulator += ".stk";
 		for( int i=0;i<channel_layer;i++ ){
 			simulator += " ../../network_";
 			simulator += i+48;
@@ -482,6 +485,79 @@ void network_generator::network_evolution(){
 	
 	
 }
+
+pair <double, double> network_generator::get_circle_center(pair<int, int> pa, pair<int, int> pb, double r, int mode){   ////// 0 : left bot    1 : right top
+	
+	double l = pow( pow(pb.first-pa.first, 2) + pow(pb.second-pa.second, 2), 0.5);
+	double b = l / 2.0;
+	double h = pow( pow(r, 2) - pow(b, 2), 0.5);
+	double tdx = -1 * h * (pb.second-pa.second) / l;
+	double tdy = h * (pb.first-pa.first) / l;
+	pair<double, double> c;
+	if(mode == 1){
+		c.first = (pb.first+pa.first) / 2 + tdx;
+		c.second = (pb.second+pa.second) / 2 + tdy;
+	}
+	else{
+		c.first = (pb.first+pa.first) / 2 - tdx;
+		c.second = (pb.second+pa.second) / 2 - tdy;
+	}
+	return c;
+}
+
+void network_generator::drow_line(pair<double, double> c, pair<int, int> pa, pair<int, int> pb, double r, int layer){
+	
+	pair<int, int> path_head = pa;
+	liquid_network[layer][path_head.second][path_head.first] = 4;
+	while(path_head != pb){
+		choose_dir_2(path_head, c, r, layer);
+		liquid_network[layer][path_head.second][path_head.first] = 4;
+	}
+	
+}
+
+void network_generator::choose_dir_2(pair<int, int> &path_head, pair<double, double> c, double r, int layer){
+	
+	vector <double> score(4);
+	if(path_head.first+1 <= 100 && liquid_network[layer][path_head.second][path_head.first+1] != 7 &&  liquid_network[layer][path_head.second][path_head.first+1] != 4){
+		score[0] += fabs(pow(path_head.first+1-c.first, 2) + pow(path_head.second-c.second, 2) - pow(r, 2));
+		
+	}
+	if(path_head.second-1 >= 0 && liquid_network[layer][path_head.second-1][path_head.first] != 7 &&  liquid_network[layer][path_head.second-1][path_head.first] != 4){
+		score[1] += fabs(pow(path_head.first-c.first, 2) + pow(path_head.second-1-c.second, 2) - pow(r, 2));
+	}
+	if(path_head.first-1 >= 0 && liquid_network[layer][path_head.second][path_head.first-1] != 7 &&  liquid_network[layer][path_head.second][path_head.first-1] != 4){
+		score[2] += fabs(pow(path_head.first-1-c.first, 2) + pow(path_head.second-c.second, 2) - pow(r, 2));
+	}
+	if(path_head.second+1 <= 100 && liquid_network[layer][path_head.second+1][path_head.first] != 7 &&  liquid_network[layer][path_head.second+1][path_head.first] != 4){
+		score[3] += fabs(pow(path_head.first-c.first, 2) + pow(path_head.second+1-c.second, 2) - pow(r, 2));
+	}
+	double min_score = 1<<30;
+	int next_location = -1;
+	for( int i=0;i<4;i++ ){
+		if(min_score > score[i]){
+			score[i] = min_score;
+			next_location = i;
+		}
+	}
+	if(next_location == 0){
+		path_head.first ++;
+	}
+	else if(next_location == 1){
+		path_head.second --;
+	}
+	else if(next_location == 2){
+		path_head.first --;
+	}
+	else if(next_location == 3){
+		path_head.second ++;
+	}
+	if(next_location == -1){
+		cout << "error" << endl;
+		getchar();
+	}
+}
+
 
 void network_generator::print_liquid_network(){
 	

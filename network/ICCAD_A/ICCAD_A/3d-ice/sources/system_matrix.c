@@ -665,7 +665,7 @@ static SystemMatrix_t add_liquid_column_4rm
 	Conductance_t conductance_2 = 0.0 ;
     SystemMatrixCoeff_t  diagonal_value   = 0.0 ;
     SystemMatrixCoeff_t *diagonal_pointer = NULL ;
-
+	double check = 0.0;
 #ifdef PRINT_SYSTEM_MATRIX
     fpos_t diag_fposition, last_fpos ;
     fprintf (stderr,
@@ -737,7 +737,7 @@ static SystemMatrix_t add_liquid_column_4rm
 				conductance_2 = get_inv(2,direction[layer_index/3][row_index*101+column_index])
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][row_index*101+column_index]) ;
 			}
-			
+			check += conductance_2;
 			*sysmatrix.Values++ = conductance_2 ;
 			
 		}
@@ -792,7 +792,7 @@ static SystemMatrix_t add_liquid_column_4rm
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][row_index*101+column_index]) ;
 			}
 			*sysmatrix.Values++ = conductance_2 ;
-			
+			check += conductance_2;
 		}
 		else{
 			
@@ -877,7 +877,7 @@ static SystemMatrix_t add_liquid_column_4rm
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][row_index*101+column_index]) ;
 			}
 			*sysmatrix.Values++ = conductance_2 ;
-			
+			check += conductance_2;
 		}
 		else{
 			
@@ -932,7 +932,7 @@ static SystemMatrix_t add_liquid_column_4rm
 								* get_convective_term_2(thermal_grid->Channel->Coolant.VHC,flow_rate[layer_index/3][row_index*101+column_index]) ;
 			}
 			*sysmatrix.Values++ = conductance_2 ;
-			
+			check += conductance_2;
 		}
 		else{
 			
@@ -988,7 +988,7 @@ static SystemMatrix_t add_liquid_column_4rm
         //diagonal_value +=  conductance ;
 		*sysmatrix.Values++  = -conductance_2 ;
         diagonal_value +=  conductance_2 ;
-
+		
         (*sysmatrix.ColumnPointers)++ ;
 
 #ifdef PRINT_SYSTEM_MATRIX
@@ -1016,6 +1016,10 @@ static SystemMatrix_t add_liquid_column_4rm
 	}
 	//cout << "diagonal " << layer_index << " " << row_index << " " << column_index << " " << *diagonal_pointer << endl << endl;
 	//cout << endl;
+	if(check != 0){
+		cout << layer_index << " " << row_index << " " << column_index << " " << check << endl;
+		getchar();
+	}
 	//getchar();
 		
 #ifdef PRINT_SYSTEM_MATRIX

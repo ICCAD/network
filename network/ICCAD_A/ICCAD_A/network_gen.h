@@ -8,6 +8,7 @@
 #include <stdlib.h>   
 #include <time.h>
 #include <iomanip>
+#include <unistd.h>
 
 
 #include "chip_info.h"
@@ -26,6 +27,9 @@ public:
 	void random_in_out_let(vector < pair <int, int> > &, vector < pair <int, int> > &);
 	bool Is_close_center(pair <int, int>, pair <int, int>);
 	void network_evolution();
+	pair <double, double> get_circle_center(pair<int, int>, pair<int, int>, double, int);
+	void drow_line(pair<double, double>, pair<int, int>, pair<int, int>, double, int);
+	void choose_dir_2(pair<int, int> &, pair<double, double>, double, int);
 	void print_heat_network(vector < vector <double> >);
     void print_liquid_network();
 	void print_network();

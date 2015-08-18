@@ -1018,7 +1018,7 @@ Capacity_t get_capacity_2
 
         return 0.0 ;
     }
-
+	
     switch (tgrid->LayersProfile [layer_index])
     {
         case TDICE_LAYER_SOLID :
@@ -1035,9 +1035,9 @@ Capacity_t get_capacity_2
                    ) ;
 
         case TDICE_LAYER_CHANNEL_4RM :
-
+			
             if (network[layer_index/3][row_index*101+column_index])
-
+	
                 return (  tgrid->Channel->Coolant.VHC
                         * get_cell_length (dimensions, column_index)
                         * get_cell_width  (dimensions, row_index)
@@ -1112,7 +1112,7 @@ Conductance_t get_conductance_top_2
 
         return 0.0 ;
     }
-
+	
     switch (tgrid->LayersProfile [layer_index])
     {
         case TDICE_LAYER_SOLID :
@@ -1184,7 +1184,7 @@ Conductance_t get_conductance_top_2
 
             if (network[layer_index/3][row_index*101+column_index])
 
-                return    get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+                return    get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
                         * get_cell_width  (dimensions, row_index)
                         * get_cell_length (dimensions, column_index) ;
 
@@ -1307,7 +1307,7 @@ Conductance_t get_conductance_bottom_2
 
             if (network[layer_index/3][row_index*101+column_index])
 
-                return    get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+                return    get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
                         * get_cell_width  (dimensions, row_index)
                         * get_cell_length (dimensions, column_index) ;
 
@@ -1407,7 +1407,7 @@ Conductance_t get_conductance_north_2
 
             if (network[layer_index/3][row_index*101+column_index])
 				
-				return    get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+				return    get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
                         * get_cell_height (dimensions, layer_index)
                         * get_cell_length (dimensions, column_index) ;
 
@@ -1500,7 +1500,7 @@ Conductance_t get_conductance_south_2
 
             if (network[layer_index/3][row_index*101+column_index])
 				
-				return    get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+				return    get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
                         * get_cell_height (dimensions, layer_index)
                         * get_cell_length (dimensions, column_index) ;
 
@@ -1593,7 +1593,7 @@ Conductance_t get_conductance_east_2
 
             if (network[layer_index/3][row_index*101+column_index]){
 				
-				return get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+				return  get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
 						* get_cell_width  (dimensions, row_index)
 						* get_cell_height (dimensions, layer_index) ;
 				
@@ -1671,7 +1671,7 @@ Conductance_t get_conductance_west_2
 
             if (network[layer_index/3][row_index*101+column_index]){
 				
-				return get_HTC(100 * pow(10,-6), 200 * pow(10,-6))
+				return  get_HTC(get_cell_width(dimensions, row_index) * pow(10,-6), get_cell_height(dimensions, layer_index) * pow(10,-6))
 						* get_cell_width  (dimensions, row_index)
 						* get_cell_height (dimensions, layer_index) ;
 				

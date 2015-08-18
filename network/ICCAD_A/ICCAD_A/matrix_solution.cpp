@@ -406,7 +406,7 @@ int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
                     
                     if (counter == 0){ //same
                         //(*equal_eq).push_back(store_func[i]);
-                        cout << "222 " << store_func[i] << endl;
+                        //cout << "222 " << store_func[i] << endl;
                         functions.erase(functions.begin()+i);
                         return i;
                     }
