@@ -26,7 +26,11 @@ int main(const int argc, const char **argv){ //
     
     network_generator network_a;
     network_a.data_init(chip);
-	network_a.find_network_sol();
+	//network_a.find_network_sol();
+	
+	network_a.network_init();
+	network_a.loading_liquid_network(argv[2]);
+	network_a.network_evolution();
     
     getchar();
     

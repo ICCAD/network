@@ -749,7 +749,7 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
    
     for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
-            flowrate_out << (*flow_rate)[i][j] << "\t";
+            flowrate_out << setw(10) << (*flow_rate)[i][j] << "\t";
             direction_out << (*direction)[i][j] << " ";
         }
         flowrate_out << endl;

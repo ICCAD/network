@@ -697,7 +697,7 @@ static SystemMatrix_t add_liquid_column_4rm
         ) ;
 		
 		//cout << "bot " << layer_index << " " << row_index << " " << column_index << " " << conductance << endl;
-		//cout << "bot " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "bot " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 		
         //*sysmatrix.Values++  = -conductance ;
         //diagonal_value +=  conductance ;
@@ -753,7 +753,7 @@ static SystemMatrix_t add_liquid_column_4rm
 			
 		}
 		//cout << "south " << layer_index << " " << row_index << " " << column_index << " " <<  conductance << endl;
-		//cout << "south " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "south " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 
 		//*sysmatrix.Values++ = conductance;
 		//*sysmatrix.Values++ = conductance_2;
@@ -806,7 +806,7 @@ static SystemMatrix_t add_liquid_column_4rm
 			
 		}
 		//cout << "west " << layer_index << " " << row_index << " " << column_index << " " <<  conductance << endl;
-		//cout << "west " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "west " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 		
 		
         //*sysmatrix.Values++  = -conductance ;
@@ -891,7 +891,7 @@ static SystemMatrix_t add_liquid_column_4rm
 			
 		}
 		//cout << "east " << layer_index << " " << row_index << " " << column_index << " " <<  conductance << endl;
-		//cout << "east " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "east " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 		
         //*sysmatrix.Values++  = -conductance ;
         //diagonal_value +=  conductance ;
@@ -947,7 +947,7 @@ static SystemMatrix_t add_liquid_column_4rm
 		}
 		
 		//cout << "north " << layer_index << " " << row_index << " " << column_index << " " << fixed << setprecision(20) << conductance << endl;
-		//cout << "north " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "north " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 		
 		//*sysmatrix.Values++ = conductance ; 
 		//*sysmatrix.Values++ = conductance_2 ;
@@ -982,7 +982,7 @@ static SystemMatrix_t add_liquid_column_4rm
         ) ;
 		
 		//cout << "top " << layer_index << " " << row_index << " " << column_index << " " << conductance << endl;
-		//cout << "top " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
+		cout << "top " << layer_index << " " << row_index << " " << column_index << " " << conductance_2 << endl;
 		
         //*sysmatrix.Values++  = -conductance ;
         //diagonal_value +=  conductance ;
@@ -1006,7 +1006,7 @@ static SystemMatrix_t add_liquid_column_4rm
 	
     if ((IS_FIRST_ROW(row_index) || IS_LAST_ROW(row_index, dimensions) || IS_FIRST_COLUMN(column_index) || IS_LAST_COLUMN(column_index, dimensions))
 		&& (network[layer_index/3][row_index*101+column_index] == 3 || network[layer_index/3][row_index*101+column_index] == 2)) {
-		//cout << row_index << " " << column_index << endl;
+		cout << row_index << " " << column_index << endl;
 		
         *diagonal_pointer += get_convective_term_2 /* == C */
 
@@ -1020,7 +1020,7 @@ static SystemMatrix_t add_liquid_column_4rm
 		cout << layer_index << " " << row_index << " " << column_index << " " << check << endl;
 		getchar();
 	}
-	//getchar();
+	getchar();
 		
 #ifdef PRINT_SYSTEM_MATRIX
     fgetpos (stderr, &last_fpos) ;

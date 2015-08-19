@@ -558,6 +558,15 @@ void network_generator::choose_dir_2(pair<int, int> &path_head, pair<double, dou
 	}
 }
 
+void network_generator::loading_liquid_network(const char *file){
+	
+	ifstream fin(file);
+	for( int i=0;i<101;i++ ){
+		for( int j=0;j<101;j++ ){
+			fin >> liquid_network[0][i][j];
+		}
+	}
+}
 
 void network_generator::print_liquid_network(){
 	

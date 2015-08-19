@@ -29,6 +29,7 @@ public:
 	void network_evolution();
 	pair <double, double> get_circle_center(pair<int, int>, pair<int, int>, double, int);
 	void drow_line(pair<double, double>, pair<int, int>, pair<int, int>, double, int);
+	void loading_liquid_network(const char *);
 	void choose_dir_2(pair<int, int> &, pair<double, double>, double, int);
 	void print_heat_network(vector < vector <double> >);
     void print_liquid_network();
