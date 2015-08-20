@@ -39,10 +39,10 @@ public:
     void initial_direction(vector <node> *, vector <edge_info> *);
     void get_inlet_Q(vector <edge_info> *);
     void get_pressure_drop(double, double, double, double,long double, long double);
-    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *);
+    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *, vector < vector <int> > *);
     void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
     //void write_output(const char *, const char *, vector < vector <double> > *, vector < vector <int> >*);
-    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*);
+    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*, vector < vector <int> >*);
     long double inlet_Q;
 private:
     vector < vector <long double> > all_function;
@@ -53,6 +53,7 @@ private:
     vector <int> store_func;
     vector <long double> sol_Q;
     vector <int> functions;
+    vector <long double> channel_length;
     int num_channel;
     int num_path;
     long double pressure_drop;

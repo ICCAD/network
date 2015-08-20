@@ -392,7 +392,10 @@ void network_generator::network_evolution(){
 		long double total_Q = 0;
 		vector <int> network_col(101,0);
 		vector < vector <int> > single_network(101,network_col);
-		vector < vector < vector <int> > > network(channel_layer,single_network);
+        vector < vector < vector <int> > > network(channel_layer,single_network);
+        vector <int> channel_info_col(101,-1);
+        vector < vector <int> > single_channel_info(101,channel_info_col);
+		vector < vector < vector <int> > > channel_info(channel_layer,single_channel_info);
 		vector <long double> flowrate_col(101,0);
 		vector < vector <long double> > single_flow_rate(101,flowrate_col);
 		vector < vector < vector <long double> > > flow_rate(channel_layer,single_flow_rate);
@@ -430,9 +433,9 @@ void network_generator::network_evolution(){
 		for (int i = 0; i < channel_layer; i++) {
 			cout << "channel_layer " << i << endl;
 			matrix_a[i].get_pressure_drop(chip.width, chip.height, chip.length, coolant_flow_rate, unit_pressure_drop, total_Q);
-			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i]);
+			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i],&channel_info[i]);
 			matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
-			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i]);
+			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i],&channel_info[i]);
 		}
 		
 		cout << "file done !" << endl;

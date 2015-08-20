@@ -40,6 +40,9 @@ int main(const int argc, const char **argv){ //
     vector <int> network_col(101,0);
     vector < vector <int> > single_network(101,network_col);
     vector < vector < vector <int> > > network(network_num,single_network);
+    vector <int> channel_info_col(101,-1);
+    vector < vector <int> > single_channel_info(101,channel_info_col);
+    vector < vector < vector <int> > > channel_info(network_num,single_channel_info);
     vector <long double> flowrate_col(101,0);
     vector < vector <long double> > single_flow_rate(101,flowrate_col);
     vector < vector < vector <long double> > > flow_rate(network_num,single_flow_rate);
@@ -131,9 +134,9 @@ int main(const int argc, const char **argv){ //
     for (int i = 0; i < network_num; i++) {
         cout << "network_num " << i << endl;
         matrix_a[i].get_pressure_drop(wc, hc, l, coolant_flow_rate, unit_pressure_drop, total_Q);
-        matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i]);
+        matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i],&channel_info[i]);
         matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
-        matrix_a[i].write_output(&i,&network[i], &tempnode[i],&flow_rate[i],&direction[i]);
+        matrix_a[i].write_output(&i,&network[i], &tempnode[i],&flow_rate[i],&direction[i],&channel_info[i]);
     }
     
     return 0;

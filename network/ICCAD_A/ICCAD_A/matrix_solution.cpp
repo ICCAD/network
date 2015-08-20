@@ -274,7 +274,7 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
     for (int i = 0; i < all_function.size(); i++) {
         for (int j = 0 ; j < all_function[i].size() ; j++) {
            // cout << all_function[i][j] << "\t" ;
-            fout << all_function[i][j] << "\t" ;
+            fout << setw(5) << all_function[i][j] << " " ;
         }
         //cout << endl;
         fout << endl;
@@ -284,6 +284,15 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
     for (int i = 0; i < all_function.size(); i++) {
         functions.push_back(i);
     }
+    ////////channel length//////
+    for (int j = 0; j < num_channel; j++) {
+        temp_length = 0;
+        for (int k = 0; k < member_channel[j].size(); k++) {
+            temp_length += (*temp_edge)[member_channel[j][k]].length;
+        }
+        channel_length.push_back(temp_length);
+    }
+    ////////
 }
 
 bool compare (record_info a ,record_info b){
@@ -493,7 +502,7 @@ void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_fl
     cout << "\npressure_drop: " << pressure_drop  << " (pa)" << endl;
 }
 
-void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <long double> > *flow_rate){ //
+void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <long double> > *flow_rate, vector < vector <int> > *channel_info){ //
     for (int i = 0; i < num_channel; i++) {
         for (int j = 0; j < member_channel[i].size(); j++) {
             if ((*temp_edge)[member_channel[i][j]].HV == 'H') {
@@ -504,6 +513,8 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
                     else{
                         (*flow_rate)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = (-1)*sol_Q[i];
                     }
+                    
+                    (*channel_info)[(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.second][k] = (*temp_edge)[member_channel[i][j]].channel;
                 }
             }
             else {
@@ -514,6 +525,8 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
                     else{
                         (*flow_rate)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = (-1)*sol_Q[i];
                     }
+                    
+                    (*channel_info)[k][(*temp_node)[(*temp_edge)[member_channel[i][j]].nodes.first].coordinate.first] = (*temp_edge)[member_channel[i][j]].channel;
                 }
             }
         }
@@ -728,11 +741,11 @@ void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_
     }*/
 }
 
-void matrix::write_output(int *i, vector < vector <int> > *network, vector <node> *temp_node, vector < vector <long double> > *flow_rate, vector < vector <int> > *direction){//const char *output_flow, const char *output_direction,
+void matrix::write_output(int *i, vector < vector <int> > *network, vector <node> *temp_node, vector < vector <long double> > *flow_rate, vector < vector <int> > *direction, vector < vector <int> > *channel_info){//const char *output_flow, const char *output_direction,
     vector <int> network_col(101,0);
     vector < vector <int> > single_network(101,network_col);
     ostringstream oss;
-    string output_network,output_flow,output_direction,num;
+    string output_network,output_flow,output_direction,output_channel_info,num;
     oss.str("");
     oss <<  "flowrate_" << *i;
     output_flow = oss.str();
@@ -742,19 +755,33 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     oss.str("");
     oss <<  "network_" << *i;
     output_network = oss.str();
-    cout << output_network << " " << output_flow << " " << output_direction << endl;
+    oss.str("");
+    oss <<  "channel_info_" << *i;
+    output_channel_info = oss.str();
+    cout << output_network << " " << output_flow << " " << output_direction << " " << output_channel_info << endl;
     ofstream network_out(output_network.c_str());
     ofstream flowrate_out(output_flow.c_str());
     ofstream direction_out(output_direction.c_str());
+    ofstream channel_info_out(output_channel_info.c_str());
    
     for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << setw(10) << (*flow_rate)[i][j] << "\t";
             direction_out << (*direction)[i][j] << " ";
+            channel_info_out << setw(2) << (*channel_info)[i][j] << " ";
         }
         flowrate_out << endl;
         direction_out << endl;
+        channel_info_out << endl;
     }
+    //////
+    channel_info_out << endl;
+    channel_info_out << "channel_length :" << endl;
+    cout << "channel_length.size" << channel_length.size() << " " << "num_channel" << num_channel << endl;
+    for (int i = 0; i < channel_length.size(); i++) {
+        channel_info_out << i << ": " << channel_length[i] << endl;
+    }
+    /////
     single_network = (*network);
     for (int i = 0; i < (*temp_node).size(); i++) {
         if ((*temp_node)[i].type == 'b' || (*temp_node)[i].type == 'c') {
