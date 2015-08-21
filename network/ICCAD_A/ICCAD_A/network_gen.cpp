@@ -405,12 +405,13 @@ void network_generator::network_evolution(){
 		vector < vector <edge_info> > edges(channel_layer);
 		//vector < vector < int > > equal_eq(channel_layer);
 		for (int i = 0; i < channel_layer; i++) {
-			//network_reverse(&liquid_network[i]);
 			network_graph( &liquid_network[i], &tempnode[i], &edges[i]);
 			cout << "network_graph done!" << endl;
 			matrix_a[i].get_num_channel(&tempnode[i], &edges[i]);
 			cout << "get_num_channel done!" << endl;
-			matrix_a[i].get_path(&tempnode[i], &edges[i]);
+            matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
+            cout << "initial_direction done!" << endl;
+			/*matrix_a[i].get_path(&tempnode[i], &edges[i]);
 			cout << "get_path done!" << endl;
 			matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
 			cout << "initial_direction done!" << endl;
@@ -423,10 +424,13 @@ void network_generator::network_evolution(){
 				matrix_a[i].check_matrix_Q();
 				check = matrix_a[i].Gaussian_Elimination();//&equal_eq[i]
 			}
-			matrix_a[i].get_inlet_Q(&edges[i]);
+            cout << "check_sol" << endl;
+            matrix_a[i].check_sol();
+            getchar();
+			matrix_a[i].get_inlet_Q(&edges[i]);*/
 			
 		}
-		for (int i = 0; i < channel_layer; i++) {
+		/*for (int i = 0; i < channel_layer; i++) {
 			total_Q += matrix_a[i].inlet_Q;
 			cout << i << " " << "total_Q " << total_Q << "\t" ;
 		}
@@ -436,7 +440,11 @@ void network_generator::network_evolution(){
 			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i],&channel_info[i]);
 			matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
 			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i],&channel_info[i]);
-		}
+		}*/
+        for (int i = 0; i < channel_layer; i++) {
+            cout << "channel_layer " << i << endl;
+            matrix_a[i].spice_input(&i, &tempnode[i],unit_pressure_drop);
+        }
 		
 		cout << "file done !" << endl;
 		getchar();

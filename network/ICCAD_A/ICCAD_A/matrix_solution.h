@@ -44,6 +44,8 @@ public:
     //void write_output(const char *, const char *, vector < vector <double> > *, vector < vector <int> >*);
     void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*, vector < vector <int> >*);
     long double inlet_Q;
+    void check_sol();
+    void spice_input(int *,vector <node> *,long double);
 private:
     vector < vector <long double> > all_function;
     vector < vector <long double> > matrix_Q;

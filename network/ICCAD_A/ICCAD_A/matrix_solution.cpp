@@ -12,6 +12,7 @@ void matrix::get_num_channel(vector <node> *temp_node, vector <edge_info> *temp_
     num_channel = 0;
     vector <int> record_edge((*temp_edge).size());
     vector <int> temp_edge_member;
+    long double temp_length;
     for (int i = 0; i < (*temp_node).size(); i++) {
         if((*temp_node)[i].type != 'c' && (*temp_node)[i].type != 'I' && (*temp_node)[i].type != 'O'){
             DFS_edge(i, temp_node, temp_edge, &temp_edge_member, &record_edge);
@@ -33,6 +34,20 @@ void matrix::get_num_channel(vector <node> *temp_node, vector <edge_info> *temp_
   /*  for (int i = 0; i < (*temp_edge).size(); i++){
         cout << "edge_" << i << ": channel_" << (*temp_edge)[i].channel << endl;
     }*/
+    ////////channel length//////
+    for (int j = 0; j < num_channel; j++) {
+        temp_length = 0;
+        for (int k = 0; k < member_channel[j].size(); k++) {
+            temp_length += (*temp_edge)[member_channel[j][k]].length;
+        }
+        channel_length.push_back(temp_length);
+    }
+    cout << "channel_length " << endl;
+    for (int i = 0; i < channel_length.size(); i++) {
+        cout << channel_length[i] << " ";
+    }
+    cout << endl;
+    ////////
 }
 
 void matrix::DFS_edge(int nodex, vector <node> *temp_node, vector <edge_info> *temp_edge, vector <int> *temp_edge_member, vector <int> *record_edge){
@@ -72,7 +87,6 @@ void matrix::DFS_edge(int nodex, vector <node> *temp_node, vector <edge_info> *t
     }
 }
 
-////////////////////
 void matrix::get_path(vector <node> *temp_node, vector <edge_info> *temp_edge){
     num_path = 0;
     vector <int> path_edge_member;
@@ -169,6 +183,47 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
     long double temp_length = 0;
     vector <int> channels;
     ofstream fout("all_functions.txt");
+    
+    /*//////////flow///////
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if ((*temp_node)[i].type == 'i'){
+            //  cout << "node_" << i << endl;
+            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                if ((*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.first].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.second].type != 'I') {
+                    cout << "iiiiii"<<endl;
+                    if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
+                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] += 1;
+                    }
+                    else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] -= 1;
+                    }
+                }
+            }
+        }
+        else if ((*temp_node)[i].type == 'o'){
+            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                if ((*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.first].type != 'O' && (*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.second].type != 'O') {
+                    cout << "oooooooo"<<endl;
+                    if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
+                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] += 1;
+                    }
+                    else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] -= 1;
+                    }
+                }
+            }
+        }
+    }
+    all_function.push_back(temp_row);
+    temp_row.clear();
+    temp_row.resize(num_channel+1);
+    for (int j = 0 ; j < all_function[0].size() ; j++) {
+        cout << all_function[all_function.size()-1][j] << " " ;
+    }
+    cout << endl;
+    cout << "flow_func done!" << endl;
+    ///////////*/
+    
     for (int i = 0; i < (*temp_node).size(); i++) { //node
         if ((*temp_node)[i].type == 'b'){
             //  cout << "node_" << i << endl;
@@ -187,7 +242,7 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
     }
     
     cout << "\nbranch: " << endl;
-    node_func_num = all_function.size();
+    node_func_num = all_function.size();/////////////////
     cout << "node_function num " << node_func_num << endl;
     cout << "node_func done!" << endl;
     /*for (int i = 0; i < all_function.size(); i++) {
@@ -197,6 +252,8 @@ void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edg
      cout << endl;
      }*/
     //getchar();
+    
+    
     for (int i = 0; i < member_path.size() ; i++) { //path
         path_channel.clear();
         path_channel.resize(num_channel,0);
@@ -303,13 +360,13 @@ void matrix::initial_matrix(){ //vector < int > *equal_eq
     matrix_Q.clear();
     store_func.clear();
     store_func.resize(0);
-    ////////node functions
-    for (int i = 0 ; i < node_func_num ; i++){
+    ////////node functions + flow
+    for (int i = 0 ; i < node_func_num ; i++){///
         matrix_Q.push_back(all_function[i]);
         store_func.push_back(i);
     }
     
-    for (int i = node_func_num; i < all_function[0].size()-1; i++){
+    for (int i = node_func_num; i < all_function[0].size()-1; i++){///
         matrix_Q.push_back(all_function[functions[i]]);
         store_func.push_back(functions[i]);
         //cout << functions[i] << " ";
@@ -324,7 +381,7 @@ void matrix::initial_matrix(){ //vector < int > *equal_eq
         cout << store_func[i] << " ";
     }
     cout << endl;
-    cout << endl;
+    //cout << endl;
 }
 
 
@@ -383,17 +440,24 @@ void matrix::check_matrix_Q(){
         fout << endl;
     }
     cout << endl;*/
+    cout << "after check "<< endl;
+    for (int i = 0; i < store_func.size(); i++) {
+        cout << store_func[i] << " ";
+    }
+    cout << endl;
 }
 
-int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
+int  matrix::Gaussian_Elimination(){
     long double a,b;
     for (int j = 0; j < matrix_Q[0].size()-1; j++ ){
         //////
         if (matrix_Q[j][j] == 0){
             cout << "111 " << store_func[j] << endl;
-            if (store_func[j] < node_func_num) {
-                functions.erase(functions.begin()+node_func_num);
-                functions.push_back(store_func[node_func_num]);
+            if (store_func[j] < node_func_num) {///
+                //cout << node_func_num+1 << " " << store_func[node_func_num+1] << endl;
+                //getchar();
+                functions.push_back(functions[node_func_num]);///
+                functions.erase(functions.begin()+node_func_num);///
             }
             else{
                 for (int i = 0;  i < functions.size(); i++) {
@@ -433,12 +497,17 @@ int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
                     
                     if (counter == 0){ //same
                         cout << "222 " << store_func[i] << endl;
-                        for (int k = 0;  k < functions.size(); k++) {
-                            if (functions[k] == store_func[i]) {
-                                functions.erase(functions.begin()+k);
-                                break;
-                            }
+                        if (store_func[i] < node_func_num) {///
+                            functions.erase(functions.begin()+j);///
                         }
+                        else {//
+                            for (int k = 0;  k < functions.size(); k++) {
+                                if (functions[k] == store_func[i]) {
+                                    functions.erase(functions.begin()+k);
+                                    break;
+                                }
+                            }
+                        }//
                         return i;
                     }
                 }
@@ -459,6 +528,19 @@ int  matrix::Gaussian_Elimination(){ //vector < int > *equal_eq
     }
     cout << endl;
     return -1;
+}
+
+void matrix::check_sol(){
+    long double sol;
+    //temp_row[j] = path_channel[j]*temp_length;
+    for (int i = 0; i < all_function.size(); i++) {//
+        sol = 0;
+        //cout << matrix_Q.size() << " " << all_function[i].size()-1 << endl;
+        for (int j = 0; j < all_function[i].size()-1; j++) {
+            sol += all_function[i][j] *  matrix_Q[j][matrix_Q[0].size()-1];
+        }
+        cout << "function" << i << " " << sol << endl;
+    }
 }
 
 void matrix::get_inlet_Q(vector <edge_info> *temp_edge){
@@ -796,3 +878,52 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
         network_out << endl;
     }
 }
+
+
+/////////////////
+void matrix::spice_input(int *i,vector <node> *temp_node,long double unit_pressure_drop){
+    ostringstream oss;
+    string output_spice;
+    oss.str("");
+    oss <<  "spice_" << *i;
+    output_spice = oss.str();
+    ofstream spice_out(output_spice.c_str());
+    spice_out << endl;
+    spice_out << "Vi  V 0 " << unit_pressure_drop << endl;
+    for (int i = 0; i < channel_length.size(); i++) {
+        if ((*temp_node)[channel_dir[i].first].type == 'i') {
+            if ((*temp_node)[channel_dir[i].second].type == 'o') {
+                spice_out << "R" << i << "  V 0 "<< channel_length[i] << endl;
+            }
+            else{
+                spice_out << "R" << i << "  V net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
+            }
+        }
+        else if((*temp_node)[channel_dir[i].second].type == 'i'){
+            if ((*temp_node)[channel_dir[i].first].type == 'o') {
+                spice_out << "R" << i << "  V 0 "<< channel_length[i] << endl;
+            }
+            else{
+                spice_out << "R" << i << "  V net" << (*temp_node)[channel_dir[i].first].num << " " << channel_length[i] << endl;
+            }
+        }
+        else{
+            if ((*temp_node)[channel_dir[i].first].type == 'o') {
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].second].num << " 0 " << channel_length[i] << endl;
+            }
+            else if((*temp_node)[channel_dir[i].second].type == 'o'){
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " 0 " << channel_length[i] << endl;
+            }
+            else{
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
+            }
+        }
+    }
+    spice_out << ".op" << endl << endl;
+    spice_out << ".end" << endl;
+    
+    
+}
+///////////////
+
+
