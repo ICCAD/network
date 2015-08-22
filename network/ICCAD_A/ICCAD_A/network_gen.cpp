@@ -411,6 +411,14 @@ void network_generator::network_evolution(){
 			cout << "get_num_channel done!" << endl;
             matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
             cout << "initial_direction done!" << endl;
+            
+            /////
+            matrix_a[i].write_spice_input(&i, &tempnode[i],unit_pressure_drop);
+            matrix_a[i].read_spice_result(&i);
+            cout << "read_spice_result done!" << endl;
+            
+            matrix_a[i].get_inlet_Q(&tempnode[i],&edges[i]);
+            ////
 			/*matrix_a[i].get_path(&tempnode[i], &edges[i]);
 			cout << "get_path done!" << endl;
 			matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
@@ -430,7 +438,7 @@ void network_generator::network_evolution(){
 			matrix_a[i].get_inlet_Q(&edges[i]);*/
 			
 		}
-		/*for (int i = 0; i < channel_layer; i++) {
+		for (int i = 0; i < channel_layer; i++) {
 			total_Q += matrix_a[i].inlet_Q;
 			cout << i << " " << "total_Q " << total_Q << "\t" ;
 		}
@@ -440,11 +448,7 @@ void network_generator::network_evolution(){
 			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i],&channel_info[i]);
 			matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);
 			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i],&channel_info[i]);
-		}*/
-        for (int i = 0; i < channel_layer; i++) {
-            cout << "channel_layer " << i << endl;
-            matrix_a[i].spice_input(&i, &tempnode[i],unit_pressure_drop);
-        }
+		}
 		
 		cout << "file done !" << endl;
 		getchar();

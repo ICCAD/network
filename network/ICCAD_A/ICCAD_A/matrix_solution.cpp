@@ -543,12 +543,17 @@ void matrix::check_sol(){
     }
 }
 
-void matrix::get_inlet_Q(vector <edge_info> *temp_edge){
+void matrix::get_inlet_Q(vector <node> *temp_node ,vector <edge_info> *temp_edge){
     inlet_Q = 0;
     vector <int> inlet_channel;
-    for (int i = 0; i < member_path.size(); i++) {
+    /*for (int i = 0; i < member_path.size(); i++) {
         if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
             inlet_channel.push_back((*temp_edge)[member_path[i][0]].channel);
+        }
+    }*/
+    for (int i = 0; i < channel_length.size(); i++) {
+        if ((*temp_node)[channel_dir[i].first].type == 'i' || (*temp_node)[channel_dir[i].second].type == 'i'){
+            inlet_channel.push_back(i);
         }
     }
     cout << "inlet_channel: ";
@@ -577,8 +582,9 @@ void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_fl
     //n = coolant_flow_rate / total_Q;
     cout << "sol_Q: ";
     for (int i = 0; i < matrix_Q.size(); i++) {
+        cout << i << ": ";
         sol_Q.push_back( n * matrix_Q[i][matrix_Q[0].size()-1] );
-        cout << sol_Q[sol_Q.size()-1] << " ";
+        cout << sol_Q[sol_Q.size()-1] << endl;
     }
     pressure_drop = k * l * unit_pressure_drop * n;
     cout << "\npressure_drop: " << pressure_drop  << " (pa)" << endl;
@@ -616,19 +622,24 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
     
     for (int i = 0; i < (*temp_node).size(); i++) {
         if ((*temp_node)[i].type == 'b') {
+            cout <<(*temp_node)[i].num << " " << (*temp_node)[i].edges.size() << endl;
             (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 0;
             for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                cout << (*temp_edge)[(*temp_node)[i].edges[j]].channel << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second << endl;
                 if ( channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first == (*temp_node)[i].num) {
                     if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] < 0) {
                         (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] -= sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
+                        cout << "-" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
                     }
                 }
-                else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
                     if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] >= 0) {
                         (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
+                        cout << "+" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
                     }
                 }
             }
+            cout<< endl << endl;
         }
     }
     
@@ -827,7 +838,7 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     vector <int> network_col(101,0);
     vector < vector <int> > single_network(101,network_col);
     ostringstream oss;
-    string output_network,output_flow,output_direction,output_channel_info,num;
+    string output_network,output_flow,output_direction,output_channel_info,output_node,num;
     oss.str("");
     oss <<  "flowrate_" << *i;
     output_flow = oss.str();
@@ -845,7 +856,13 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     ofstream flowrate_out(output_flow.c_str());
     ofstream direction_out(output_direction.c_str());
     ofstream channel_info_out(output_channel_info.c_str());
-   
+    ////////
+    oss.str("");
+    oss <<  "node_info_" << *i;
+    output_node = oss.str();
+    single_network = (*network);
+    ofstream node_info_out(output_node.c_str());
+    ///////
     for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << setw(10) << (*flow_rate)[i][j] << "\t";
@@ -877,15 +894,30 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
         }
         network_out << endl;
     }
+    /////
+    single_network = (*network);
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if ((*temp_node)[i].type == 'b') {
+            single_network[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = (*temp_node)[i].num;
+        }
+    }
+    
+    for (int i = 0; i < single_network.size(); i++) {
+        for (int j = 0; j < single_network[i].size(); j++) {
+            node_info_out << setw(2) << single_network[i][j] << " ";
+        }
+        node_info_out << endl;
+    }
+    //////////
 }
 
 
 /////////////////
-void matrix::spice_input(int *i,vector <node> *temp_node,long double unit_pressure_drop){
+void matrix::write_spice_input(int *i,vector <node> *temp_node,long double unit_pressure_drop){
     ostringstream oss;
     string output_spice;
     oss.str("");
-    oss <<  "spice_" << *i;
+    oss <<  "spice_" << *i << ".txt";
     output_spice = oss.str();
     ofstream spice_out(output_spice.c_str());
     spice_out << endl;
@@ -901,15 +933,15 @@ void matrix::spice_input(int *i,vector <node> *temp_node,long double unit_pressu
         }
         else if((*temp_node)[channel_dir[i].second].type == 'i'){
             if ((*temp_node)[channel_dir[i].first].type == 'o') {
-                spice_out << "R" << i << "  V 0 "<< channel_length[i] << endl;
+                spice_out << "R" << i << "  0 V "<< channel_length[i] << endl;
             }
             else{
-                spice_out << "R" << i << "  V net" << (*temp_node)[channel_dir[i].first].num << " " << channel_length[i] << endl;
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " V " << channel_length[i] << endl;
             }
         }
         else{
             if ((*temp_node)[channel_dir[i].first].type == 'o') {
-                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].second].num << " 0 " << channel_length[i] << endl;
+                spice_out << "R" << i << "  0 net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
             }
             else if((*temp_node)[channel_dir[i].second].type == 'o'){
                 spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " 0 " << channel_length[i] << endl;
@@ -921,8 +953,78 @@ void matrix::spice_input(int *i,vector <node> *temp_node,long double unit_pressu
     }
     spice_out << ".op" << endl << endl;
     spice_out << ".end" << endl;
-    
-    
+}
+
+void  matrix::read_spice_result(int *i){
+    string temp;
+    long double Q;
+    vector <long double> temp_Q;
+    stringstream ss;
+    ostringstream oss;
+    string spice_test;
+    oss.str("");
+    oss <<  "test_" << *i << ".txt";
+    spice_test = oss.str();
+    cout << spice_test << endl;
+    ifstream fin(spice_test.c_str());
+    while (matrix_Q.size() != channel_length.size()) {//!fin.eof()
+        fin >> temp;
+        //cout<< temp << endl;
+        //getchar();
+        if (temp == "resistors") {
+            cout << temp << endl;
+            while ( matrix_Q.size() != channel_length.size()) {
+                fin >> temp;
+                if (temp == "current") {
+                    while (!fin.eof()){
+                        fin >> temp;
+                        if (temp == "power") {
+                            break;
+                        }
+                        else{
+                            ss.str("");
+                            ss.clear();
+                            if (temp[temp.length()-1] > 57) {
+                                for (int i = 0; i < temp.length()-1; i++) {
+                                    ss << temp[i];
+                                }
+                                ss >> Q;
+                                
+                                if(temp[temp.length()-1] == 'm'){
+                                    Q *= pow (10.0, -3.0);
+                                }
+                                else if(temp[temp.length()-1] == 'u'){
+                                    Q *= pow (10.0, -6.0);
+                                }
+                                else if(temp[temp.length()-1] == 'n'){
+                                    Q *= pow (10.0, -9.0);
+                                }
+                                else if(temp[temp.length()-1] == 'p'){
+                                    Q *= pow (10.0, -12.0);
+                                }
+                            }
+                            else{
+                                ss << temp;
+                                ss >> Q;
+                            }
+                            temp_Q.push_back(Q);
+                            matrix_Q.push_back(temp_Q);
+                            temp_Q.clear();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    cout << "matrix_Q" << endl;
+    for (int i = 0; i < matrix_Q.size(); i++) {
+        cout << i << ": ";
+        for (int j = 0; j < matrix_Q[i].size(); j++) {
+            cout << matrix_Q[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
 ///////////////
 

@@ -124,7 +124,7 @@ int main(const int argc, const char **argv){ //
             check = matrix_a[i].Gaussian_Elimination();//&equal_eq[i]
         }
         
-        matrix_a[i].get_inlet_Q(&edges[i]);
+        matrix_a[i].get_inlet_Q(&tempnode[i],&edges[i]);
     }
     cout << endl << endl << endl;
     for (int i = 0; i < network_num; i++) {

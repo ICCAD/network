@@ -37,7 +37,7 @@ public:
     void initial_matrix();//vector < int > *
     void get_funtion(vector <node> *, vector <edge_info> *, long double);
     void initial_direction(vector <node> *, vector <edge_info> *);
-    void get_inlet_Q(vector <edge_info> *);
+    void get_inlet_Q(vector <node> *,vector <edge_info> *);
     void get_pressure_drop(double, double, double, double,long double, long double);
     void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *, vector < vector <int> > *);
     void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
@@ -45,7 +45,8 @@ public:
     void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*, vector < vector <int> >*);
     long double inlet_Q;
     void check_sol();
-    void spice_input(int *,vector <node> *,long double);
+    void write_spice_input(int *,vector <node> *,long double);
+    void read_spice_result(int *);
 private:
     vector < vector <long double> > all_function;
     vector < vector <long double> > matrix_Q;
