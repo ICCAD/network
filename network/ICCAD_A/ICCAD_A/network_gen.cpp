@@ -386,7 +386,7 @@ void network_generator::random_in_out_let(vector < pair <int, int> > &inlet, vec
 void network_generator::network_evolution(){
 	
 	long double coolant_flow_rate = 84.0;
-	long double unit_pressure_drop = 100.0;// * pow (10.0, 12.0) / 60
+	long double unit_pressure_drop = 100.0;
 	while(1){
 		print_network();
 		long double total_Q = 0;
@@ -403,7 +403,6 @@ void network_generator::network_evolution(){
 		vector < matrix > matrix_a(channel_layer);
 		vector < vector <node> > tempnode(channel_layer);
 		vector < vector <edge_info> > edges(channel_layer);
-		//vector < vector < int > > equal_eq(channel_layer);
 		for (int i = 0; i < channel_layer; i++) {
 			network_graph( &liquid_network[i], &tempnode[i], &edges[i]);
 			cout << "network_graph done!" << endl;
@@ -411,39 +410,19 @@ void network_generator::network_evolution(){
 			cout << "get_num_channel done!" << endl;
             matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
             cout << "initial_direction done!" << endl;
-            
-            /////
             matrix_a[i].write_spice_input(&i, &tempnode[i],unit_pressure_drop);
+            cout << "write_spice_input done!" << endl;
+            
             matrix_a[i].read_spice_result(&i);
             cout << "read_spice_result done!" << endl;
-            
-            matrix_a[i].get_inlet_Q(&tempnode[i],&edges[i]);
-            ////
-			/*matrix_a[i].get_path(&tempnode[i], &edges[i]);
-			cout << "get_path done!" << endl;
-			matrix_a[i].initial_direction(&tempnode[i], &edges[i]);
-			cout << "initial_direction done!" << endl;
-			matrix_a[i].get_funtion( &tempnode[i], &edges[i], unit_pressure_drop);
-			cout << "get_funtion done!" << endl;
-			
-			int check = -2;
-			while ( check != -1){
-				matrix_a[i].initial_matrix();//&equal_eq[i]
-				matrix_a[i].check_matrix_Q();
-				check = matrix_a[i].Gaussian_Elimination();//&equal_eq[i]
-			}
-            cout << "check_sol" << endl;
-            matrix_a[i].check_sol();
-            getchar();
-			matrix_a[i].get_inlet_Q(&edges[i]);*/
-			
+            matrix_a[i].get_inlet_Q(&tempnode[i]);
 		}
 		for (int i = 0; i < channel_layer; i++) {
 			total_Q += matrix_a[i].inlet_Q;
-			cout << i << " " << "total_Q " << total_Q << "\t" ;
+			//cout << i << " " << "total_Q " << total_Q << "\t" ;
 		}
 		for (int i = 0; i < channel_layer; i++) {
-			cout << "channel_layer " << i << endl;
+			cout << "\nchannel_layer " << i << endl;
 			matrix_a[i].get_pressure_drop(chip.width, chip.height, chip.length, coolant_flow_rate, unit_pressure_drop, total_Q);
 			matrix_a[i].fill_flow_rate(&tempnode[i] ,&edges[i],&flow_rate[i],&channel_info[i]);
 			matrix_a[i].fill_direction(&tempnode[i] ,&edges[i],&direction[i]);

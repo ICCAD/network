@@ -87,66 +87,6 @@ void matrix::DFS_edge(int nodex, vector <node> *temp_node, vector <edge_info> *t
     }
 }
 
-void matrix::get_path(vector <node> *temp_node, vector <edge_info> *temp_edge){
-    num_path = 0;
-    vector <int> path_edge_member;
-    vector <int> record_node((*temp_edge).size()-2);
-    for (int i = 0; i < (*temp_node).size(); i++) {
-        if((*temp_node)[i].type == 'i'){
-            //cout << (*temp_node)[i].num << endl;
-            record_node.resize((*temp_edge).size()-2,0);
-            DFS_path(i, temp_node, temp_edge, path_edge_member, record_node);
-            // cout << "path done" << endl;
-        }
-    }
- /*   for( int i = 0; i < member_path.size(); i++){
-        cout << "path_" << i << ": " ;
-        for (int j = 0; j < member_path[i].size(); j++) {
-            cout << member_path[i][j] << " ";
-        }
-        cout << endl;
-    }*/
-    cout << "num_path: " << num_path << endl;
-}
-
-void matrix::DFS_path(int nodex, vector <node> *temp_node, vector <edge_info> *temp_edge, vector <int> path_edge_member, vector <int> record_node){//
-    record_node [nodex] = 1;
-    for (int i = 0; i < (*temp_node)[nodex].edges.size(); i++) {
-        if ( record_node[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] != 1 || record_node[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] != 1 ){
-            if ( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first != nodex) {
-                if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'o' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'O' ){
-                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] = 1;
-                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
-                    DFS_path( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first, temp_node, temp_edge, path_edge_member, record_node);//
-                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
-                }
-                else if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type == 'o' ){
-                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] = 1;
-                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
-                    member_path.push_back((path_edge_member));
-                    num_path++;
-                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
-                }
-            }
-            else if ( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second != nodex) {
-                if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'o' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'O' ){
-                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] = 1;
-                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
-                    DFS_path( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second, temp_node, temp_edge, path_edge_member, record_node);//
-                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
-                }
-                else if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type == 'o' ){
-                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] = 1;
-                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
-                    member_path.push_back((path_edge_member));
-                    num_path++;
-                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
-                }
-            }
-        }
-    }
-}
-
 void matrix::initial_direction(vector <node> *temp_node , vector <edge_info> *temp_edge){
     pair <int, int> dir;
     for (int i = 0 ; i < member_channel.size(); i++) {
@@ -177,386 +117,127 @@ void matrix::initial_direction(vector <node> *temp_node , vector <edge_info> *te
     }*/
 }
 
-void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edge, long double unit_pressure_drop ){
-    vector <long double> temp_row(num_channel+1,0);
-    vector <int> path_channel(num_channel,0);
-    long double temp_length = 0;
-    vector <int> channels;
-    ofstream fout("all_functions.txt");
-    
-    /*//////////flow///////
-    for (int i = 0; i < (*temp_node).size(); i++) {
-        if ((*temp_node)[i].type == 'i'){
-            //  cout << "node_" << i << endl;
-            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
-                if ((*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.first].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.second].type != 'I') {
-                    cout << "iiiiii"<<endl;
-                    if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
-                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] += 1;
-                    }
-                    else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
-                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] -= 1;
-                    }
-                }
-            }
-        }
-        else if ((*temp_node)[i].type == 'o'){
-            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
-                if ((*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.first].type != 'O' && (*temp_node)[(*temp_edge)[(*temp_node)[i].edges[j]].nodes.second].type != 'O') {
-                    cout << "oooooooo"<<endl;
-                    if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
-                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] += 1;
-                    }
-                    else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
-                        temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] -= 1;
-                    }
-                }
-            }
-        }
-    }
-    all_function.push_back(temp_row);
-    temp_row.clear();
-    temp_row.resize(num_channel+1);
-    for (int j = 0 ; j < all_function[0].size() ; j++) {
-        cout << all_function[all_function.size()-1][j] << " " ;
-    }
-    cout << endl;
-    cout << "flow_func done!" << endl;
-    ///////////*/
-    
-    for (int i = 0; i < (*temp_node).size(); i++) { //node
-        if ((*temp_node)[i].type == 'b'){
-            //  cout << "node_" << i << endl;
-            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
-                if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
-                    temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] = -1;
-                }
-                else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
-                    temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] = 1;
-                }
-            }
-            all_function.push_back(temp_row);
-            temp_row.clear();
-            temp_row.resize(num_channel+1);
-        }
-    }
-    
-    cout << "\nbranch: " << endl;
-    node_func_num = all_function.size();/////////////////
-    cout << "node_function num " << node_func_num << endl;
-    cout << "node_func done!" << endl;
-    /*for (int i = 0; i < all_function.size(); i++) {
-     for (int j = 0 ; j < all_function[i].size() ; j++) {
-     cout << all_function[i][j] << " " ;
-     }
-     cout << endl;
-     }*/
-    //getchar();
-    
-    
-    for (int i = 0; i < member_path.size() ; i++) { //path
-        path_channel.clear();
-        path_channel.resize(num_channel,0);
-        channels.clear();
-        for (int j = 0; j < member_path[i].size(); j++) {
-            if (channels.size() == 0 || channels[channels.size()-1]!= (*temp_edge)[member_path[i][j]].channel) {
-                channels.push_back((*temp_edge)[member_path[i][j]].channel);
-            }
-        }
-        /*cout << "path_" << i << " channels ";
-         for (int j = 0; j < channels.size(); j++) {
-         cout << channels[j] << " " ;
-         }
-         cout << endl;
-         getchar();*/
-        ///////
-        for (int j = 0; j < channels.size(); j++) {
-            if ( channels.size() >= 2) {
-                if ( j != channels.size()-1) {
-                    if (channel_dir[channels[j]].first != channel_dir[channels[j+1]].first && channel_dir[channels[j]].first != channel_dir[channels[j+1]].second) {
-                        path_channel[channels[j]] = 1;
-                    }
-                    else if(channel_dir[channels[j]].second != channel_dir[channels[j+1]].first && channel_dir[channels[j]].second != channel_dir[channels[j+1]].second){
-                        path_channel[channels[j]] = -1;
-                    }
-                }
-                else{
-                    if (channel_dir[channels[j]].first != channel_dir[channels[j-1]].first && channel_dir[channels[j]].first != channel_dir[channels[j-1]].second) {
-                        path_channel[channels[j]] = -1;
-                    }
-                    else if(channel_dir[channels[j]].second != channel_dir[channels[j-1]].first && channel_dir[channels[j]].second != channel_dir[channels[j-1]].second){
-                        path_channel[channels[j]] = 1;
-                    }
-                }
-            }
-            else {
-                if ((*temp_node)[channel_dir[channels[j]].first].type == 'i') {
-                    path_channel[channels[j]] = 1;
-                }
-                else if ((*temp_node)[channel_dir[channels[j]].second].type == 'i'){
-                    path_channel[channels[j]] = -1;
-                }
-            }
-        }
-        //////
-       /* cout << "path_" << i << " channel: ";
-        for (int j = 0; j < path_channel.size(); j++){
-            cout << path_channel[j] << " ";
-        }
-        cout << endl;*/
-        //getchar();
-        
-        for (int j = 0; j < path_channel.size(); j++) {
-            temp_length = 0;
-            if (path_channel[j] == 1 || path_channel[j] == -1){
-                for (int k = 0; k < member_channel[j].size(); k++) {
-                    temp_length += (*temp_edge)[member_channel[j][k]].length;
-                }
-                temp_row[j] = path_channel[j]*temp_length;
-            }
-        }
-        /* cout << "length: ";
-         for (int j = 0; j < temp_row.size(); j++) {
-         cout << temp_row[j] << " ";
-         }
-         cout << endl;*/
-        //getchar();
-        
-        all_function.push_back(temp_row);
-        all_function[all_function.size()-1][num_channel] = unit_pressure_drop;
-        temp_row.clear();
-        temp_row.resize(num_channel+1);
-    }
-    cout << "\nall_function" << endl;
-    for (int i = 0; i < all_function.size(); i++) {
-        for (int j = 0 ; j < all_function[i].size() ; j++) {
-           // cout << all_function[i][j] << "\t" ;
-            fout << setw(5) << all_function[i][j] << " " ;
-        }
-        //cout << endl;
-        fout << endl;
-    }
-    cout << endl;
-    cout << "all function num " << all_function.size() << endl;
-    for (int i = 0; i < all_function.size(); i++) {
-        functions.push_back(i);
-    }
-    ////////channel length//////
-    for (int j = 0; j < num_channel; j++) {
-        temp_length = 0;
-        for (int k = 0; k < member_channel[j].size(); k++) {
-            temp_length += (*temp_edge)[member_channel[j][k]].length;
-        }
-        channel_length.push_back(temp_length);
-    }
-    ////////
-}
-
-bool compare (record_info a ,record_info b){
-    return a.num < b.num;
-}
-
-void matrix::initial_matrix(){ //vector < int > *equal_eq
-    matrix_Q.clear();
-    store_func.clear();
-    store_func.resize(0);
-    ////////node functions + flow
-    for (int i = 0 ; i < node_func_num ; i++){///
-        matrix_Q.push_back(all_function[i]);
-        store_func.push_back(i);
-    }
-    
-    for (int i = node_func_num; i < all_function[0].size()-1; i++){///
-        matrix_Q.push_back(all_function[functions[i]]);
-        store_func.push_back(functions[i]);
-        //cout << functions[i] << " ";
-    }
-    cout << "functions" <<endl;
-    for (int i = 0; i < functions.size(); i++) {
-        cout <<functions[i] << " ";
-    }
-    cout << endl;
-    cout << "used functions "<< endl;
-    for (int i = 0; i < store_func.size(); i++) {
-        cout << store_func[i] << " ";
-    }
-    cout << endl;
-    //cout << endl;
-}
-
-
-void matrix::check_matrix_Q(){
-    vector < vector <long double> > matrix_copy;
-    matrix_copy = matrix_Q;
-    record_info temp_record;
-    vector <record_info> record;
-    vector <int> store_func_copy;
-    store_func_copy.clear();
-    store_func_copy = store_func;
-    /*cout << "store_func_copy"<< endl;
-    for (int i = 0; i < store_func_copy.size(); i++) {
-        cout << store_func_copy[i] << " ";
-    }
-    cout << endl;
-    ofstream fout("after_check.txt");*/
-    for (int j = 0; j < matrix_Q[0].size()-1 ; j++){
-        temp_record.column = j;
-        temp_record.num = 0;
-        record.push_back(temp_record);
-        for ( int i = 0; i < matrix_Q.size() ; i++){
-            if (matrix_Q[i][j] != 0){
-                record[record.size()-1].num++;
-                record[record.size()-1].row.push_back(i);
-            }
-        }
-    }
-    //cout << 5555555 << " " << matrix_copy[5].size() << endl;
-    for (int i = 0; i < matrix_Q[0].size()-1 ; i++){
-        sort (record.begin(),record.end(),compare);
-        matrix_Q[record[0].column] = matrix_copy[record[0].row[0]];//
-        //cout << 2 << endl;
-        store_func[record[0].column] = store_func_copy[record[0].row[0]];/////
-        //cout << 3 << endl;
-        for (int j = 1; j < record.size() ; j++){
-            for ( int k = 0 ; k < record[j].row.size(); k++){
-                if (record[j].row[k] == record[0].row[0]){
-                    record[j].row.erase(record[j].row.begin()+k);
-                    record[j].num--;
-                }
-            }
-        }
-        //cout << 4 << endl;
-        record.erase(record.begin());
-        //cout << 5 << endl;
-    }
-    //cout << 6666666 << endl;
-    /*cout << "after check" << endl;
-    for (int i = 0; i < matrix_Q.size(); i++){
-        for (int j = 0; j < matrix_Q[i].size(); j++){
-            cout << matrix_Q[i][j] << "\t";
-            fout << matrix_Q[i][j] << "\t";
-        }
-        cout << endl;
-        fout << endl;
-    }
-    cout << endl;*/
-    cout << "after check "<< endl;
-    for (int i = 0; i < store_func.size(); i++) {
-        cout << store_func[i] << " ";
-    }
-    cout << endl;
-}
-
-int  matrix::Gaussian_Elimination(){
-    long double a,b;
-    for (int j = 0; j < matrix_Q[0].size()-1; j++ ){
-        //////
-        if (matrix_Q[j][j] == 0){
-            cout << "111 " << store_func[j] << endl;
-            if (store_func[j] < node_func_num) {///
-                //cout << node_func_num+1 << " " << store_func[node_func_num+1] << endl;
-                //getchar();
-                functions.push_back(functions[node_func_num]);///
-                functions.erase(functions.begin()+node_func_num);///
+void matrix::write_spice_input(int *i,vector <node> *temp_node,long double unit_pressure_drop){
+    ostringstream oss;
+    string output_spice;
+    oss.str("");
+    oss <<  "spice_" << *i << ".txt";
+    output_spice = oss.str();
+    ofstream spice_out(output_spice.c_str());
+    spice_out << endl;
+    spice_out << "Vi  V 0 " << unit_pressure_drop << endl;
+    for (int i = 0; i < channel_length.size(); i++) {
+        if ((*temp_node)[channel_dir[i].first].type == 'i') {
+            if ((*temp_node)[channel_dir[i].second].type == 'o') {
+                spice_out << "R" << i << "  V 0 "<< channel_length[i] << endl;
             }
             else{
-                for (int i = 0;  i < functions.size(); i++) {
-                    if (functions[i] == store_func[j]) {
-                        functions.erase(functions.begin()+i);
-                        break;
-                    }
-                }
-                functions.push_back(store_func[j]);
+                spice_out << "R" << i << "  V net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
             }
-            return j;
         }
-        ///////
-        for (int i = 0; i < matrix_Q.size(); i++){
-            if ( j == i ){
-                if ( matrix_Q[i][j] != 1 ){
-                    a = matrix_Q[i][j];
-                    for (int k = j ; k < matrix_Q[0].size() ; k++){
-                        matrix_Q[i][k] /= a; 
-                    }
-                }
+        else if((*temp_node)[channel_dir[i].second].type == 'i'){
+            if ((*temp_node)[channel_dir[i].first].type == 'o') {
+                spice_out << "R" << i << "  0 V "<< channel_length[i] << endl;
             }
-            else {				
-                if ( matrix_Q[i][j] != 0 ){
-                    a = matrix_Q[i][j];
-                    b = matrix_Q[j][j];
-                    int counter = 0;
-                    for(int k = j; k < matrix_Q[0].size(); k++){
-                        matrix_Q[i][k] += (-1)*matrix_Q[j][k]/b*a;
-                    }
-                    
-                    for(int k = 0; k < matrix_Q[0].size(); k++){
-                        if (matrix_Q[i][k] != 0){
-                            counter++;
+            else{
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " V " << channel_length[i] << endl;
+            }
+        }
+        else{
+            if ((*temp_node)[channel_dir[i].first].type == 'o') {
+                spice_out << "R" << i << "  0 net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
+            }
+            else if((*temp_node)[channel_dir[i].second].type == 'o'){
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " 0 " << channel_length[i] << endl;
+            }
+            else{
+                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
+            }
+        }
+    }
+    spice_out << ".op" << endl << endl;
+    spice_out << ".end" << endl;
+}
+
+void  matrix::read_spice_result(int *i){
+    string temp;
+    long double Q;
+    vector <long double> temp_Q;
+    stringstream ss;
+    ostringstream oss;
+    string spice_test;
+    oss.str("");
+    oss <<  "test_" << *i << ".txt";
+    spice_test = oss.str();
+    //cout << spice_test << endl;
+    ifstream fin(spice_test.c_str());
+    while (matrix_Q.size() != channel_length.size()) {
+        fin >> temp;
+        if (temp == "resistors") {
+            //cout << temp << endl;
+            while ( matrix_Q.size() != channel_length.size()) {
+                fin >> temp;
+                if (temp == "current") {
+                    while (!fin.eof()){
+                        fin >> temp;
+                        if (temp == "power") {
+                            break;
                         }
-                    }
-                    
-                    if (counter == 0){ //same
-                        cout << "222 " << store_func[i] << endl;
-                        if (store_func[i] < node_func_num) {///
-                            functions.erase(functions.begin()+j);///
-                        }
-                        else {//
-                            for (int k = 0;  k < functions.size(); k++) {
-                                if (functions[k] == store_func[i]) {
-                                    functions.erase(functions.begin()+k);
-                                    break;
+                        else{
+                            ss.str("");
+                            ss.clear();
+                            if (temp[temp.length()-1] > 57) {
+                                for (int i = 0; i < temp.length()-1; i++) {
+                                    ss << temp[i];
+                                }
+                                ss >> Q;
+                                
+                                if(temp[temp.length()-1] == 'm'){
+                                    Q *= pow (10.0, -3.0);
+                                }
+                                else if(temp[temp.length()-1] == 'u'){
+                                    Q *= pow (10.0, -6.0);
+                                }
+                                else if(temp[temp.length()-1] == 'n'){
+                                    Q *= pow (10.0, -9.0);
+                                }
+                                else if(temp[temp.length()-1] == 'p'){
+                                    Q *= pow (10.0, -12.0);
                                 }
                             }
-                        }//
-                        return i;
+                            else{
+                                ss << temp;
+                                ss >> Q;
+                            }
+                            temp_Q.push_back(Q);
+                            matrix_Q.push_back(temp_Q);
+                            temp_Q.clear();
+                        }
                     }
                 }
             }
         }
     }
-    cout << "sol: " << num_channel << endl;
-    for (int i = 0; i < matrix_Q.size(); i++){
-        //for (int j = 0; j < matrix_Q[i].size(); j++){
-            //cout << matrix_Q[i][j] << "\t";
-        cout << i+1 << " " << matrix_Q[i][matrix_Q[0].size()-1] <<endl;//<< "\t";
-        /*if (matrix_Q[i][matrix_Q[0].size()-1] == 0) {
-            cout << "  000000 " ;
-            getchar();
-        }*/
-        //}
-       // cout << endl;
-    }
-    cout << endl;
-    return -1;
-}
-
-void matrix::check_sol(){
-    long double sol;
-    //temp_row[j] = path_channel[j]*temp_length;
-    for (int i = 0; i < all_function.size(); i++) {//
-        sol = 0;
-        //cout << matrix_Q.size() << " " << all_function[i].size()-1 << endl;
-        for (int j = 0; j < all_function[i].size()-1; j++) {
-            sol += all_function[i][j] *  matrix_Q[j][matrix_Q[0].size()-1];
+    cout << "\nmatrix_Q" << endl;
+    for (int i = 0; i < matrix_Q.size(); i++) {
+        cout << i << ": ";
+        for (int j = 0; j < matrix_Q[i].size(); j++) {
+            cout << matrix_Q[i][j] << " ";
         }
-        cout << "function" << i << " " << sol << endl;
+        cout << endl;
     }
 }
 
-void matrix::get_inlet_Q(vector <node> *temp_node ,vector <edge_info> *temp_edge){
+void matrix::get_inlet_Q(vector <node> *temp_node){
     inlet_Q = 0;
     vector <int> inlet_channel;
-    /*for (int i = 0; i < member_path.size(); i++) {
-        if (inlet_channel.size() == 0 || inlet_channel[inlet_channel.size()-1] != (*temp_edge)[member_path[i][0]].channel) {
-            inlet_channel.push_back((*temp_edge)[member_path[i][0]].channel);
-        }
-    }*/
+    
     for (int i = 0; i < channel_length.size(); i++) {
         if ((*temp_node)[channel_dir[i].first].type == 'i' || (*temp_node)[channel_dir[i].second].type == 'i'){
             inlet_channel.push_back(i);
         }
     }
-    cout << "inlet_channel: ";
+    cout << "\ninlet_channel: ";
     for (int i = 0; i < inlet_channel.size(); i++) {
         cout << inlet_channel[i] << " ";
         if (matrix_Q[inlet_channel[i]][matrix_Q[0].size()-1] < 0) {
@@ -570,17 +251,15 @@ void matrix::get_inlet_Q(vector <node> *temp_node ,vector <edge_info> *temp_edge
     cout << "\ninlet_Q: " << inlet_Q << endl;
 }
 
-
 void matrix::get_pressure_drop(double wc, double hc, double l, double coolant_flow_rate,long double unit_pressure_drop ,long double total_Q){
-    double k,dh,Ac,n;//Q
+    double k,dh,Ac,n;
     dh = (2 * wc * hc) / (wc + hc);
     Ac = wc * hc;
     k = 0.02848 / (dh * dh * Ac);
     
-    cout << "coolant_flow_rate: " << coolant_flow_rate << endl; //pow (7.0, 3.0)
+    cout << "coolant_flow_rate: " << coolant_flow_rate << endl;
     n = (coolant_flow_rate * pow (10.0, 12.0) / 60) / total_Q;
-    //n = coolant_flow_rate / total_Q;
-    cout << "sol_Q: ";
+    cout << "sol_Q: " << endl;
     for (int i = 0; i < matrix_Q.size(); i++) {
         cout << i << ": ";
         sol_Q.push_back( n * matrix_Q[i][matrix_Q[0].size()-1] );
@@ -622,24 +301,24 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
     
     for (int i = 0; i < (*temp_node).size(); i++) {
         if ((*temp_node)[i].type == 'b') {
-            cout <<(*temp_node)[i].num << " " << (*temp_node)[i].edges.size() << endl;
+            //cout <<(*temp_node)[i].num << " " << (*temp_node)[i].edges.size() << endl;
             (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] = 0;
             for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
-                cout << (*temp_edge)[(*temp_node)[i].edges[j]].channel << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second << endl;
+                //cout << (*temp_edge)[(*temp_node)[i].edges[j]].channel << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first << " " << channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second << endl;
                 if ( channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first == (*temp_node)[i].num) {
                     if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] < 0) {
                         (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] -= sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
-                        cout << "-" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
+                        //cout << "-" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
                     }
                 }
                 if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
                     if (sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel] >= 0) {
                         (*flow_rate)[(*temp_node)[i].coordinate.second][(*temp_node)[i].coordinate.first] += sol_Q[(*temp_edge)[(*temp_node)[i].edges[j]].channel];
-                        cout << "+" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
+                        //cout << "+" << (*temp_edge)[(*temp_node)[i].edges[j]].channel << endl;
                     }
                 }
             }
-            cout<< endl << endl;
+            //cout<< endl << endl;
         }
     }
     
@@ -651,7 +330,6 @@ void matrix::fill_flow_rate(vector <node> *temp_node , vector <edge_info> *temp_
         cout << endl;
     }
     */
-    
 }
 
 void matrix::fill_direction(vector <node> *temp_node , vector <edge_info> *temp_edge, vector < vector <int> > *direction){
@@ -851,18 +529,16 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
     oss.str("");
     oss <<  "channel_info_" << *i;
     output_channel_info = oss.str();
-    cout << output_network << " " << output_flow << " " << output_direction << " " << output_channel_info << endl;
+    oss.str("");
+    oss <<  "node_info_" << *i;
+    output_node = oss.str();
+    cout << output_network << " " << output_flow << " " << output_direction << " " << output_channel_info << " " << output_node <<endl;
     ofstream network_out(output_network.c_str());
     ofstream flowrate_out(output_flow.c_str());
     ofstream direction_out(output_direction.c_str());
     ofstream channel_info_out(output_channel_info.c_str());
-    ////////
-    oss.str("");
-    oss <<  "node_info_" << *i;
-    output_node = oss.str();
-    single_network = (*network);
     ofstream node_info_out(output_node.c_str());
-    ///////
+    /////// flowrate direction channel
     for (int i = 0; i < (*flow_rate).size(); i++) {
         for (int j = 0; j < (*flow_rate)[i].size(); j++) {
             flowrate_out << setw(10) << (*flow_rate)[i][j] << "\t";
@@ -873,14 +549,14 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
         direction_out << endl;
         channel_info_out << endl;
     }
-    //////
+
     channel_info_out << endl;
     channel_info_out << "channel_length :" << endl;
-    cout << "channel_length.size" << channel_length.size() << " " << "num_channel" << num_channel << endl;
+    //cout << "channel_length.size" << channel_length.size() << " " << "num_channel" << num_channel << endl;
     for (int i = 0; i < channel_length.size(); i++) {
         channel_info_out << i << ": " << channel_length[i] << endl;
     }
-    /////
+    ///// network
     single_network = (*network);
     for (int i = 0; i < (*temp_node).size(); i++) {
         if ((*temp_node)[i].type == 'b' || (*temp_node)[i].type == 'c') {
@@ -894,7 +570,7 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
         }
         network_out << endl;
     }
-    /////
+    ///// node
     single_network = (*network);
     for (int i = 0; i < (*temp_node).size(); i++) {
         if ((*temp_node)[i].type == 'b') {
@@ -908,124 +584,404 @@ void matrix::write_output(int *i, vector < vector <int> > *network, vector <node
         }
         node_info_out << endl;
     }
-    //////////
 }
 
 
-/////////////////
-void matrix::write_spice_input(int *i,vector <node> *temp_node,long double unit_pressure_drop){
-    ostringstream oss;
-    string output_spice;
-    oss.str("");
-    oss <<  "spice_" << *i << ".txt";
-    output_spice = oss.str();
-    ofstream spice_out(output_spice.c_str());
-    spice_out << endl;
-    spice_out << "Vi  V 0 " << unit_pressure_drop << endl;
-    for (int i = 0; i < channel_length.size(); i++) {
-        if ((*temp_node)[channel_dir[i].first].type == 'i') {
-            if ((*temp_node)[channel_dir[i].second].type == 'o') {
-                spice_out << "R" << i << "  V 0 "<< channel_length[i] << endl;
-            }
-            else{
-                spice_out << "R" << i << "  V net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
-            }
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////
+void matrix::get_path(vector <node> *temp_node, vector <edge_info> *temp_edge){
+    num_path = 0;
+    vector <int> path_edge_member;
+    vector <int> record_node((*temp_edge).size()-2);
+    for (int i = 0; i < (*temp_node).size(); i++) {
+        if((*temp_node)[i].type == 'i'){
+            //cout << (*temp_node)[i].num << endl;
+            record_node.resize((*temp_edge).size()-2,0);
+            DFS_path(i, temp_node, temp_edge, path_edge_member, record_node);
+            // cout << "path done" << endl;
         }
-        else if((*temp_node)[channel_dir[i].second].type == 'i'){
-            if ((*temp_node)[channel_dir[i].first].type == 'o') {
-                spice_out << "R" << i << "  0 V "<< channel_length[i] << endl;
+    }
+    /*   for( int i = 0; i < member_path.size(); i++){
+     cout << "path_" << i << ": " ;
+     for (int j = 0; j < member_path[i].size(); j++) {
+     cout << member_path[i][j] << " ";
+     }
+     cout << endl;
+     }*/
+    cout << "num_path: " << num_path << endl;
+}
+
+void matrix::DFS_path(int nodex, vector <node> *temp_node, vector <edge_info> *temp_edge, vector <int> path_edge_member, vector <int> record_node){//
+    record_node [nodex] = 1;
+    for (int i = 0; i < (*temp_node)[nodex].edges.size(); i++) {
+        if ( record_node[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] != 1 || record_node[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] != 1 ){
+            if ( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first != nodex) {
+                if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'o' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type != 'O' ){
+                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] = 1;
+                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
+                    DFS_path( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first, temp_node, temp_edge, path_edge_member, record_node);//
+                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
+                }
+                else if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first].type == 'o' ){
+                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.first] = 1;
+                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
+                    member_path.push_back((path_edge_member));
+                    num_path++;
+                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
+                }
             }
-            else{
-                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " V " << channel_length[i] << endl;
-            }
-        }
-        else{
-            if ((*temp_node)[channel_dir[i].first].type == 'o') {
-                spice_out << "R" << i << "  0 net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
-            }
-            else if((*temp_node)[channel_dir[i].second].type == 'o'){
-                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " 0 " << channel_length[i] << endl;
-            }
-            else{
-                spice_out << "R" << i << "  net" << (*temp_node)[channel_dir[i].first].num << " net" << (*temp_node)[channel_dir[i].second].num << " " << channel_length[i] << endl;
+            else if ( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second != nodex) {
+                if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'o' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'I' && (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type != 'O' ){
+                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] = 1;
+                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
+                    DFS_path( (*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second, temp_node, temp_edge, path_edge_member, record_node);//
+                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
+                }
+                else if ( (*temp_node)[(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second].type == 'o' ){
+                    record_node [(*temp_edge)[(*temp_node)[nodex].edges[i]].nodes.second] = 1;
+                    (path_edge_member).push_back((*temp_node)[nodex].edges[i]);
+                    member_path.push_back((path_edge_member));
+                    num_path++;
+                    (path_edge_member).erase ((path_edge_member).begin()+(path_edge_member).size()-1);
+                }
             }
         }
     }
-    spice_out << ".op" << endl << endl;
-    spice_out << ".end" << endl;
 }
 
-void  matrix::read_spice_result(int *i){
-    string temp;
-    long double Q;
-    vector <long double> temp_Q;
-    stringstream ss;
-    ostringstream oss;
-    string spice_test;
-    oss.str("");
-    oss <<  "test_" << *i << ".txt";
-    spice_test = oss.str();
-    cout << spice_test << endl;
-    ifstream fin(spice_test.c_str());
-    while (matrix_Q.size() != channel_length.size()) {//!fin.eof()
-        fin >> temp;
-        //cout<< temp << endl;
+void matrix::get_funtion(vector <node> *temp_node , vector <edge_info> *temp_edge, long double unit_pressure_drop ){
+    vector <long double> temp_row(num_channel+1,0);
+    vector <int> path_channel(num_channel,0);
+    long double temp_length = 0;
+    vector <int> channels;
+    ofstream fout("all_functions.txt");
+    
+    for (int i = 0; i < (*temp_node).size(); i++) { //node
+        if ((*temp_node)[i].type == 'b'){
+            //  cout << "node_" << i << endl;
+            for (int j = 0; j < (*temp_node)[i].edges.size(); j++) {
+                if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].first== (*temp_node)[i].num) {
+                    temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] = -1;
+                }
+                else if (channel_dir[(*temp_edge)[(*temp_node)[i].edges[j]].channel].second == (*temp_node)[i].num){
+                    temp_row[ (*temp_edge)[(*temp_node)[i].edges[j]].channel ] = 1;
+                }
+            }
+            all_function.push_back(temp_row);
+            temp_row.clear();
+            temp_row.resize(num_channel+1);
+        }
+    }
+    
+    cout << "\nbranch: " << endl;
+    node_func_num = all_function.size();/////////////////
+    cout << "node_function num " << node_func_num << endl;
+    cout << "node_func done!" << endl;
+    /*for (int i = 0; i < all_function.size(); i++) {
+     for (int j = 0 ; j < all_function[i].size() ; j++) {
+     cout << all_function[i][j] << " " ;
+     }
+     cout << endl;
+     }*/
+    //getchar();
+    
+    
+    for (int i = 0; i < member_path.size() ; i++) { //path
+        path_channel.clear();
+        path_channel.resize(num_channel,0);
+        channels.clear();
+        for (int j = 0; j < member_path[i].size(); j++) {
+            if (channels.size() == 0 || channels[channels.size()-1]!= (*temp_edge)[member_path[i][j]].channel) {
+                channels.push_back((*temp_edge)[member_path[i][j]].channel);
+            }
+        }
+        /*cout << "path_" << i << " channels ";
+         for (int j = 0; j < channels.size(); j++) {
+         cout << channels[j] << " " ;
+         }
+         cout << endl;
+         getchar();*/
+        ///////
+        for (int j = 0; j < channels.size(); j++) {
+            if ( channels.size() >= 2) {
+                if ( j != channels.size()-1) {
+                    if (channel_dir[channels[j]].first != channel_dir[channels[j+1]].first && channel_dir[channels[j]].first != channel_dir[channels[j+1]].second) {
+                        path_channel[channels[j]] = 1;
+                    }
+                    else if(channel_dir[channels[j]].second != channel_dir[channels[j+1]].first && channel_dir[channels[j]].second != channel_dir[channels[j+1]].second){
+                        path_channel[channels[j]] = -1;
+                    }
+                }
+                else{
+                    if (channel_dir[channels[j]].first != channel_dir[channels[j-1]].first && channel_dir[channels[j]].first != channel_dir[channels[j-1]].second) {
+                        path_channel[channels[j]] = -1;
+                    }
+                    else if(channel_dir[channels[j]].second != channel_dir[channels[j-1]].first && channel_dir[channels[j]].second != channel_dir[channels[j-1]].second){
+                        path_channel[channels[j]] = 1;
+                    }
+                }
+            }
+            else {
+                if ((*temp_node)[channel_dir[channels[j]].first].type == 'i') {
+                    path_channel[channels[j]] = 1;
+                }
+                else if ((*temp_node)[channel_dir[channels[j]].second].type == 'i'){
+                    path_channel[channels[j]] = -1;
+                }
+            }
+        }
+        //////
+        /* cout << "path_" << i << " channel: ";
+         for (int j = 0; j < path_channel.size(); j++){
+         cout << path_channel[j] << " ";
+         }
+         cout << endl;*/
         //getchar();
-        if (temp == "resistors") {
-            cout << temp << endl;
-            while ( matrix_Q.size() != channel_length.size()) {
-                fin >> temp;
-                if (temp == "current") {
-                    while (!fin.eof()){
-                        fin >> temp;
-                        if (temp == "power") {
-                            break;
+        
+        for (int j = 0; j < path_channel.size(); j++) {
+            temp_length = 0;
+            if (path_channel[j] == 1 || path_channel[j] == -1){
+                for (int k = 0; k < member_channel[j].size(); k++) {
+                    temp_length += (*temp_edge)[member_channel[j][k]].length;
+                }
+                temp_row[j] = path_channel[j]*temp_length;
+            }
+        }
+        /* cout << "length: ";
+         for (int j = 0; j < temp_row.size(); j++) {
+         cout << temp_row[j] << " ";
+         }
+         cout << endl;*/
+        //getchar();
+        
+        all_function.push_back(temp_row);
+        all_function[all_function.size()-1][num_channel] = unit_pressure_drop;
+        temp_row.clear();
+        temp_row.resize(num_channel+1);
+    }
+    cout << "\nall_function" << endl;
+    for (int i = 0; i < all_function.size(); i++) {
+        for (int j = 0 ; j < all_function[i].size() ; j++) {
+            // cout << all_function[i][j] << "\t" ;
+            fout << setw(5) << all_function[i][j] << " " ;
+        }
+        //cout << endl;
+        fout << endl;
+    }
+    cout << endl;
+    cout << "all function num " << all_function.size() << endl;
+    for (int i = 0; i < all_function.size(); i++) {
+        functions.push_back(i);
+    }
+    ////////channel length//////
+    for (int j = 0; j < num_channel; j++) {
+        temp_length = 0;
+        for (int k = 0; k < member_channel[j].size(); k++) {
+            temp_length += (*temp_edge)[member_channel[j][k]].length;
+        }
+        channel_length.push_back(temp_length);
+    }
+    ////////
+}
+
+bool compare (record_info a ,record_info b){
+    return a.num < b.num;
+}
+
+void matrix::initial_matrix(){ //vector < int > *equal_eq
+    matrix_Q.clear();
+    store_func.clear();
+    store_func.resize(0);
+    ////////node functions + flow
+    for (int i = 0 ; i < node_func_num ; i++){///
+        matrix_Q.push_back(all_function[i]);
+        store_func.push_back(i);
+    }
+    
+    for (int i = node_func_num; i < all_function[0].size()-1; i++){///
+        matrix_Q.push_back(all_function[functions[i]]);
+        store_func.push_back(functions[i]);
+        //cout << functions[i] << " ";
+    }
+    cout << "functions" <<endl;
+    for (int i = 0; i < functions.size(); i++) {
+        cout <<functions[i] << " ";
+    }
+    cout << endl;
+    cout << "used functions "<< endl;
+    for (int i = 0; i < store_func.size(); i++) {
+        cout << store_func[i] << " ";
+    }
+    cout << endl;
+    //cout << endl;
+}
+
+
+void matrix::check_matrix_Q(){
+    vector < vector <long double> > matrix_copy;
+    matrix_copy = matrix_Q;
+    record_info temp_record;
+    vector <record_info> record;
+    vector <int> store_func_copy;
+    store_func_copy.clear();
+    store_func_copy = store_func;
+    /*cout << "store_func_copy"<< endl;
+     for (int i = 0; i < store_func_copy.size(); i++) {
+     cout << store_func_copy[i] << " ";
+     }
+     cout << endl;
+     ofstream fout("after_check.txt");*/
+    for (int j = 0; j < matrix_Q[0].size()-1 ; j++){
+        temp_record.column = j;
+        temp_record.num = 0;
+        record.push_back(temp_record);
+        for ( int i = 0; i < matrix_Q.size() ; i++){
+            if (matrix_Q[i][j] != 0){
+                record[record.size()-1].num++;
+                record[record.size()-1].row.push_back(i);
+            }
+        }
+    }
+    //cout << 5555555 << " " << matrix_copy[5].size() << endl;
+    for (int i = 0; i < matrix_Q[0].size()-1 ; i++){
+        sort (record.begin(),record.end(),compare);
+        matrix_Q[record[0].column] = matrix_copy[record[0].row[0]];//
+        //cout << 2 << endl;
+        store_func[record[0].column] = store_func_copy[record[0].row[0]];/////
+        //cout << 3 << endl;
+        for (int j = 1; j < record.size() ; j++){
+            for ( int k = 0 ; k < record[j].row.size(); k++){
+                if (record[j].row[k] == record[0].row[0]){
+                    record[j].row.erase(record[j].row.begin()+k);
+                    record[j].num--;
+                }
+            }
+        }
+        //cout << 4 << endl;
+        record.erase(record.begin());
+        //cout << 5 << endl;
+    }
+    //cout << 6666666 << endl;
+    /*cout << "after check" << endl;
+     for (int i = 0; i < matrix_Q.size(); i++){
+     for (int j = 0; j < matrix_Q[i].size(); j++){
+     cout << matrix_Q[i][j] << "\t";
+     fout << matrix_Q[i][j] << "\t";
+     }
+     cout << endl;
+     fout << endl;
+     }
+     cout << endl;*/
+    cout << "after check "<< endl;
+    for (int i = 0; i < store_func.size(); i++) {
+        cout << store_func[i] << " ";
+    }
+    cout << endl;
+}
+
+int  matrix::Gaussian_Elimination(){
+    long double a,b;
+    for (int j = 0; j < matrix_Q[0].size()-1; j++ ){
+        //////
+        if (matrix_Q[j][j] == 0){
+            cout << "111 " << store_func[j] << endl;
+            if (store_func[j] < node_func_num) {///
+                //cout << node_func_num+1 << " " << store_func[node_func_num+1] << endl;
+                //getchar();
+                functions.push_back(functions[node_func_num]);///
+                functions.erase(functions.begin()+node_func_num);///
+            }
+            else{
+                for (int i = 0;  i < functions.size(); i++) {
+                    if (functions[i] == store_func[j]) {
+                        functions.erase(functions.begin()+i);
+                        break;
+                    }
+                }
+                functions.push_back(store_func[j]);
+            }
+            return j;
+        }
+        ///////
+        for (int i = 0; i < matrix_Q.size(); i++){
+            if ( j == i ){
+                if ( matrix_Q[i][j] != 1 ){
+                    a = matrix_Q[i][j];
+                    for (int k = j ; k < matrix_Q[0].size() ; k++){
+                        matrix_Q[i][k] /= a;
+                    }
+                }
+            }
+            else {
+                if ( matrix_Q[i][j] != 0 ){
+                    a = matrix_Q[i][j];
+                    b = matrix_Q[j][j];
+                    int counter = 0;
+                    for(int k = j; k < matrix_Q[0].size(); k++){
+                        matrix_Q[i][k] += (-1)*matrix_Q[j][k]/b*a;
+                    }
+                    
+                    for(int k = 0; k < matrix_Q[0].size(); k++){
+                        if (matrix_Q[i][k] != 0){
+                            counter++;
                         }
-                        else{
-                            ss.str("");
-                            ss.clear();
-                            if (temp[temp.length()-1] > 57) {
-                                for (int i = 0; i < temp.length()-1; i++) {
-                                    ss << temp[i];
-                                }
-                                ss >> Q;
-                                
-                                if(temp[temp.length()-1] == 'm'){
-                                    Q *= pow (10.0, -3.0);
-                                }
-                                else if(temp[temp.length()-1] == 'u'){
-                                    Q *= pow (10.0, -6.0);
-                                }
-                                else if(temp[temp.length()-1] == 'n'){
-                                    Q *= pow (10.0, -9.0);
-                                }
-                                else if(temp[temp.length()-1] == 'p'){
-                                    Q *= pow (10.0, -12.0);
+                    }
+                    
+                    if (counter == 0){ //same
+                        cout << "222 " << store_func[i] << endl;
+                        if (store_func[i] < node_func_num) {///
+                            functions.erase(functions.begin()+j);///
+                        }
+                        else {//
+                            for (int k = 0;  k < functions.size(); k++) {
+                                if (functions[k] == store_func[i]) {
+                                    functions.erase(functions.begin()+k);
+                                    break;
                                 }
                             }
-                            else{
-                                ss << temp;
-                                ss >> Q;
-                            }
-                            temp_Q.push_back(Q);
-                            matrix_Q.push_back(temp_Q);
-                            temp_Q.clear();
-                        }
+                        }//
+                        return i;
                     }
                 }
             }
         }
     }
-    cout << "matrix_Q" << endl;
-    for (int i = 0; i < matrix_Q.size(); i++) {
-        cout << i << ": ";
-        for (int j = 0; j < matrix_Q[i].size(); j++) {
-            cout << matrix_Q[i][j] << " ";
-        }
-        cout << endl;
+    cout << "sol: " << num_channel << endl;
+    for (int i = 0; i < matrix_Q.size(); i++){
+        //for (int j = 0; j < matrix_Q[i].size(); j++){
+        //cout << matrix_Q[i][j] << "\t";
+        cout << i+1 << " " << matrix_Q[i][matrix_Q[0].size()-1] <<endl;//<< "\t";
+        /*if (matrix_Q[i][matrix_Q[0].size()-1] == 0) {
+         cout << "  000000 " ;
+         getchar();
+         }*/
+        //}
+        // cout << endl;
     }
     cout << endl;
+    return -1;
 }
-///////////////
 
-
+void matrix::check_sol(){
+    long double sol;
+    //temp_row[j] = path_channel[j]*temp_length;
+    for (int i = 0; i < all_function.size(); i++) {//
+        sol = 0;
+        //cout << matrix_Q.size() << " " << all_function[i].size()-1 << endl;
+        for (int j = 0; j < all_function[i].size()-1; j++) {
+            sol += all_function[i][j] *  matrix_Q[j][matrix_Q[0].size()-1];
+        }
+        cout << "function" << i << " " << sol << endl;
+    }
+}

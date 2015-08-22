@@ -28,37 +28,38 @@ bool compare (record_info,record_info);
 class matrix{
 public:
     void get_num_channel(vector <node> *, vector <edge_info> *);
-    void data_init();
+    //void data_init();
     void DFS_edge(int, vector <node> *, vector <edge_info> *, vector <int> *, vector <int> *);
+    void initial_direction(vector <node> *, vector <edge_info> *);
+    void get_inlet_Q(vector <node> *);
+    void get_pressure_drop(double, double, double, double,long double, long double);
+    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *, vector < vector <int> > *);
+    void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
+    void write_spice_input(int *,vector <node> *,long double);
+    void read_spice_result(int *);
+    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*, vector < vector <int> >*);
+    long double inlet_Q;
+    //////////////////////////
     void get_path(vector <node> *, vector <edge_info> * );
     void DFS_path(int, vector <node> *, vector <edge_info> *, vector <int> , vector <int> );
     int Gaussian_Elimination();//vector < int > *
     void check_matrix_Q();
     void initial_matrix();//vector < int > *
     void get_funtion(vector <node> *, vector <edge_info> *, long double);
-    void initial_direction(vector <node> *, vector <edge_info> *);
-    void get_inlet_Q(vector <node> *,vector <edge_info> *);
-    void get_pressure_drop(double, double, double, double,long double, long double);
-    void fill_flow_rate(vector <node> *, vector <edge_info> *,vector < vector <long double> > *, vector < vector <int> > *);
-    void fill_direction(vector <node> *, vector <edge_info> *, vector < vector <int> >*);
-    //void write_output(const char *, const char *, vector < vector <double> > *, vector < vector <int> >*);
-    void write_output(int *, vector < vector <int> > *, vector <node> *, vector < vector <long double> > *, vector < vector <int> >*, vector < vector <int> >*);
-    long double inlet_Q;
     void check_sol();
-    void write_spice_input(int *,vector <node> *,long double);
-    void read_spice_result(int *);
 private:
     vector < vector <long double> > all_function;
+    vector < vector <int> > member_path;
+    vector <int> store_func;
+    vector <int> functions;
+    int num_path;
+    ////////////////////////////////////
     vector < vector <long double> > matrix_Q;
     vector < vector <int> > member_channel;
     vector < pair < int,int > > channel_dir;
-    vector < vector <int> > member_path;
-    vector <int> store_func;
     vector <long double> sol_Q;
-    vector <int> functions;
     vector <long double> channel_length;
     int num_channel;
-    int num_path;
     long double pressure_drop;
     int  node_func_num;
 };
