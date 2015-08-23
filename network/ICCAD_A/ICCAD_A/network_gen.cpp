@@ -440,7 +440,6 @@ void network_generator::network_evolution(){
 		getchar();
 		
 		chdir("3d-ice/bin/");
-		system("ls");
 		string simulator = "./3D-ICE-Emulator test_case_0";
 		simulator += chip.case_num + 48;
 		simulator += ".stk";
@@ -456,6 +455,7 @@ void network_generator::network_evolution(){
 		system(simulator.c_str());
 		getchar();
 		
+		chdir("../../");
 		ifstream *fin = new ifstream[channel_layer+1];
 		vector < vector < vector <double> > > T_map;
 		for( int i=0;i<channel_layer+1;i++ ){
@@ -480,6 +480,8 @@ void network_generator::network_evolution(){
 				}
 			}
 			fin[i].close();
+			T_map.push_back(temp_T_map);
+			print_heat_color_picture(&temp_T_map, i);
 		}
 		getchar();
 	}
@@ -567,6 +569,60 @@ void network_generator::loading_liquid_network(const char *file){
 			fin >> liquid_network[0][i][j];
 		}
 	}
+
+}
+void network_generator::print_heat_color_picture(vector < vector <double> > *output, int layer){
+	
+	double MIN_t = 1 << 30, MAX_t = 0;
+	for( int y=0;y<101;y++ ){
+		for( int x=0;x<101;x++ ){
+			if(MIN_t > (*output)[y][x]){
+				MIN_t = (*output)[y][x];
+			}
+			if(MAX_t < (*output)[y][x]){
+				MAX_t = (*output)[y][x];
+			}
+		}
+	}
+	double gap = (MAX_t - MIN_t) / 10;
+	
+	ofstream gnuData_out("color.txt", ios::out);
+	ofstream gnuCmd_out("color", ios::out);
+	string network_name = "heat_color_picture_";
+	network_name += char(layer+48);
+	
+	gnuCmd_out << "set terminal png transparent nocrop enhanced size 1000,1000 font \"arial,8\" " << endl;
+	gnuCmd_out << "set output '" << network_name << "'" << endl;
+	gnuCmd_out << "set title \"heat_color\" " << endl;
+	gnuCmd_out << "unset key" << endl << "set tic scale 0" << endl;
+	gnuCmd_out << "set palette rgbformula 21,22,23" << endl;
+	gnuCmd_out << "set cbrange [0:10]" << endl;
+	gnuCmd_out << "set cblabel \"temperature\" " << endl;
+	gnuCmd_out << "unset cbtics" << endl;
+	gnuCmd_out << "set xrange [-0.5:100.5]" << endl;
+	gnuCmd_out << "set yrange [-0.5:100.5]" << endl;
+	gnuCmd_out << "set view map" << endl;
+	gnuCmd_out << "splot 'color.txt' matrix with image" << endl;
+	
+	for( int i=100;i>=0;i-- ){
+		for( int j=0;j<101;j++ ){
+			for( int k=1;k<11;k++ ){
+				if((*output)[i][j] >= MAX_t-gap*k){
+					gnuData_out << 11-k << " ";
+					break;
+				}
+				else if(k == 10){
+					gnuData_out << 0 << " ";
+				}
+			}
+		}
+		gnuData_out << endl;
+	}
+	gnuData_out.close();
+	gnuCmd_out.close();
+	system("gnuplot color");
+	
+	
 }
 
 void network_generator::print_liquid_network(){
@@ -581,6 +637,7 @@ void network_generator::print_liquid_network(){
         }
         fout << endl;
     }
+	fout.close();
 }
 
 void network_generator::print_heat_network(vector < vector <double> > heat_network){
@@ -592,6 +649,7 @@ void network_generator::print_heat_network(vector < vector <double> > heat_netwo
 		}
 		fout << endl;
 	}
+	fout.close();
 }
 
 void network_generator::print_network(){
@@ -626,6 +684,8 @@ void network_generator::print_network(){
 			}
 			gnuData_out << endl;
 		}
+		gnuData_out.close();
+		gnuCmd_out.close();
 		system("gnuplot gp");
 	}
 	

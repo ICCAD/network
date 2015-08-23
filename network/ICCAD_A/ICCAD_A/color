@@ -1,0 +1,13 @@
+set terminal png transparent nocrop enhanced size 1000,1000 font "arial,8" 
+set output 'heat_color_picture_1'
+set title "heat_color" 
+unset key
+set tic scale 0
+set palette rgbformula 21,22,23
+set cbrange [0:10]
+set cblabel "temperature" 
+unset cbtics
+set xrange [-0.5:100.5]
+set yrange [-0.5:100.5]
+set view map
+splot 'color.txt' matrix with image
