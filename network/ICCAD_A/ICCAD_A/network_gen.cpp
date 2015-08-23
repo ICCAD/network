@@ -412,7 +412,14 @@ void network_generator::network_evolution(){
             cout << "initial_direction done!" << endl;
             matrix_a[i].write_spice_input(&i, &tempnode[i],unit_pressure_drop);
             cout << "write_spice_input done!" << endl;
-            
+            string spice_sim = "hspice spice_";
+			spice_sim += i + 48;
+			spice_sim += ".txt";
+			spice_sim += " > test_";
+			spice_sim += i + 48;
+			spice_sim += ".txt";
+			cout << spice_sim << endl;
+			system(spice_sim.c_str());
             matrix_a[i].read_spice_result(&i);
             cout << "read_spice_result done!" << endl;
             matrix_a[i].get_inlet_Q(&tempnode[i]);
