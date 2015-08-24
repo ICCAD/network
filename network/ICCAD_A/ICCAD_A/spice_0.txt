@@ -1,23 +1,17 @@
 
 Vi  V 0 100
-R0  V net5 23.5
-R1  net5 net11 53
-R2  net11 net15 19
-R3  net15 0 5.5
-R4  net15 net10 37
-R5  0 net10 5.5
-R6  net10 net11 18
-R7  net11 net12 54
-R8  net12 V 24.5
-R9  net6 net12 53
-R10  net2 net6 18
-R11  0 net2 5.5
-R12  net2 net7 36
-R13  net6 net7 18
-R14  net5 net6 54
-R15  V net5 23.5
-R16  net7 0 5.5
-R17  net12 V 23.5
+R0  0 V 37
+R1  0 V 145
+R2  0 V 97
+R3  V 0 37
+R4  V 0 145
+R5  0 V 145
+R6  V 0 97
+R7  0 V 97
+R8  0 V 37
+R9  V 0 37
+R10  V 0 145
+R11  V 0 97
 .op
 
 .end

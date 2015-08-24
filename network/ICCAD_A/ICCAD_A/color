@@ -6,7 +6,7 @@ set tic scale 0
 set palette rgbformula 21,22,23
 set cbrange [0:10]
 set cblabel "temperature" 
-unset cbtics
+set cbtics ("300.1" 0,"302.07" 1,"304.04" 2,"306.01" 3,"307.98" 4,"309.95" 5,"311.92" 6,"313.89" 7,"315.86" 8,"317.83" 9)
 set xrange [-0.5:100.5]
 set yrange [-0.5:100.5]
 set view map

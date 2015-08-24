@@ -33,7 +33,7 @@ dimensions :
 stack:
    die     TOP_DIE     TOP_IC    floorplan "./testcase_02/top.flp" ;
    channel CHANNEL_LAYER    ;
-   die     BOTTOM_DIE       BOTTOM_IC  floorplan "./testcase_01/bottom.flp" ;
+   die     BOTTOM_DIE       BOTTOM_IC  floorplan "./testcase_02/bottom.flp" ;
 
 solver:
    steady ;

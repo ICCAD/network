@@ -585,7 +585,6 @@ void network_generator::print_heat_color_picture(vector < vector <double> > *out
 		}
 	}
 	double gap = (MAX_t - MIN_t) / 10;
-	
 	ofstream gnuData_out("color.txt", ios::out);
 	ofstream gnuCmd_out("color", ios::out);
 	string network_name = "heat_color_picture_";
@@ -598,7 +597,14 @@ void network_generator::print_heat_color_picture(vector < vector <double> > *out
 	gnuCmd_out << "set palette rgbformula 21,22,23" << endl;
 	gnuCmd_out << "set cbrange [0:10]" << endl;
 	gnuCmd_out << "set cblabel \"temperature\" " << endl;
-	gnuCmd_out << "unset cbtics" << endl;
+	gnuCmd_out << "set cbtics (";
+	for( int i=0;i<10;i++ ){
+		gnuCmd_out << "\"" << MIN_t + i * gap << "\" " << i;
+		if(i < 9){
+			gnuCmd_out << ",";
+		}
+	}
+	gnuCmd_out << ")" << endl;
 	gnuCmd_out << "set xrange [-0.5:100.5]" << endl;
 	gnuCmd_out << "set yrange [-0.5:100.5]" << endl;
 	gnuCmd_out << "set view map" << endl;

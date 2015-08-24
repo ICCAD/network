@@ -44,5 +44,5 @@ solver:
    initial temperature 300.0 ;
 
 output:
-   Tmap     (    TOP_DIE,             "./testcase_04/output_1.txt",             final ) ;
-   Tmap     (    BOTTOM_DIE,             "./testcase_04/output_0.txt",             final ) ;
+   Tmap     (    TOP_DIE,             "./testcase_05/output_1.txt",             final ) ;
+   Tmap     (    BOTTOM_DIE,             "./testcase_05/output_0.txt",             final ) ;
