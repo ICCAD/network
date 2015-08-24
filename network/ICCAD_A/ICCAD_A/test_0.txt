@@ -11,12 +11,12 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
  lic:  
  lic: FLEXlm: v10.8 
  lic: USER:   cmchang              HOSTNAME: ladyeyes 
- lic: HOSTID: f46d04643fb9         PID:      29359 
+ lic: HOSTID: f46d04643fb9         PID:      29739 
  lic: Using FLEXlm license file: 
  lic: 26585@lsntu 
  lic: Checkout 1 hspice 
  lic: License/Maintenance for hspice will expire on 14-may-2016/2015.06 
- lic: 80(in_use)/90(total) FLOATING license(s) on SERVER lsntu 
+ lic: 78(in_use)/90(total) FLOATING license(s) on SERVER lsntu 
  lic:   
  Init: read install configuration file: /usr/cad/synopsys/hspice/cur/hspice/meta.cfg
  
@@ -116,9 +116,9 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
 
            total memory used           26  kbytes
            total cpu time            0.00 seconds
-           total elapsed time        0.21 seconds
-           job started at     14:49:50 08/24/2015
-           job ended   at     14:49:50 08/24/2015
+           total elapsed time        0.20 seconds
+           job started at     15:06:42 08/24/2015
+           job ended   at     15:06:42 08/24/2015
 
 
  lic: Release hspice token(s) 

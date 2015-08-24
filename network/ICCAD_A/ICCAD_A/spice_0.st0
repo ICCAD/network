@@ -3,12 +3,12 @@
  lic:
  lic: FLEXlm: v10.8
  lic: USER:   cmchang              HOSTNAME: ladyeyes
- lic: HOSTID: f46d04643fb9         PID:      29359
+ lic: HOSTID: f46d04643fb9         PID:      29739
  lic: Using FLEXlm license file:
  lic: 26585@lsntu
  lic: Checkout 1 hspice
  lic: License/Maintenance for hspice will expire on 14-may-2016/2015.06
- lic: 80(in_use)/90(total) FLOATING license(s) on SERVER lsntu
+ lic: 78(in_use)/90(total) FLOATING license(s) on SERVER lsntu
  lic:
  init: begin read circuit files,  cpu clock=  0.00E+00
        option search   = /usr/cad/synopsys/hspice/cur/hspice

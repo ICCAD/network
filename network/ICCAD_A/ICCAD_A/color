@@ -1,5 +1,5 @@
 set terminal png transparent nocrop enhanced size 1000,1000 font "arial,8" 
-set output 'heat_color_picture_case_1_layer_1'
+set output './heat_color_pic/heat_color_picture_case_1_layer_1'
 set title "heat_color" 
 unset key
 set tic scale 0

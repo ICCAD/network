@@ -587,7 +587,7 @@ void network_generator::print_heat_color_picture(vector < vector <double> > *out
 	double gap = (MAX_t - MIN_t) / 10;
 	ofstream gnuData_out("color.txt", ios::out);
 	ofstream gnuCmd_out("color", ios::out);
-	string network_name = "heat_color_picture_case_";
+	string network_name = "./heat_color_pic/heat_color_picture_case_";
 	network_name += char(chip.case_num+48);
 	network_name += "_layer_";
 	network_name += char(layer+48);
@@ -666,7 +666,9 @@ void network_generator::print_network(){
 		ofstream gnuData_out("map.txt", ios::out);
 		ofstream gnuCmd_out("gp", ios::out);
 		
-		string network_name = "liquid_network_";
+		string network_name = "./liquid_pic/liquid_network_case_";
+		network_name += char(chip.case_num+48);
+		network_name += "_layer_";
 		network_name += char(i+48);
 		gnuCmd_out << "set terminal png transparent nocrop enhanced size 1000,1000 font \"arial,8\" " << endl;
 		gnuCmd_out << "set output '" << network_name << "'" << endl;
