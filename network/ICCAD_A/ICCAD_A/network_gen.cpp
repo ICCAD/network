@@ -436,7 +436,7 @@ void network_generator::network_evolution(){
 			matrix_a[i].write_output(&i,&liquid_network[i], &tempnode[i],&flow_rate[i],&direction[i],&channel_info[i]);
 		}
 		
-		cout << "file done !" << endl;
+		//cout << "file done !" << endl;
 		vector < RTree<int, int, 2, float>* > edge_rtree(channel_layer);
 		for( int i=0;i<channel_layer;i++ ){
 			edge_rtree[i] = new RTree<int, int, 2, float>;
@@ -464,7 +464,7 @@ void network_generator::network_evolution(){
 				}
 			}
 		}
-		cout << "Rtree done !" << endl;
+		//cout << "Rtree done !" << endl;
 		/*int minp[2], maxp[2];
 		minp[0] = 17;
 		minp[1] = 0;
@@ -494,9 +494,9 @@ void network_generator::network_evolution(){
 			simulator += " ../../direction_";
 			simulator += i+48;
 		}
-		cout << simulator << endl;
+		//cout << simulator << endl;
 		system(simulator.c_str());
-		getchar();
+		//getchar();
 		
 		chdir("../../");
 		ifstream *fin = new ifstream[channel_layer+1];
@@ -539,10 +539,12 @@ void network_generator::network_evolution(){
 		if(T_max - T_min > chip.T_gredient){
 			cout << "T_gredient fail !!!" << endl;
 			cout << "T_gredient : " << chip.T_gredient << endl;
+			cout << "your gragient : " << T_max - T_min << endl;
 		}
 		if(T_max > chip.T_max+273){
 			cout << "T_max fail !!!" << endl;
 			cout << "T_max : " << chip.T_max << endl;
+			cout << "your T_max : " << T_max << endl;
 		}
 		cout << "sim over !!!!!!!!!!!!!!!!!!" << endl;
 		return;
