@@ -1,0 +1,26 @@
+***** HSPICE -- E-2010.12 32-BIT (Nov 20 2010) linux ******
+ Input File: spice_1.txt
+ lic:
+ lic: FLEXlm: v10.8
+ lic: USER:   cmchang              HOSTNAME: ladyeyes
+ lic: HOSTID: f46d04643fb9         PID:      31649
+ lic: Using FLEXlm license file:
+ lic: 26585@lsntu
+ lic: Checkout 1 hspice
+ lic: License/Maintenance for hspice will expire on 14-may-2016/2015.06
+ lic: 1(in_use)/90(total) FLOATING license(s) on SERVER lsntu
+ lic:
+ init: begin read circuit files,  cpu clock=  0.00E+00
+       option search   = /usr/cad/synopsys/hspice/cur/hspice
+       option runlvl
+ init: end read circuit files,  cpu clock=  0.00E+00 memory=     18 kb
+ init: begin check errors,  cpu clock=  0.00E+00
+ init: end check errors,  cpu clock=  0.00E+00 memory=     18 kb
+ init: begin setup matrix, pivot=     0 cpu clock=  0.00E+00
+       establish matrix -- done,  cpu clock=  0.00E+00 memory=     19 kb
+       re-order matrix -- done,  cpu clock=  0.00E+00 memory=     19 kb
+ init: end setup matrix,  cpu clock=  0.00E+00 memory=     28 kb
+ dcop: begin dcop,  cpu clock=  0.00E+00
+ dcop: end dcop,  cpu clock=  0.00E+00 memory=     28 kb  tot_iter=       4
+>info:         ***** hspice job concluded
+ lic: Release hspice token(s)

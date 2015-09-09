@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <unistd.h>
 
-
+#include "RTree.h"
 #include "chip_info.h"
 #include "matrix_solution.h"
 
@@ -27,10 +27,10 @@ public:
 	void random_in_out_let(vector < pair <int, int> > &, vector < pair <int, int> > &);
 	bool Is_close_center(pair <int, int>, pair <int, int>);
 	void network_evolution();
+	bool check_around(pair<int, int>, pair<int, int>, int);
+	bool optimization_move_channel(pair <int, int>, vector < RTree<int, int, 2, float>* > *, vector < vector <edge_info> > *, vector < vector <node> > *);
 	pair <double, double> get_circle_center(pair<int, int>, pair<int, int>, double, int);
-	void drow_line(pair<double, double>, pair<int, int>, pair<int, int>, double, int);
-	void loading_liquid_network(const char *);
-	void choose_dir_2(pair<int, int> &, pair<double, double>, double, int);
+	void loading_liquid_network(const char **);
 	void print_heat_color_picture(vector < vector <double> > *, int);
 	void print_heat_network(vector < vector <double> >);
     void print_liquid_network();

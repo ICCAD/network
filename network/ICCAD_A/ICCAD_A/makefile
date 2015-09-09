@@ -14,7 +14,7 @@ BasicExcel.o:BasicExcel.cpp ExcelFormat.h
 	g++ -g -c BasicExcel.cpp ExcelFormat.h
 ExcelFormat.o:ExcelFormat.cpp ExcelFormat.h BasicExcel.hpp 
 	g++ -g -c ExcelFormat.cpp ExcelFormat.h BasicExcel.hpp
-network_gen.o:network_gen.cpp network_gen.h chip_info.h
-	g++ -g -c network_gen.cpp network_gen.h chip_info.h
+network_gen.o:network_gen.cpp network_gen.h chip_info.h RTree.h
+	g++ -g -c network_gen.cpp network_gen.h chip_info.h RTree.h
 clean:
 	rm network_sol main.o network.o matrix_solution.o constraint_check.o chip_info.o BasicExcel.o ExcelFormat.o network_gen.o

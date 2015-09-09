@@ -8,12 +8,14 @@ using namespace std;
 int main(int argc, char **argv){
 	
 	ifstream fin(argv[1]);
-	
+	//ifstream fin_2(argv[2]);
 	vector < vector <int> > temp(101, vector <int> (101)),used(101, vector <int> (101)); 
+	//vector < vector <int> > temp_2(101, vector <int> (101)); 
 	
 	for( int i=0;i<101;i++ ){
 		for( int j=0;j<101;j++ ){
 			fin >> temp[i][j];
+			//fin_2 >> temp_2[i][j];
 		}
 	}
 	fin.close();

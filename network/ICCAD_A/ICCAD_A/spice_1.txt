@@ -1,0 +1,23 @@
+
+Vi  V 0 100
+R0  0 V 93
+R1  0 V 145
+R2  0 V 105
+R3  V 0 155
+R4  V net21 27.5
+R5  net21 net17 46
+R6  net17 0 29.5
+R7  net17 net21 26
+R8  0 net38 27.5
+R9  net38 net47 8
+R10  net47 V 79.5
+R11  net47 net38 24
+R12  V 0 145
+R13  V 0 93
+R14  V 0 115
+R15  0 V 145
+R16  0 V 93
+R17  V 0 115
+.op
+
+.end

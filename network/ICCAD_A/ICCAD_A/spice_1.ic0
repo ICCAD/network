@@ -1,0 +1,18 @@
+* "simulator" "HSPICE" 
+* "version" "E-2010.12 32-BIT"
+* "format" "HSP"
+* "rundate" "10:46:57 09/09/2015 "
+* "netlist" "spice_1.txt "
+* "runtitle" ""
+* time =    0.            
+* temperature =   25.0000        
+*** BEGIN: Saved Operating Point ***                     
+.option 
++ gmindc=   1.0000p       
+.nodeset
++ net17 =  40.0755        
++ net21 =  62.6415        
++ net38 =  24.3363        
++ net47 =  29.6460        
++ v = 100.0000        
+***   END: Saved Operating Point ***                     

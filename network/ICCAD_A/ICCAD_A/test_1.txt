@@ -1,0 +1,132 @@
+Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_1.txt
+ ****** HSPICE -- E-2010.12 32-BIT (Nov 20 2010) linux ******                   
+  Copyright (C) 2010 Synopsys, Inc. All Rights Reserved.                        
+  Unpublished-rights reserved under US copyright laws.
+  This program is protected by law and is subject to the
+  terms and conditions of the license agreement from Synopsys.
+  Use of this program is your acceptance to be bound by the
+  license agreement. HSPICE is the trademark of Synopsys, Inc.
+  Input File: spice_1.txt                                                       
+  Command line options: spice_1.txt
+ lic:  
+ lic: FLEXlm: v10.8 
+ lic: USER:   cmchang              HOSTNAME: ladyeyes 
+ lic: HOSTID: f46d04643fb9         PID:      31649 
+ lic: Using FLEXlm license file: 
+ lic: 26585@lsntu 
+ lic: Checkout 1 hspice 
+ lic: License/Maintenance for hspice will expire on 14-may-2016/2015.06 
+ lic: 1(in_use)/90(total) FLOATING license(s) on SERVER lsntu 
+ lic:   
+ Init: read install configuration file: /usr/cad/synopsys/hspice/cur/hspice/meta.cfg
+ 
+      
+ *****************************************************************
+ ******  option summary
+ ******
+ runlvl  = 3         bypass  = 2         
+1****** HSPICE -- E-2010.12 32-BIT (Nov 20 2010) linux ******                   
+ ******  
+ 
+
+  ******  operating point information tnom=  25.000 temp=  25.000 *****
+ ***** operating point status is all       simulation time is     0.     
+    node    =voltage      node    =voltage      node    =voltage
+
+ +0:net17   =  40.0755  0:net21   =  62.6415  0:net38   =  24.3363 
+ +0:net47   =  29.6460  0:v       = 100.0000 
+
+
+ ****  voltage sources
+
+ subckt             
+ element  0:vi      
+  volts    100.0000 
+  current  -10.8749 
+  power      1.0875k
+
+     total voltage source power dissipation=    1.0875k       watts
+
+
+
+ **** resistors
+
+ subckt                                                                    
+ element  0:r0       0:r1       0:r2       0:r3       0:r4       0:r5      
+  r value   93.0000   145.0000   105.0000   155.0000    27.5000    46.0000 
+  v drop  -100.0000  -100.0000  -100.0000   100.0000    37.3585    22.5660 
+  current   -1.0753  -689.6552m -952.3810m  645.1613m    1.3585   490.5660m
+  power    107.5269    68.9655    95.2381    64.5161    50.7512    11.0701 
+
+ subckt                                                                    
+ element  0:r6       0:r7       0:r8       0:r9       0:r10      0:r11     
+  r value   29.5000    26.0000    27.5000     8.0000    79.5000    24.0000 
+  v drop    40.0755   -22.5660   -24.3363    -5.3097   -70.3540     5.3097 
+  current    1.3585  -867.9245m -884.9558m -663.7168m -884.9558m  221.2389m
+  power     54.4422    19.5856    21.5365     3.5242    62.2602     1.1747 
+
+ subckt                                                                    
+ element  0:r12      0:r13      0:r14      0:r15      0:r16      0:r17     
+  r value  145.0000    93.0000   115.0000   145.0000    93.0000   115.0000 
+  v drop   100.0000   100.0000   100.0000  -100.0000  -100.0000   100.0000 
+  current  689.6552m    1.0753   869.5652m -689.6552m   -1.0753   869.5652m
+  power     68.9655   107.5269    86.9565    68.9655   107.5269    86.9565 
+
+
+          ***** job concluded
+1****** HSPICE -- E-2010.12 32-BIT (Nov 20 2010) linux ******                   
+ ******  
+ 
+
+  ******  job statistics summary tnom=  25.000 temp=  25.000 *****
+ 
+ 
+ ******  Machine Information  ******
+ CPU:
+ model name	: Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz
+ cpu MHz	: 1600.000
+ 
+ OS:
+ Linux version 2.6.32-220.el6.x86_64 (mockbuild@c6b18n3.bsys.dev.centos.org) (gc
+ c version 4.4.6 20110731 (Red Hat 4.4.6-3) (GCC) ) #1 SMP Tue Dec 6 19:48:22 GM
+ T 2011
+
+
+  ******  HSPICE Threads Information  ******
+
+  Command Line Threads Count                  :     1
+  Available CPU Count                         :     8
+  Actual Model Evaluation(Load) Threads Count :     1
+  Actual Solver Threads Count                 :     1
+
+
+  ******  Circuit Statistics  ******
+  # nodes       =       6 # elements   =      19
+  # resistors   =      18 # capacitors =       0 # inductors   =       0
+  # mutual_inds =       0 # vccs       =       0 # vcvs        =       0
+  # cccs        =       0 # ccvs       =       0 # volt_srcs   =       1
+  # curr_srcs   =       0 # diodes     =       0 # bjts        =       0
+  # jfets       =       0 # mosfets    =       0 # U elements  =       0
+  # T elements  =       0 # W elements =       0 # B elements  =       0
+  # S elements  =       0 # P elements =       0 # va device   =       0
+  # vector_srcs =       0
+
+
+  ******  Runtime Statistics (seconds)  ******
+
+  analysis           time    # points   tot. iter  conv.iter
+  op point           0.00           1           4
+  readin             0.00
+  errchk             0.00
+  setup              0.00
+  output             0.00
+
+
+           total memory used           28  kbytes
+           total cpu time            0.00 seconds
+           total elapsed time        0.20 seconds
+           job started at     10:46:57 09/09/2015
+           job ended   at     10:46:57 09/09/2015
+
+
+ lic: Release hspice token(s) 
