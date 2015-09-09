@@ -30,7 +30,7 @@ int main(const int argc, const char **argv){ //
 	
 	network_a.network_init();
 	network_a.loading_liquid_network(argv);
-	network_a.network_evolution();
+	network_a.network_evolution(argv);
     
     return 0;
     

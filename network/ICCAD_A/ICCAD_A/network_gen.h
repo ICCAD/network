@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <stdlib.h>   
 #include <time.h>
 #include <iomanip>
@@ -26,7 +27,7 @@ public:
 	void choose_dir(pair<int, int> &, int, vector < vector <double> > *);
 	void random_in_out_let(vector < pair <int, int> > &, vector < pair <int, int> > &);
 	bool Is_close_center(pair <int, int>, pair <int, int>);
-	void network_evolution();
+	void network_evolution(const char **);
 	bool check_around(pair<int, int>, pair<int, int>, int);
 	bool optimization_move_channel(pair <int, int>, vector < RTree<int, int, 2, float>* > *, vector < vector <edge_info> > *, vector < vector <node> > *);
 	pair <double, double> get_circle_center(pair<int, int>, pair<int, int>, double, int);

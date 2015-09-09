@@ -1,7 +1,7 @@
 * "simulator" "HSPICE" 
 * "version" "E-2010.12 32-BIT"
 * "format" "HSP"
-* "rundate" "23:26:43 09/09/2015 "
+* "rundate" "23:42:27 09/09/2015 "
 * "netlist" "spice_0.txt "
 * "runtitle" ""
 * time =    0.            

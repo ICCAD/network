@@ -11,7 +11,7 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
  lic:  
  lic: FLEXlm: v10.8 
  lic: USER:   cmchang              HOSTNAME: ladyeyes 
- lic: HOSTID: f46d04643fb9         PID:      5273 
+ lic: HOSTID: f46d04643fb9         PID:      5419 
  lic: Using FLEXlm license file: 
  lic: 26585@lsntu 
  lic: Checkout 1 hspice 
@@ -126,17 +126,17 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
 
   analysis           time    # points   tot. iter  conv.iter
   op point           0.00           1           4
-  readin             0.01
+  readin             0.00
   errchk             0.00
   setup              0.00
   output             0.00
 
 
            total memory used           32  kbytes
-           total cpu time            0.01 seconds
+           total cpu time            0.00 seconds
            total elapsed time        0.20 seconds
-           job started at     23:26:43 09/09/2015
-           job ended   at     23:26:44 09/09/2015
+           job started at     23:42:27 09/09/2015
+           job ended   at     23:42:27 09/09/2015
 
 
  lic: Release hspice token(s) 

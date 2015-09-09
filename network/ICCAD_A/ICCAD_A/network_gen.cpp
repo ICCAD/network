@@ -60,7 +60,7 @@ void network_generator::find_network_sol(){
 		if(network_gen()){
 			cout << i << " network build done !" << endl;
 		}
-		network_evolution();
+		//network_evolution();
 		//print_network();
 		//cout << "seed #1" << endl;
 		//getchar();
@@ -383,10 +383,15 @@ void network_generator::random_in_out_let(vector < pair <int, int> > &inlet, vec
 	}
 }
 
-void network_generator::network_evolution(){
+void network_generator::network_evolution(const char **file){
 	
-	long double coolant_flow_rate = 42.0;
+	long double coolant_flow_rate;
 	long double unit_pressure_drop = 100.0;
+	
+	stringstream ss;
+	ss << file[channel_layer+2];
+	ss >> coolant_flow_rate;
+	
 	while(1){
 		print_network();
 		long double total_Q = 0;
@@ -546,6 +551,7 @@ void network_generator::network_evolution(){
 			cout << "T_max : " << chip.T_max << endl;
 			cout << "your T_max : " << T_max << endl;
 		}
+		cout << "your T_max : " << T_max << endl;
 		cout << "sim over !!!!!!!!!!!!!!!!!!" << endl;
 		return;
 		pout(target);
