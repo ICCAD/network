@@ -1,7 +1,7 @@
 * "simulator" "HSPICE" 
 * "version" "E-2010.12 32-BIT"
 * "format" "HSP"
-* "rundate" "17:07:49 09/09/2015 "
+* "rundate" "23:23:40 09/09/2015 "
 * "netlist" "spice_0.txt "
 * "runtitle" ""
 * time =    0.            
@@ -10,13 +10,19 @@
 .option 
 + gmindc=   1.0000p       
 .nodeset
-+ net147 =  89.8738        
-+ net149 =  89.8738        
-+ net150 =  98.1354        
-+ net169 =  98.1354        
-+ net25 =  98.1354        
-+ net26 =  89.8738        
-+ net28 =  89.8738        
-+ net6 =  98.1354        
++ net12 =  37.4743        
++ net14 =  54.7584        
++ net15 =  53.6155        
++ net18 =  56.6810        
++ net19 =  55.6079        
++ net2 =  24.9789        
++ net22 =  69.1196        
++ net23 =  89.6724        
++ net24 =  68.0897        
++ net3 =   4.4261        
++ net4 =  26.0088        
++ net7 =  35.5517        
++ net8 =  36.8626        
++ net9 =  38.5229        
 + v = 100.0000        
 ***   END: Saved Operating Point ***                     

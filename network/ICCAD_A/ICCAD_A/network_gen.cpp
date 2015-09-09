@@ -501,7 +501,7 @@ void network_generator::network_evolution(){
 		chdir("../../");
 		ifstream *fin = new ifstream[channel_layer+1];
 		vector < vector < vector <double> > > T_map;
-		double T_max = 0;
+		double T_max = 0, T_min = 1<<30;
 		pair<int, int> target;
 		for( int i=0;i<channel_layer+1;i++ ){
 			string file_location = "3d-ice/bin/testcase_0";
@@ -526,6 +526,9 @@ void network_generator::network_evolution(){
 							target.first = j;
 							target.second = k;
 						}
+						if(T_min > temp_T_map[k][j]){
+							T_min = temp_T_map[k][j];
+						}
 					}
 				}
 			}
@@ -533,6 +536,16 @@ void network_generator::network_evolution(){
 			T_map.push_back(temp_T_map);
 			print_heat_color_picture(&temp_T_map, i);
 		}
+		if(T_max - T_min > chip.T_gredient){
+			cout << "T_gredient fail !!!" << endl;
+			cout << "T_gredient : " << chip.T_gredient << endl;
+		}
+		if(T_max > chip.T_max+273){
+			cout << "T_max fail !!!" << endl;
+			cout << "T_max : " << chip.T_max << endl;
+		}
+		cout << "sim over !!!!!!!!!!!!!!!!!!" << endl;
+		return;
 		pout(target);
 		cout << endl;
 		cout << T_max << endl;

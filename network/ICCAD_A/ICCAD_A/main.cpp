@@ -2,8 +2,8 @@
 //  main.cpp
 //  ICCAD_A
 //
-//  Created by 張志銘 on 2015/8/7.
-//  Copyright (c) 2015年 cmchang. All rights reserved.
+//  Created by 張�???on 2015/8/7.
+//  Copyright (c) 2015�?cmchang. All rights reserved.
 //
 
 #include "chip_info.h"
@@ -32,7 +32,7 @@ int main(const int argc, const char **argv){ //
 	network_a.loading_liquid_network(argv);
 	network_a.network_evolution();
     
-    getchar();
+    return 0;
     
     
     int network_num = 2;
