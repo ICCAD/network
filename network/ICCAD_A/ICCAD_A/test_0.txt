@@ -11,12 +11,12 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
  lic:  
  lic: FLEXlm: v10.8 
  lic: USER:   cmchang              HOSTNAME: ladyeyes 
- lic: HOSTID: f46d04643fb9         PID:      5419 
+ lic: HOSTID: f46d04643fb9         PID:      30021 
  lic: Using FLEXlm license file: 
  lic: 26585@lsntu 
  lic: Checkout 1 hspice 
  lic: License/Maintenance for hspice will expire on 14-may-2016/2015.06 
- lic: 4(in_use)/90(total) FLOATING license(s) on SERVER lsntu 
+ lic: 5(in_use)/90(total) FLOATING license(s) on SERVER lsntu 
  lic:   
  Init: read install configuration file: /usr/cad/synopsys/hspice/cur/hspice/meta.cfg
  
@@ -33,11 +33,25 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
  ***** operating point status is all       simulation time is     0.     
     node    =voltage      node    =voltage      node    =voltage
 
- +0:net12   =  37.4743  0:net14   =  54.7584  0:net15   =  53.6155 
- +0:net18   =  56.6810  0:net19   =  55.6079  0:net2    =  24.9789 
- +0:net22   =  69.1196  0:net23   =  89.6724  0:net24   =  68.0897 
- +0:net3    =   4.4261  0:net4    =  26.0088  0:net7    =  35.5517 
- +0:net8    =  36.8626  0:net9    =  38.5229  0:v       = 100.0000 
+ +0:net100  =  79.8205  0:net12   =  81.3548  0:net15   =  93.0084 
+ +0:net16   =  89.0957  0:net17   =  80.4150  0:net18   =  77.2444 
+ +0:net19   =  77.1860  0:net22   =  74.5411  0:net23   =  75.5534 
+ +0:net24   =  75.0471  0:net26   =  72.1789  0:net27   =  73.1392 
+ +0:net29   =  69.8035  0:net30   =  69.9581  0:net31   =  72.5708 
+ +0:net32   =  82.1527  0:net33   =  77.3625  0:net34   =  73.7499 
+ +0:net35   =  71.0336  0:net36   =  67.9156  0:net39   =  64.3181 
+ +0:net40   =  67.0170  0:net42   =  60.2706  0:net44   =  74.7988 
+ +0:net45   =  69.8437  0:net46   =  62.9242  0:net49   =  66.0297 
+ +0:net50   =  67.7574  0:net57   =  65.1098  0:net58   =  58.4711 
+ +0:net6    =  78.5905  0:net60   =  61.4173  0:net61   =  70.5798 
+ +0:net64   =  69.6566  0:net65   =  69.5226  0:net66   =  66.4394 
+ +0:net67   =  62.7134  0:net68   =  70.7482  0:net69   =  68.5795 
+ +0:net7    =  85.3396  0:net70   =  66.2406  0:net71   =  76.2227 
+ +0:net72   =  79.6309  0:net73   =  87.5128  0:net75   =  73.6135 
+ +0:net76   =  73.9079  0:net78   =  89.0941  0:net80   =  83.0806 
+ +0:net81   =  76.9105  0:net85   =  78.7235  0:net86   =  79.4801 
+ +0:net87   =  80.2744  0:net88   =  86.4158  0:net93   =  81.2329 
+ +0:v       = 100.0000 
 
 
  ****  voltage sources
@@ -45,10 +59,10 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
  subckt             
  element  0:vi      
   volts    100.0000 
-  current   -2.9507 
-  power    295.0740 
+  current   -4.6864 
+  power    468.6373 
 
-     total voltage source power dissipation=  295.0740        watts
+     total voltage source power dissipation=  468.6373        watts
 
 
 
@@ -56,31 +70,108 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
 
  subckt                                                                    
  element  0:r0       0:r1       0:r2       0:r3       0:r4       0:r5      
-  r value    1.5000    96.0000     3.5000    19.0000    96.0000    17.0000 
-  v drop    -4.4261   -85.2463   -10.3276   -20.5528   -44.1407   -10.5728 
-  current   -2.9507  -887.9823m   -2.9507    -1.0817  -459.7988m -621.9280m
-  power     13.0603    75.6972    30.4740    22.2325    20.2958     6.5755 
+  r value   49.5000    14.0000    20.0000    54.0000     4.0000    14.0000 
+  v drop   -62.9242     8.1095    -6.1524   -15.8224     3.9128     6.9430 
+  current   -1.2712   579.2475m -307.6177m -293.0079m  978.1876m  495.9300m
+  power     79.9889     4.6974     1.8926     4.6361     3.8274     3.4433 
 
  subckt                                                                    
  element  0:r6       0:r7       0:r8       0:r9       0:r10      0:r11     
-  r value   89.0000    20.0000     5.0000    87.0000     5.0000    93.0000 
-  v drop   -21.1293   -12.4386     1.9226   -17.2842     1.9226   -17.2842 
-  current -237.4084m -621.9280m  384.5195m -198.6684m  384.5195m -185.8511m
-  power      5.0163     7.7359   739.2764m    3.4338   739.2764m    3.2123 
+  r value   32.0000    14.0000    14.0000    18.0000    12.0000    14.0000 
+  v drop     7.3539     2.5637     3.0526     8.6806     3.1706     3.4945 
+  current  229.8082m  183.1194m  218.0410m  482.2576m  264.2166m  249.6068m
+  power      1.6900   469.4582m  665.5864m    4.1863   837.7250m  872.2497m
 
  subckt                                                                    
  element  0:r12      0:r13      0:r14      0:r15      0:r16      0:r17     
-  r value   19.0000    22.0000    96.0000    22.0000    23.0000    89.0000 
-  v drop    20.5528   -21.5827   -42.0809    21.5827    12.4818   -18.7453 
-  current    1.0817  -981.0312m -438.3430m  981.0312m  542.6882m -210.6217m
-  power     22.2325    21.1733    18.4459    21.1733     6.7737     3.9482 
+  r value   14.0000    12.0000    10.0000    12.0000    18.0000    10.0000 
+  v drop     3.9063     4.9551     6.9195     3.6125     4.7902     2.7163 
+  current  279.0203m  412.9277m  691.9480m  301.0433m  266.1218m  271.6298m
+  power      1.0899     2.0461     4.7879     1.0875     1.2748   737.8277m
 
- subckt                                                         
- element  0:r18      0:r19      0:r20      0:r21      0:r22     
-  r value   20.0000     5.0000    88.0000     6.0000    94.0000 
-  v drop    10.8538    -1.6603   -15.0926    -1.9924    15.0926 
-  current  542.6882m -332.0665m -171.5069m -332.0665m  160.5596m
-  power      5.8902   551.3407m    2.5885   661.6088m    2.4233 
+ subckt                                                                    
+ element  0:r18      0:r19      0:r20      0:r21      0:r22      0:r23     
+  r value    4.0000     5.5000    13.5000     6.0000    18.0000     4.0000 
+  v drop    58.4393m    6.9916    14.6604     3.9848     6.3076     1.9079 
+  current   14.6098m    1.2712     1.0860   664.1368m  350.4238m  476.9788m
+  power    853.7867u    8.8877    15.9206     2.6465     2.2103   910.0352m
+
+ subckt                                                                    
+ element  0:r24      0:r25      0:r26      0:r27      0:r28      0:r29     
+  r value    8.0000     8.0000     8.0000    14.0000     6.0000     8.0000 
+  v drop     3.3357     2.7865   987.2844m    5.7591     4.0475    -3.5975 
+  current  416.9610m  348.3181m  123.4105m  411.3672m  674.5890m -449.6814m
+  power      1.3909   970.6041m  121.8413m    2.3691     2.7304     1.6177 
+
+ subckt                                                                    
+ element  0:r30      0:r31      0:r32      0:r33      0:r34      0:r35     
+  r value   12.0000     8.0000    24.0000    12.0000     8.0000     4.0000 
+  v drop     4.2634    -2.3621    -4.0494     3.0371    -1.0123   506.2201m
+  current  355.2822m -295.2644m -168.7261m  253.0933m -126.5383m  126.5550m
+  power      1.5147   697.4483m  683.2437m  768.6746m  128.0955m   64.0647m
+
+ subckt                                                                    
+ element  0:r36      0:r37      0:r38      0:r39      0:r40      0:r41     
+  r value   16.0000    16.0000    20.0000     6.0000    16.0000     6.0000 
+  v drop    -6.7491  -960.2857m   -1.8880  -154.5382m    2.2006    -1.7277 
+  current -421.8194m  -60.0179m  -94.3992m  -25.7564m  137.5392m -287.9566m
+  power      2.8469    57.6343m  178.2243m    3.9803m  302.6726m  497.5142m
+
+ subckt                                                                    
+ element  0:r42      0:r43      0:r44      0:r45      0:r46      0:r47     
+  r value   32.0000    28.0000    16.0000    12.0000    55.5000    49.5000 
+  v drop    -4.8134    -8.7840    -2.6127    -2.6989    60.2706   -58.4711 
+  current -150.4174m -313.7130m -163.2956m -224.9076m    1.0860    -1.1812 
+  power    724.0127m    2.7556   426.6472m  607.0010m   65.4512    69.0682 
+
+ subckt                                                                    
+ element  0:r48      0:r49      0:r50      0:r51      0:r52      0:r53     
+  r value    6.0000     8.0000    28.0000    36.0000    11.5000     4.0000 
+  v drop    -4.2423    -3.5272    -7.6674   -12.5079   -13.5842    -3.3352 
+  current -707.0425m -440.8990m -273.8341m -347.4403m   -1.1812  -833.7949m
+  power      2.9995     1.5551     2.0996     4.3457    16.0461     2.7809 
+
+ subckt                                                                    
+ element  0:r54      0:r55      0:r56      0:r57      0:r58      0:r59     
+  r value   42.0000     2.0000     8.0000    20.0000    12.0000    16.0000 
+  v drop    13.4240   134.0411m   -1.2256    -6.1623     6.1701     3.2970 
+  current  319.6191m   67.0205m -153.2057m -308.1143m  514.1759m  206.0616m
+  power      4.2906     8.9835m  187.7758m    1.8987     3.1725   679.3821m
+
+ subckt                                                                    
+ element  0:r60      0:r61      0:r62      0:r63      0:r64      0:r65     
+  r value   18.0000     8.0000     6.0000    18.0000    14.0000    14.0000 
+  v drop    -5.0340    -2.1401    -1.3296    -4.5468     6.6387     3.0832 
+  current -279.6678m -267.5115m -221.5942m -252.5985m  474.1927m  220.2262m
+  power      1.4079   572.4992m  294.6240m    1.1485     3.1480   678.9942m
+
+ subckt                                                                    
+ element  0:r66      0:r67      0:r68      0:r69      0:r70      0:r71     
+  r value   14.0000    14.0000    14.0000     4.0000    30.0000    10.0000 
+  v drop     3.7260     2.1687     2.3389  -294.4249m  -14.8055    -2.5008 
+  current  266.1435m  154.9086m  167.0649m  -73.6062m -493.5158m -250.0788m
+  power    991.6530m  335.9534m  390.7496m   21.6715m    7.3067   625.3938m
+
+ subckt                                                                    
+ element  0:r72      0:r73      0:r74      0:r75      0:r76      0:r77     
+  r value   18.0000     6.0000     4.0000     6.0000     4.0000    12.0000 
+  v drop    -1.0970  -340.4954m -756.5313m -794.3016m -958.5358m    1.4123 
+  current  -60.9459m  -56.7492m -189.1328m -132.3836m -239.6339m  117.6952m
+  power     66.8593m   19.3229m  143.0849m  105.1525m  229.6977m  166.2258m
+
+ subckt                                                                    
+ element  0:r78      0:r79      0:r80      0:r81      0:r82      0:r83     
+  r value   22.0000     2.0000    48.0000    30.0000     6.0000    14.0000 
+  v drop    -7.8612    -1.5813    16.9330    -9.0510  -643.5021m   -3.4081 
+  current -357.3291m -790.6571m  352.7702m -301.7002m -107.2503m -243.4370m
+  power      2.8090     1.2503     5.9734     2.7307    69.0158m  829.6622m
+
+ subckt                                              
+ element  0:r84      0:r85      0:r86      0:r87     
+  r value   18.0000    14.0000    53.5000     9.5000 
+  v drop    -7.8820    -9.1626    61.4173   -10.9059 
+  current -437.8869m -654.4704m    1.1480    -1.1480 
+  power      3.4514     5.9966    70.5062    12.5198 
 
 
           ***** job concluded
@@ -111,8 +202,8 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
 
 
   ******  Circuit Statistics  ******
-  # nodes       =      16 # elements   =      24
-  # resistors   =      23 # capacitors =       0 # inductors   =       0
+  # nodes       =      56 # elements   =      89
+  # resistors   =      88 # capacitors =       0 # inductors   =       0
   # mutual_inds =       0 # vccs       =       0 # vcvs        =       0
   # cccs        =       0 # ccvs       =       0 # volt_srcs   =       1
   # curr_srcs   =       0 # diodes     =       0 # bjts        =       0
@@ -132,11 +223,11 @@ Using: /usr/bin/time -p /usr/cad/synopsys/hspice/cur/hspice/linux/hspice spice_0
   output             0.00
 
 
-           total memory used           32  kbytes
+           total memory used          187  kbytes
            total cpu time            0.00 seconds
-           total elapsed time        0.20 seconds
-           job started at     23:42:27 09/09/2015
-           job ended   at     23:42:27 09/09/2015
+           total elapsed time        0.21 seconds
+           job started at     20:16:58 09/10/2015
+           job ended   at     20:16:58 09/10/2015
 
 
  lic: Release hspice token(s) 

@@ -36,6 +36,8 @@ public:
 	void print_heat_network(vector < vector <double> >);
     void print_liquid_network();
 	void print_network();
+	bool Is_Meaningful();
+	void write_output();
 private:
 	int channel_layer;
 	vector < vector < vector <double> > > init_heat_network;

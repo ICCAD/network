@@ -392,6 +392,9 @@ void network_generator::network_evolution(const char **file){
 	ss << file[channel_layer+2];
 	ss >> coolant_flow_rate;
 	
+	if(!Is_Meaningful()){
+		return ;
+	}
 	while(1){
 		print_network();
 		long double total_Q = 0;
@@ -541,7 +544,7 @@ void network_generator::network_evolution(const char **file){
 			T_map.push_back(temp_T_map);
 			print_heat_color_picture(&temp_T_map, i);
 		}
-		if(T_max - T_min > chip.T_gredient){
+		if(T_max - T_min >= chip.T_gredient){
 			cout << "T_gredient fail !!!" << endl;
 			cout << "T_gredient : " << chip.T_gredient << endl;
 			cout << "your gragient : " << T_max - T_min << endl;
@@ -552,9 +555,11 @@ void network_generator::network_evolution(const char **file){
 			cout << "your T_max : " << T_max << endl;
 		}
 		cout << "your T_max : " << T_max << endl;
+		pout(target);
+		cout << endl;
 		cout << "sim over !!!!!!!!!!!!!!!!!!" << endl;
 		return;
-		pout(target);
+		
 		cout << endl;
 		cout << T_max << endl;
 		if(optimization_move_channel(target, &edge_rtree, &edges, &tempnode)){
@@ -943,6 +948,84 @@ void network_generator::print_network(){
 		gnuData_out.close();
 		gnuCmd_out.close();
 		system("gnuplot gp");
+	}
+	
+}
+
+bool network_generator::Is_Meaningful(){
+	
+	for( int i=0;i<channel_layer;i++ ){
+		for( int x=0;x<101;x++ ){
+			for( int y=0;y<101;y++ ){
+				if(liquid_network[i][y][x] != 0 && (y%2 == 0 && x%2 == 0)){
+					cout << "liquid error !" << endl;
+					cout << x << " " << y << endl;
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void network_generator::write_output(){
+	for(int k=0;k<channel_layer;k++){
+		BasicExcel xls;
+
+		 // create sheet 1 and get the associated BasicExcelWorksheet pointer
+		xls.New(1);
+		BasicExcelWorksheet* sheet = xls.GetWorksheet(0);
+
+		XLSFormatManager fmt_mgr(xls);
+
+
+		 // Create a table containing an header row in bold and four rows below.
+
+		ExcelFont font_bold;
+		font_bold._weight = FW_BOLD; // 700
+
+		CellFormat fmt_bold(fmt_mgr);
+		fmt_bold.set_font(font_bold);
+
+		ExcelFont font_red_bold;
+		font_red_bold._weight = FW_BOLD;
+		font_red_bold._color_index = EGA_BLACK;
+		CellFormat color_1(fmt_mgr, font_red_bold);
+		color_1.set_color1(COLOR1_PAT_SOLID);
+		color_1.set_color2(MAKE_COLOR2(29,0));
+		CellFormat color_2(fmt_mgr, font_red_bold);
+		color_2.set_color1(COLOR1_PAT_SOLID);
+		color_2.set_color2(MAKE_COLOR2(16,0));
+		for (int i=0;i<101;i++){
+			for(int j=0;j<101;j++){
+				BasicExcelCell* cell = sheet->Cell(i, j);
+				
+				if(i%2 == 0 && j%2 == 0){
+					cell->SetFormat(color_2);
+					sheet->Cell(i, j)->Set(-1);
+				}
+				else{
+					cell->SetFormat(color_1);
+					sheet->Cell(i, j)->Set(liquid_network[k][i][j]);
+				}
+			}
+		}
+		for (int i=0;i<101;i++){
+			sheet->SetColWidth(i,950);
+		}
+		
+		char layernum = k+48;
+		string test_case_num = "0";
+		test_case_num += char(chip.case_num+48);
+		string output_name="";
+		output_name += "cada030_problemA_testcase";
+		output_name += test_case_num;
+		if(channel_layer > 1){
+			output_name += "_channellayer";
+			output_name += layernum;
+		}
+		output_name += ".xls";
+		xls.SaveAs(&output_name[0]);	
 	}
 	
 }
